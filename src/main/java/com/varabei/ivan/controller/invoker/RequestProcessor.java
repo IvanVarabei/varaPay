@@ -2,6 +2,8 @@ package com.varabei.ivan.controller.invoker;
 
 import com.varabei.ivan.controller.command.ActionCommand;
 import com.varabei.ivan.controller.command.provider.ActionProvider;
+import com.varabei.ivan.model.dao.DaoException;
+import com.varabei.ivan.model.dao.impl.DbUserDao;
 import com.varabei.ivan.model.dao.pool.ConnectionPool;
 
 import javax.servlet.ServletException;
@@ -19,6 +21,12 @@ public class RequestProcessor extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        try {
+            int i = new DbUserDao().findAll().size();
+            req.setAttribute("userAmount", i);
+        } catch (DaoException e) {
+            e.printStackTrace();
+        }
         req.getRequestDispatcher("/WEB-INF/pages/main.jsp").forward(req, resp);
     }
 

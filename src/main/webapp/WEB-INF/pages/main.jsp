@@ -5,4 +5,5 @@
 
 <tags:general pageTitle="Main page">
 	hello from main
+	${requestScope.userAmount}
 </tags:general>
