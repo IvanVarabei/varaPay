@@ -2,14 +2,14 @@ package com.varabei.ivan.model.entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Payment implements Serializable {
     private Long paymentId;
-    private Card sourceCard;
-    private Card destinationCard;
+    private CardInfo sourceCardInfo;
+    private CardInfo destinationCardInfo;
     private BigDecimal amount;
-    private LocalDate paymentInstant;
+    private LocalDateTime paymentInstant;
 
     public Long getPaymentId() {
         return paymentId;
@@ -19,20 +19,20 @@ public class Payment implements Serializable {
         this.paymentId = paymentId;
     }
 
-    public Card getSourceCard() {
-        return sourceCard;
+    public CardInfo getSourceCardInfo() {
+        return sourceCardInfo;
     }
 
-    public void setSourceCard(Card sourceCard) {
-        this.sourceCard = sourceCard;
+    public void setSourceCardInfo(CardInfo sourceCardInfo) {
+        this.sourceCardInfo = sourceCardInfo;
     }
 
-    public Card getDestinationCard() {
-        return destinationCard;
+    public CardInfo getDestinationCardInfo() {
+        return destinationCardInfo;
     }
 
-    public void setDestinationCard(Card destinationCard) {
-        this.destinationCard = destinationCard;
+    public void setDestinationCardInfo(CardInfo destinationCardInfo) {
+        this.destinationCardInfo = destinationCardInfo;
     }
 
     public BigDecimal getAmount() {
@@ -43,45 +43,20 @@ public class Payment implements Serializable {
         this.amount = amount;
     }
 
-    public LocalDate getPaymentInstant() {
+    public LocalDateTime getPaymentInstant() {
         return paymentInstant;
     }
 
-    public void setPaymentInstant(LocalDate paymentInstant) {
+    public void setPaymentInstant(LocalDateTime paymentInstant) {
         this.paymentInstant = paymentInstant;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Payment payment = (Payment) o;
-
-        if (paymentId != null ? !paymentId.equals(payment.paymentId) : payment.paymentId != null) return false;
-        if (sourceCard != null ? !sourceCard.equals(payment.sourceCard) : payment.sourceCard != null) return false;
-        if (destinationCard != null ? !destinationCard.equals(payment.destinationCard) : payment.destinationCard != null)
-            return false;
-        if (amount != null ? !amount.equals(payment.amount) : payment.amount != null) return false;
-        return paymentInstant != null ? paymentInstant.equals(payment.paymentInstant) : payment.paymentInstant == null;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = paymentId != null ? paymentId.hashCode() : 0;
-        result = 31 * result + (sourceCard != null ? sourceCard.hashCode() : 0);
-        result = 31 * result + (destinationCard != null ? destinationCard.hashCode() : 0);
-        result = 31 * result + (amount != null ? amount.hashCode() : 0);
-        result = 31 * result + (paymentInstant != null ? paymentInstant.hashCode() : 0);
-        return result;
     }
 
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Payment{");
         sb.append("paymentId=").append(paymentId);
-        sb.append(", sourceCard=").append(sourceCard);
-        sb.append(", destinationCard=").append(destinationCard);
+        sb.append(", sourceCardInfo=").append(sourceCardInfo);
+        sb.append(", destinationCardInfo=").append(destinationCardInfo);
         sb.append(", amount=").append(amount);
         sb.append(", paymentInstant=").append(paymentInstant);
         sb.append('}');

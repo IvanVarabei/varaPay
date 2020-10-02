@@ -6,7 +6,7 @@ import java.util.List;
 
 public class User implements Serializable {
     private Long userId;
-    private Role role;
+    private String role;
     private String login;
     private String password;
     private String firstName;
@@ -14,7 +14,6 @@ public class User implements Serializable {
     private String email;
     private LocalDate birth;
     private List<Account> accounts;
-    private List<Card> cards;
 
     public Long getUserId() {
         return userId;
@@ -24,11 +23,11 @@ public class User implements Serializable {
         this.userId = userId;
     }
 
-    public Role getRole() {
+    public String getRole() {
         return role;
     }
 
-    public void setRole(Role role) {
+    public void setRole(String role) {
         this.role = role;
     }
 
@@ -88,53 +87,11 @@ public class User implements Serializable {
         this.accounts = accounts;
     }
 
-    public List<Card> getCards() {
-        return cards;
-    }
-
-    public void setCards(List<Card> cards) {
-        this.cards = cards;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        User user = (User) o;
-
-        if (userId != null ? !userId.equals(user.userId) : user.userId != null) return false;
-        if (role != null ? !role.equals(user.role) : user.role != null) return false;
-        if (login != null ? !login.equals(user.login) : user.login != null) return false;
-        if (password != null ? !password.equals(user.password) : user.password != null) return false;
-        if (firstName != null ? !firstName.equals(user.firstName) : user.firstName != null) return false;
-        if (lastName != null ? !lastName.equals(user.lastName) : user.lastName != null) return false;
-        if (email != null ? !email.equals(user.email) : user.email != null) return false;
-        if (birth != null ? !birth.equals(user.birth) : user.birth != null) return false;
-        if (accounts != null ? !accounts.equals(user.accounts) : user.accounts != null) return false;
-        return cards != null ? cards.equals(user.cards) : user.cards == null;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = userId != null ? userId.hashCode() : 0;
-        result = 31 * result + (role != null ? role.hashCode() : 0);
-        result = 31 * result + (login != null ? login.hashCode() : 0);
-        result = 31 * result + (password != null ? password.hashCode() : 0);
-        result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
-        result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
-        result = 31 * result + (email != null ? email.hashCode() : 0);
-        result = 31 * result + (birth != null ? birth.hashCode() : 0);
-        result = 31 * result + (accounts != null ? accounts.hashCode() : 0);
-        result = 31 * result + (cards != null ? cards.hashCode() : 0);
-        return result;
-    }
-
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("User{");
         sb.append("userId=").append(userId);
-        sb.append(", role=").append(role);
+        sb.append(", role='").append(role).append('\'');
         sb.append(", login='").append(login).append('\'');
         sb.append(", password='").append(password).append('\'');
         sb.append(", firstName='").append(firstName).append('\'');
@@ -142,7 +99,6 @@ public class User implements Serializable {
         sb.append(", email='").append(email).append('\'');
         sb.append(", birth=").append(birth);
         sb.append(", accounts=").append(accounts);
-        sb.append(", cards=").append(cards);
         sb.append('}');
         return sb.toString();
     }

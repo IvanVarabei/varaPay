@@ -2,12 +2,14 @@ package com.varabei.ivan.model.entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
 
 public class Account implements Serializable {
     private Long accountId;
     private User owner;
     private BigDecimal balance;
     private boolean isActive;
+    private List<Card> cards;
 
     public Long getAccountId() {
         return accountId;
@@ -41,35 +43,22 @@ public class Account implements Serializable {
         isActive = active;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Account account = (Account) o;
-
-        if (isActive != account.isActive) return false;
-        if (accountId != null ? !accountId.equals(account.accountId) : account.accountId != null) return false;
-        if (owner != null ? !owner.equals(account.owner) : account.owner != null) return false;
-        return balance != null ? balance.equals(account.balance) : account.balance == null;
+    public List<Card> getCards() {
+        return cards;
     }
 
-    @Override
-    public int hashCode() {
-        int result = accountId != null ? accountId.hashCode() : 0;
-        result = 31 * result + (owner != null ? owner.hashCode() : 0);
-        result = 31 * result + (balance != null ? balance.hashCode() : 0);
-        result = 31 * result + (isActive ? 1 : 0);
-        return result;
+    public void setCards(List<Card> cards) {
+        this.cards = cards;
     }
 
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Account{");
         sb.append("accountId=").append(accountId);
-        sb.append(", owner=").append(owner);
+        sb.append(", ownerId=").append(owner.getUserId());
         sb.append(", balance=").append(balance);
         sb.append(", isActive=").append(isActive);
+        sb.append(", cards=").append(cards);
         sb.append('}');
         return sb.toString();
     }
