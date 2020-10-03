@@ -52,6 +52,32 @@ public class Payment implements Serializable {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Payment payment = (Payment) o;
+
+        if (paymentId != null ? !paymentId.equals(payment.paymentId) : payment.paymentId != null) return false;
+        if (sourceCardInfo != null ? !sourceCardInfo.equals(payment.sourceCardInfo) : payment.sourceCardInfo != null)
+            return false;
+        if (destinationCardInfo != null ? !destinationCardInfo.equals(payment.destinationCardInfo) : payment.destinationCardInfo != null)
+            return false;
+        if (amount != null ? !amount.equals(payment.amount) : payment.amount != null) return false;
+        return paymentInstant != null ? paymentInstant.equals(payment.paymentInstant) : payment.paymentInstant == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = paymentId != null ? paymentId.hashCode() : 0;
+        result = 31 * result + (sourceCardInfo != null ? sourceCardInfo.hashCode() : 0);
+        result = 31 * result + (destinationCardInfo != null ? destinationCardInfo.hashCode() : 0);
+        result = 31 * result + (amount != null ? amount.hashCode() : 0);
+        result = 31 * result + (paymentInstant != null ? paymentInstant.hashCode() : 0);
+        return result;
+    }
+
+    @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Payment{");
         sb.append("paymentId=").append(paymentId);

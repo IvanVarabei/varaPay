@@ -41,6 +41,29 @@ public class CardInfo {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        CardInfo cardInfo = (CardInfo) o;
+
+        if (cardId != null ? !cardId.equals(cardInfo.cardId) : cardInfo.cardId != null) return false;
+        if (cardNumber != null ? !cardNumber.equals(cardInfo.cardNumber) : cardInfo.cardNumber != null) return false;
+        if (validThruDate != null ? !validThruDate.equals(cardInfo.validThruDate) : cardInfo.validThruDate != null)
+            return false;
+        return cvc != null ? cvc.equals(cardInfo.cvc) : cardInfo.cvc == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = cardId != null ? cardId.hashCode() : 0;
+        result = 31 * result + (cardNumber != null ? cardNumber.hashCode() : 0);
+        result = 31 * result + (validThruDate != null ? validThruDate.hashCode() : 0);
+        result = 31 * result + (cvc != null ? cvc.hashCode() : 0);
+        return result;
+    }
+
+    @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("CardInfo{");
         sb.append("cardId=").append(cardId);
