@@ -1,0 +1,26 @@
+.form {
+	display: grid;
+	align-items: center;
+	gap: 20px;
+}
+.form_button{
+	grid-column: 1;
+}
+
+.form__error{
+	color: red;
+	letter-spacing: 2px;
+}
+
+@media(min-width: 992px){
+	.form {
+		grid-template: auto	/ auto 1fr 1fr;
+	}
+	.form__input-lable {
+		grid-column: 1 / 2;
+	}
+	.form__input{
+		grid-column: 2 / 3;
+	}
+}
+

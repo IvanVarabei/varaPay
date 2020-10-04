@@ -1,0 +1,7 @@
+.input{
+	font-size: 26px;
+	padding: 10px;
+}
+.input:focus {
+  background-color: #7a956b;
+}

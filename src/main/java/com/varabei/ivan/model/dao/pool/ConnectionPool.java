@@ -16,7 +16,7 @@ import java.util.concurrent.LinkedBlockingDeque;
 
 public class ConnectionPool {
     private static final String URL = "jdbc:postgresql://localhost:5432/bank";
-    private static final int DEFAULT_POOL_SIZE = 5;
+    private static final int DEFAULT_POOL_SIZE = 30;
     private static final String POSTGRES_DRIVER_CLASS = "org.postgresql.Driver";
     private static final String CONNECTION_PROPERTIES_FILE = "postgresConnection.properties";
     private final Logger log = LogManager.getLogger(ConnectionPool.class);
