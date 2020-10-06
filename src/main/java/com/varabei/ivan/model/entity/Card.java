@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 
-public class Card  extends CardInfo implements Serializable{
+public class Card extends CardInfo implements Serializable {
     private List<Payment> payments;
     private Account account;
 
@@ -15,6 +15,7 @@ public class Card  extends CardInfo implements Serializable{
     public void setPayments(List<Payment> payments) {
         this.payments = payments;
     }
+
     public Account getAccount() {
         return account;
     }
@@ -22,6 +23,7 @@ public class Card  extends CardInfo implements Serializable{
     public void setAccount(Account account) {
         this.account = account;
     }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Card{");

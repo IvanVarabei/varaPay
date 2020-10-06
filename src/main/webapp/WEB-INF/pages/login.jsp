@@ -7,8 +7,8 @@
 	<div class="authorization">
 		<div class="authorization__title title">Login page</div>
 		<form action="" class="form">
-			<p class="form__input-lable">Enter login</p><input class="input form__input">
-			<p class="form__input-lable">Enter password</p><input class="input form__input">
+			<p class="form__input-label">Enter login</p><input class="input form__input">
+			<p class="form__input-label">Enter password</p><input class="input form__input">
 			<button class="button form_button">login</button>
 		</form>
 	</div>

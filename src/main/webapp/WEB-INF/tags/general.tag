@@ -9,7 +9,7 @@
     <title>${pageTitle}</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/nullStile.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/common.css">
-    <meta http-equiv="Content-type" content="text/html;charset=UTF-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 </head>
 <body>
 <div class="wrapper">

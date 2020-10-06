@@ -3,11 +3,11 @@ package com.varabei.ivan.controller.command.client;
 import com.varabei.ivan.controller.command.ActionCommand;
 import com.varabei.ivan.controller.command.impl.LoginCommand;
 import com.varabei.ivan.controller.command.impl.LogoutCommand;
-import com.varabei.ivan.controller.command.impl.RegisterCommand;
+import com.varabei.ivan.controller.command.impl.SignUpCommand;
 
 
 public enum CommandType {
-    REGISTER(new RegisterCommand()),
+    REGISTER(new SignUpCommand()),
     LOGIN(new LoginCommand()),
     LOGOUT(new LogoutCommand());
     private final ActionCommand command;

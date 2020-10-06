@@ -8,7 +8,9 @@ import java.util.Optional;
 public interface UserDao{
     void create(User user) throws DaoException;
 
-    Optional<User> read(String login)throws DaoException;
+    Optional<User> readByLogin(String login)throws DaoException;
+
+    Optional<User> readByEmail(String email) throws DaoException;
 
     List<User> readAll() throws DaoException;
 

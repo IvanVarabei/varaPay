@@ -4,9 +4,8 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 
-public class User implements Serializable {
-    private Long userId;
-    private String role;
+public class User extends StorableItem implements Serializable {
+    private String roleName;
     private String login;
     private String password;
     private String firstName;
@@ -15,20 +14,24 @@ public class User implements Serializable {
     private LocalDate birth;
     private List<Account> accounts;
 
-    public Long getUserId() {
-        return userId;
+    public User(){
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public User(String login, String password, String firstName, String lastName, String email, LocalDate birth) {
+        this.login = login;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.birth = birth;
     }
 
-    public String getRole() {
-        return role;
+    public String getRoleName() {
+        return roleName;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
     }
 
     public String getLogin() {
@@ -90,8 +93,7 @@ public class User implements Serializable {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("User{");
-        sb.append("userId=").append(userId);
-        sb.append(", role='").append(role).append('\'');
+        sb.append(", role='").append(roleName).append('\'');
         sb.append(", login='").append(login).append('\'');
         sb.append(", password='").append(password).append('\'');
         sb.append(", firstName='").append(firstName).append('\'');

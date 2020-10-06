@@ -1,5 +1,6 @@
 package com.varabei.ivan.model.dao.impl;
 
+import com.varabei.ivan.Const;
 import com.varabei.ivan.model.dao.DaoException;
 import com.varabei.ivan.model.dao.UserDao;
 import com.varabei.ivan.model.entity.*;
@@ -25,6 +26,8 @@ public class DbUserDao extends GenericDao implements UserDao {
             "select accountid, cardnumber, validthru, cvc from cards where cardid = ?";
     private static final String FIND_USER_BY_LOGIN = "select rolename, userid, login, password, firstname, lastname," +
             " email, birth from users join roles on users.roleid = roles.roleid and login = ?";
+    private static final String FIND_USER_BY_EMAIL = "select rolename, userid, login, password, firstname, lastname," +
+            " email, birth from users join roles on users.roleid = roles.roleid and email = ?";
     private static final String CREATE_USER = "insert into users(login, password, firstname, lastname, email, birth)" +
             "values (?, ?, ?, ?, ?, ?)";
     private static final String CREATE_ACCOUNT = "insert into accounts(userId) values (?)";
@@ -57,10 +60,20 @@ public class DbUserDao extends GenericDao implements UserDao {
     }
 
     @Override
-    public Optional<User> read(String login) throws DaoException {
+    public Optional<User> readByLogin(String login) throws DaoException {
         Connection connection = pool.getConnection();
         try {
-            return find(login, connection);
+            return readByUniqueField(login, connection, FIND_USER_BY_LOGIN);
+        } finally {
+            pool.releaseConnection(connection);
+        }
+    }
+
+    @Override
+    public Optional<User> readByEmail(String email) throws DaoException {
+        Connection connection = pool.getConnection();
+        try {
+            return readByUniqueField(email, connection, FIND_USER_BY_EMAIL);
         } finally {
             pool.releaseConnection(connection);
         }
@@ -80,8 +93,8 @@ public class DbUserDao extends GenericDao implements UserDao {
     public boolean ifExists(String login, String password) throws DaoException {
         Connection connection = pool.getConnection();
         PreparedStatement preparedStatement = null;
-        DaoException daoException = null;
         ResultSet resultSet = null;
+        DaoException daoException = null;
         try {
             preparedStatement = connection.prepareStatement(FIND_USER_BY_LOGIN_PASSWORD);
             preparedStatement.setString(PARAM_INDEX_1, login);
@@ -111,8 +124,8 @@ public class DbUserDao extends GenericDao implements UserDao {
         DaoException daoException = null;
         try {
             preparedStatement = connection.prepareStatement(CREATE_ACCOUNT);
-            User user = find(login, connection).orElseThrow(DaoException::new);
-            preparedStatement.setLong(1, user.getUserId());
+            User user = readByUniqueField(login, connection, FIND_USER_BY_LOGIN).orElseThrow(DaoException::new);
+            preparedStatement.setLong(PARAM_INDEX_1, user.getId());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             daoException = new DaoException("", e);
@@ -121,14 +134,14 @@ public class DbUserDao extends GenericDao implements UserDao {
         }
     }
 
-    private Optional<User> find(String login, Connection connection) throws DaoException {
+    private Optional<User> readByUniqueField(String fieldValue, Connection connection, String dbQuery) throws DaoException {
         PreparedStatement preparedStatement = null;
-        DaoException daoException = null;
         ResultSet resultSet = null;
+        DaoException daoException = null;
         Optional<User> user = Optional.empty();
         try {
-            preparedStatement = connection.prepareStatement(FIND_USER_BY_LOGIN);
-            preparedStatement.setString(PARAM_INDEX_1, login);
+            preparedStatement = connection.prepareStatement(dbQuery);
+            preparedStatement.setString(PARAM_INDEX_1, fieldValue);
             resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 user = Optional.of(instantiateUser(resultSet, connection));
@@ -146,10 +159,10 @@ public class DbUserDao extends GenericDao implements UserDao {
     }
 
     private List<User> findAll(Connection connection) throws DaoException {
-        List<User> users = new ArrayList<>();
         Statement statement = null;
         ResultSet resultSet = null;
         DaoException daoException = null;
+        List<User> users = new ArrayList<>();
         try {
             statement = connection.createStatement();
             resultSet = statement.executeQuery(FIND_ALL_USERS);
@@ -169,21 +182,21 @@ public class DbUserDao extends GenericDao implements UserDao {
     }
 
     private List<Account> findAllAccountsByUserId(Long userId, Connection connection) throws DaoException {
-        List<Account> accounts = new ArrayList<>();
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         DaoException daoException = null;
+        List<Account> accounts = new ArrayList<>();
         try {
             preparedStatement = connection.prepareStatement(FIND_ACCOUNTS_BY_USER_ID);
             preparedStatement.setLong(PARAM_INDEX_1, userId);
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 Account account = new Account();
-                Long accountId = resultSet.getLong("accountId");
+                Long accountId = resultSet.getLong(Const.AccountField.ID);
                 account.setCards(findCardsByAccountId(accountId, connection));
-                account.setAccountId(accountId);
-                account.setBalance(new BigDecimal(resultSet.getLong("balance")));
-                account.setActive(resultSet.getBoolean("isactive"));
+                account.setId(accountId);
+                account.setBalance(new BigDecimal(resultSet.getLong(Const.AccountField.BALANCE)));
+                account.setActive(resultSet.getBoolean(Const.AccountField.IS_ACTIVE));
                 accounts.add(account);
             }
         } catch (SQLException e) {
@@ -199,22 +212,22 @@ public class DbUserDao extends GenericDao implements UserDao {
     }
 
     private List<Card> findCardsByAccountId(Long accountId, Connection connection) throws DaoException {
-        List<Card> cards = new ArrayList<>();
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         DaoException daoException = null;
+        List<Card> cards = new ArrayList<>();
         try {
             preparedStatement = connection.prepareStatement(FIND_CARDS_BY_ACCOUNT_ID);
             preparedStatement.setLong(PARAM_INDEX_1, accountId);
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 Card card = new Card();
-                Long cardId = resultSet.getLong("cardId");
+                Long cardId = resultSet.getLong(Const.CardField.ID);
                 card.setPayments(findPaymentsByCardId(cardId, connection));
-                card.setCardId(cardId);
-                card.setCardNumber(resultSet.getString("cardNumber"));
-                card.setValidThruDate(LocalDate.parse(resultSet.getString("validThru")));
-                card.setCvc(resultSet.getString("cvc"));
+                card.setId(cardId);
+                card.setCardNumber(resultSet.getString(Const.CardField.NUMBER));
+                card.setValidThruDate(LocalDate.parse(resultSet.getString(Const.CardField.VALID_THRU)));
+                card.setCvc(resultSet.getString(Const.CardField.CVC));
                 cards.add(card);
             }
         } catch (SQLException e) {
@@ -230,10 +243,10 @@ public class DbUserDao extends GenericDao implements UserDao {
     }
 
     private List<Payment> findPaymentsByCardId(Long cardId, Connection connection) throws DaoException {
-        List<Payment> payments = new ArrayList<>();
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         DaoException daoException = null;
+        List<Payment> payments = new ArrayList<>();
         try {
             preparedStatement = connection.prepareStatement(FIND_PAYMENTS_BY_CARD_ID);
             preparedStatement.setLong(PARAM_INDEX_1, cardId);
@@ -241,13 +254,13 @@ public class DbUserDao extends GenericDao implements UserDao {
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 Payment payment = new Payment();
-                payment.setPaymentId(resultSet.getLong("paymentId"));
+                payment.setId(resultSet.getLong(Const.PaymentField.ID));
                 payment.setSourceCardInfo(findCardInfoByCardId(
-                        resultSet.getLong("sourceCardId"), connection));
+                        resultSet.getLong(Const.PaymentField.SOURCE_CARD_ID), connection));
                 payment.setDestinationCardInfo(findCardInfoByCardId(
-                        resultSet.getLong("destinationCardId"), connection));
-                payment.setAmount(new BigDecimal(resultSet.getLong("amount")));
-                payment.setPaymentInstant(resultSet.getTimestamp("paymentInstant").toLocalDateTime());
+                        resultSet.getLong(Const.PaymentField.DESTINATION_CARD_ID), connection));
+                payment.setAmount(new BigDecimal(resultSet.getLong(Const.PaymentField.AMOUNT)));
+                payment.setPaymentInstant(resultSet.getTimestamp(Const.PaymentField.INSTANT).toLocalDateTime());
                 payments.add(payment);
             }
         } catch (SQLException e) {
@@ -263,19 +276,19 @@ public class DbUserDao extends GenericDao implements UserDao {
     }
 
     private CardInfo findCardInfoByCardId(Long cardId, Connection connection) throws DaoException {
-        CardInfo cardInfo = new CardInfo();
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         DaoException daoException = null;
+        CardInfo cardInfo = new CardInfo();
         try {
             preparedStatement = connection.prepareStatement(FIND_CARD_BY_CARD_ID);
             preparedStatement.setLong(PARAM_INDEX_1, cardId);
             resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                cardInfo.setCardId(cardId);
-                cardInfo.setCardNumber(resultSet.getString("cardnumber"));
-                cardInfo.setValidThruDate(LocalDate.parse(resultSet.getString("validThru")));
-                cardInfo.setCvc(resultSet.getString("cvc"));
+                cardInfo.setId(cardId);
+                cardInfo.setCardNumber(resultSet.getString(Const.CardField.NUMBER));
+                cardInfo.setValidThruDate(LocalDate.parse(resultSet.getString(Const.CardField.VALID_THRU)));
+                cardInfo.setCvc(resultSet.getString(Const.CardField.CVC));
             }
         } catch (SQLException e) {
             daoException = new DaoException("can not get access to db", e);
@@ -291,17 +304,17 @@ public class DbUserDao extends GenericDao implements UserDao {
 
     private User instantiateUser(ResultSet resultSet, Connection connection) throws SQLException, DaoException {
         User user = new User();
-        Long userId = resultSet.getLong("userId");
+        Long userId = resultSet.getLong(Const.UserField.ID);
         List<Account> userAccounts = findAllAccountsByUserId(userId, connection);
         userAccounts.forEach(account -> account.setOwner(user));
         user.setAccounts(userAccounts);
-        user.setUserId(userId);
-        user.setRole(resultSet.getString("roleName"));
-        user.setLogin(resultSet.getString("login"));
-        user.setFirstName(resultSet.getString("firstname"));
-        user.setLastName(resultSet.getString("lastname"));
-        user.setEmail(resultSet.getString("email"));
-        user.setBirth(LocalDate.parse(resultSet.getString("birth")));
+        user.setId(userId);
+        user.setRoleName(resultSet.getString(Const.UserField.ROLE_NAME));
+        user.setLogin(resultSet.getString(Const.UserField.LOGIN));
+        user.setFirstName(resultSet.getString(Const.UserField.FIRST_NAME));
+        user.setLastName(resultSet.getString(Const.UserField.LAST_NAME));
+        user.setEmail(resultSet.getString(Const.UserField.EMAIL));
+        user.setBirth(LocalDate.parse(resultSet.getString(Const.UserField.BIRTH)));
         return user;
     }
 }

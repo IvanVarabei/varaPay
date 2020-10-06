@@ -8,15 +8,17 @@ import com.varabei.ivan.model.service.ServiceException;
 import com.varabei.ivan.model.service.UserService;
 
 import java.util.List;
+import java.util.Optional;
 
 public class UserServiceImpl implements UserService {
+    private static final UserDao userDao =  DaoFactory.getInstance().getUserDao();
+    
     @Override
     public void signIn(String login, String password) throws ServiceException {
         if (login == null || login.isEmpty()) {
             throw new ServiceException("Incorrect login");
         }
         try {
-            UserDao userDao = DaoFactory.getInstance().getUserDao();
             userDao.ifExists(login, password);
         } catch (DaoException e) {
             throw new ServiceException(e);
@@ -24,14 +26,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void signOut(String login) throws ServiceException {
-
-    }
-
-    @Override
-    public void registration(User user) throws ServiceException {
+    public void signUp(User user) throws ServiceException {
         try {
-            UserDao userDao = DaoFactory.getInstance().getUserDao();
             userDao.create(user);
         } catch (DaoException e) {
             throw new ServiceException("", e);
@@ -41,7 +37,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> findAll() throws ServiceException {
         try {
-            UserDao userDao = DaoFactory.getInstance().getUserDao();
             return userDao.readAll();
         } catch (DaoException e) {
             throw new ServiceException("", e);
@@ -49,10 +44,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User find(String login) throws ServiceException {
+    public Optional<User> findByLogin(String login) throws ServiceException {
         try {
-            UserDao userDao = DaoFactory.getInstance().getUserDao();
-            return userDao.read(login).get();
+            return userDao.readByLogin(login);
+        } catch (DaoException e) {
+            throw new ServiceException("", e);
+        }
+    }
+
+    @Override
+    public Optional<User> findByEmail(String email) throws ServiceException {
+        try {
+            return userDao.readByEmail(email);
         } catch (DaoException e) {
             throw new ServiceException("", e);
         }

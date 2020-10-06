@@ -7,6 +7,15 @@
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
 
+    <filter>
+        <filter-name>CharsetFilter</filter-name>
+        <filter-class>com.varabei.ivan.controller.filter.CharsetFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>CharsetFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
     <servlet>
         <servlet-name>Servlet</servlet-name>
         <servlet-class>com.varabei.ivan.controller.invoker.RequestProcessor</servlet-class>
@@ -15,4 +24,22 @@
         <servlet-name>Servlet</servlet-name>
         <url-pattern>/mainServlet</url-pattern>
     </servlet-mapping>
+
+    <security-constraint>
+        <display-name>SecurityConstraint</display-name>
+        <web-resource-collection>
+            <web-resource-name>WRCollection</web-resource-name>
+            <url-pattern>/mainServlet</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>tomcat</role-name>
+        </auth-constraint>
+        <user-data-constraint>
+            <transport-guarantee>NONE</transport-guarantee>
+        </user-data-constraint>
+    </security-constraint>
+    <login-config>
+        <auth-method>BASIC</auth-method>
+        <realm-name>file</realm-name>
+    </login-config>
 </web-app>

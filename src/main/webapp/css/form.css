@@ -10,13 +10,14 @@
 .form__error{
 	color: red;
 	letter-spacing: 2px;
+	font-size: 18px;
 }
 
 @media(min-width: 992px){
 	.form {
-		grid-template: auto	/ auto 1fr 1fr;
+		grid-template: auto	/ auto 1fr 2fr;
 	}
-	.form__input-lable {
+	.form__input-label {
 		grid-column: 1 / 2;
 	}
 	.form__input{

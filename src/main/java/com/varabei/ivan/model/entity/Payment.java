@@ -4,20 +4,11 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-public class Payment implements Serializable {
-    private Long paymentId;
+public class Payment extends StorableItem implements Serializable {
     private CardInfo sourceCardInfo;
     private CardInfo destinationCardInfo;
     private BigDecimal amount;
     private LocalDateTime paymentInstant;
-
-    public Long getPaymentId() {
-        return paymentId;
-    }
-
-    public void setPaymentId(Long paymentId) {
-        this.paymentId = paymentId;
-    }
 
     public CardInfo getSourceCardInfo() {
         return sourceCardInfo;
@@ -53,23 +44,31 @@ public class Payment implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
         Payment payment = (Payment) o;
-
-        if (paymentId != null ? !paymentId.equals(payment.paymentId) : payment.paymentId != null) return false;
-        if (sourceCardInfo != null ? !sourceCardInfo.equals(payment.sourceCardInfo) : payment.sourceCardInfo != null)
+        if (sourceCardInfo != null ? !sourceCardInfo.equals(payment.sourceCardInfo) : payment.sourceCardInfo != null) {
             return false;
-        if (destinationCardInfo != null ? !destinationCardInfo.equals(payment.destinationCardInfo) : payment.destinationCardInfo != null)
+        }
+        if (destinationCardInfo != null ? !destinationCardInfo.equals(payment.destinationCardInfo) : payment.destinationCardInfo != null) {
             return false;
-        if (amount != null ? !amount.equals(payment.amount) : payment.amount != null) return false;
+        }
+        if (amount != null ? !amount.equals(payment.amount) : payment.amount != null) {
+            return false;
+        }
         return paymentInstant != null ? paymentInstant.equals(payment.paymentInstant) : payment.paymentInstant == null;
     }
 
     @Override
     public int hashCode() {
-        int result = paymentId != null ? paymentId.hashCode() : 0;
+        int result = super.hashCode();
         result = 31 * result + (sourceCardInfo != null ? sourceCardInfo.hashCode() : 0);
         result = 31 * result + (destinationCardInfo != null ? destinationCardInfo.hashCode() : 0);
         result = 31 * result + (amount != null ? amount.hashCode() : 0);
@@ -80,7 +79,6 @@ public class Payment implements Serializable {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Payment{");
-        sb.append("paymentId=").append(paymentId);
         sb.append(", sourceCardInfo=").append(sourceCardInfo);
         sb.append(", destinationCardInfo=").append(destinationCardInfo);
         sb.append(", amount=").append(amount);
