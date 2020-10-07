@@ -4,6 +4,8 @@
 @import "button.css";
 @import "title.css";
 @import "authorization.css";
+@import "profile.css";
+@import "card.css";
 .wrapper {
 	min-height: 100%;
 	display: grid;

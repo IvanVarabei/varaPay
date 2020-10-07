@@ -10,9 +10,11 @@ public interface UserService {
 
     List<User> findAll() throws ServiceException;
 
-    void signIn(String login, String password) throws ServiceException;
+    Optional<User> signIn(String login, String password) throws ServiceException;
 
     Optional<User> findByLogin(String login) throws ServiceException;
+
+    Optional<User> findById(Long id) throws ServiceException;
 
     Optional<User> findByEmail(String email) throws ServiceException;
 }

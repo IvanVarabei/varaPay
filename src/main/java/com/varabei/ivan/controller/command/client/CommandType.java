@@ -1,15 +1,17 @@
 package com.varabei.ivan.controller.command.client;
 
 import com.varabei.ivan.controller.command.ActionCommand;
-import com.varabei.ivan.controller.command.impl.LoginCommand;
-import com.varabei.ivan.controller.command.impl.LogoutCommand;
-import com.varabei.ivan.controller.command.impl.SignUpCommand;
+import com.varabei.ivan.controller.command.impl.*;
 
 
 public enum CommandType {
-    REGISTER(new SignUpCommand()),
-    LOGIN(new LoginCommand()),
-    LOGOUT(new LogoutCommand());
+    SIGNUP_GET(new SignUpGetCommand()),
+    SIGNUP_POST(new SignUpPostCommand()),
+    LOGIN_GET(new LoginGetCommand()),
+    LOGIN_POST(new LoginPostCommand()),
+    LOGOUT(new LogoutCommand()),
+    PROFILE(new ProfileCommand()),
+    CARD_PAGE_GET(new CardPageGetCommand()),;
     private final ActionCommand command;
 
     CommandType(ActionCommand command) {

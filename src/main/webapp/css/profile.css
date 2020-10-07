@@ -1,0 +1,73 @@
+.profile {
+}
+.profile__info {
+	margin: 30px 0 30px 0;
+	display: grid;
+	grid-template: repeat(5, 1fr) /  1fr 2fr;
+	grid-row-gap: 20px;
+	grid-column-gap: 30px;
+}
+.profile__photo {
+	grid-row-start: 1;
+	grid-row-end: 6;
+	grid-column-start: 1;
+	grid-column-end: 2;
+	position: relative;
+}
+
+.profile__photo img{
+	box-shadow:1px 1px 50px #7a956b;
+	-webkit-box-shadow:1px 1px 50px #7a956b;
+	background: #7a956b;
+	border-radius: 50%;
+	width: 100%;
+	height: 100%;
+	object-fit: fill;
+}
+.profile__text {}
+@media(max-width: 700px){
+	.profile__info {
+		grid-template:  1fr/  1fr;
+	}
+}
+
+.profile__accounts {
+	margin: 30px 0 0 0;
+	display: grid;
+	gap: 20px;
+}
+.profile__account {
+	display: grid;
+	text-align: center;
+	align-items: center;
+	grid-template: 1fr auto / repeat(4, 1fr);
+	background: #7a956b;
+}
+.profile__account-text {}
+.profile__cards-sub-sub-title{
+	grid-column-start: 2;
+	grid-column-end: 4;
+}
+.profile__cards {
+	display: grid;
+	gap: 20px;
+	grid-template: auto / repeat(7, 1fr);
+	margin: 0 0 30px 0;
+}
+.profile__card {
+	display: grid;
+	text-align: center;
+	align-items: center;
+	background: #77608d;
+	grid-template-columns: 4fr 2fr 1fr;
+	grid-column-start: 2;
+	grid-column-end: 8;
+	color: white;
+	text-decoration: none;
+}
+.profile__card-button{
+	grid-column-start: 2;
+	grid-column-end: 8;
+}
+.profile__card-text {
+}

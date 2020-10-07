@@ -12,6 +12,7 @@ public class Const {
         public static final String WRONG_DATE = "wrong date format";
         public static final String WRONG_LOGIN = ">=3 and <=20 letter, number, _";
         public static final String WRONG_EMAIL = "wrong email format";
+        public static final String WRONG_LOGIN_OR_PASSWORD = "wrong login or password";
 
         private ErrorInfo() {
         }
@@ -28,6 +29,8 @@ public class Const {
         public static final String USER_AMOUNT = "userAmount";
         public static final String PAYMENT_AMOUNT = "paymentAmount";
         public static final String ERRORS = "errors";
+        public static final String ERROR = "error";
+        public static final String USER = "user";
 
         private AttributeKey() {
         }

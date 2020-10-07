@@ -3,6 +3,8 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 
-<tags:general pageTitle="Create account">
-
+<tags:general pageTitle="Card">
+	<div class="card">
+		<div class="authorization__title title">Card</div>
+	</div>
 </tags:general>

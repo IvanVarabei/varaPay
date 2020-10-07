@@ -16,6 +16,15 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
+    <filter>
+        <filter-name>PermissionFilter</filter-name>
+        <filter-class>com.varabei.ivan.controller.filter.PermissionFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>PermissionFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
     <servlet>
         <servlet-name>Servlet</servlet-name>
         <servlet-class>com.varabei.ivan.controller.invoker.RequestProcessor</servlet-class>
@@ -25,21 +34,26 @@
         <url-pattern>/mainServlet</url-pattern>
     </servlet-mapping>
 
-    <security-constraint>
-        <display-name>SecurityConstraint</display-name>
-        <web-resource-collection>
-            <web-resource-name>WRCollection</web-resource-name>
-            <url-pattern>/mainServlet</url-pattern>
-        </web-resource-collection>
-        <auth-constraint>
-            <role-name>tomcat</role-name>
-        </auth-constraint>
-        <user-data-constraint>
-            <transport-guarantee>NONE</transport-guarantee>
-        </user-data-constraint>
-    </security-constraint>
-    <login-config>
-        <auth-method>BASIC</auth-method>
-        <realm-name>file</realm-name>
-    </login-config>
+    <security-role>
+        <role-name>tomcat</role-name>
+    </security-role>
+    <security-role>
+        <role-name>admin</role-name>
+    </security-role>
+    <security-role>
+        <role-name>client</role-name>
+    </security-role>
+
+<!--    <login-config>-->
+<!--        <auth-method>BASIC</auth-method>-->
+<!--    </login-config>-->
+<!--    <security-constraint>-->
+<!--        <web-resource-collection>-->
+<!--            <web-resource-name>WRCollection</web-resource-name>-->
+<!--            <url-pattern>/mainServlet</url-pattern>-->
+<!--        </web-resource-collection>-->
+<!--        <auth-constraint>-->
+<!--            <role-name>client</role-name>-->
+<!--        </auth-constraint>-->
+<!--    </security-constraint>-->
 </web-app>

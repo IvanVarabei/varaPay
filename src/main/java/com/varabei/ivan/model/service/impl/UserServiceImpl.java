@@ -14,12 +14,9 @@ public class UserServiceImpl implements UserService {
     private static final UserDao userDao =  DaoFactory.getInstance().getUserDao();
     
     @Override
-    public void signIn(String login, String password) throws ServiceException {
-        if (login == null || login.isEmpty()) {
-            throw new ServiceException("Incorrect login");
-        }
+    public Optional<User> signIn(String login, String password) throws ServiceException {
         try {
-            userDao.ifExists(login, password);
+            return userDao.findByLoginPassword(login, password);
         } catch (DaoException e) {
             throw new ServiceException(e);
         }
@@ -47,6 +44,15 @@ public class UserServiceImpl implements UserService {
     public Optional<User> findByLogin(String login) throws ServiceException {
         try {
             return userDao.readByLogin(login);
+        } catch (DaoException e) {
+            throw new ServiceException("", e);
+        }
+    }
+
+    @Override
+    public Optional<User> findById(Long id) throws ServiceException {
+        try {
+            return userDao.readById(id);
         } catch (DaoException e) {
             throw new ServiceException("", e);
         }

@@ -20,34 +20,19 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-public class SignUpCommand implements ActionCommand {
+public class SignUpPostCommand implements ActionCommand {
     private static final UserService userService = ServiceFactory.getInstance().getUserService();
-    private static final Logger log = LogManager.getLogger(SignUpCommand.class);
-    private static final String JSP_REGISTER = "/WEB-INF/pages/register.jsp";
+    private static final Logger log = LogManager.getLogger(SignUpPostCommand.class);
     private static final String DATE_FORMAT = "yyyy-MM-dd";
-    private static final String GET_METHOD = "GET";
-    private static final String POST_METHOD = "POST";
-    private static final int METHOD_NOT_ALLOWED = 405;
+    private static final String FORWARD_SIGNUP_GET = "/mainServlet?command=signup_get";
     private static final int MIN_PASSWORD_LENGTH = 3;
     private static final int MAX_PASSWORD_LENGTH = 20;
     private static final Pattern LOGIN_PATTERN = Pattern.compile("^\\w{3,20}$");
-    private static final Pattern NAME_PATTERN = Pattern.compile("^[A-Za-zА-Яа-яЁё]{3,20}$");
+    private static final Pattern NAME_PATTERN = Pattern.compile("^[A-Za-z]{3,20}$");//todo rus
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
 
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        switch (req.getMethod()) {
-            case GET_METHOD -> doGet(req, resp);
-            case POST_METHOD -> doPost(req, resp);
-            default -> resp.sendError(METHOD_NOT_ALLOWED);
-        }
-    }
-
-    private void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        req.getRequestDispatcher(JSP_REGISTER).forward(req, resp);
-    }
-
-    private void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         String login = req.getParameter(Const.UserField.LOGIN);
         String password = req.getParameter(Const.UserField.PASSWORD);
         String repeatPassword = req.getParameter(Const.UserField.REPEAT_PASSWORD);
@@ -68,13 +53,12 @@ public class SignUpCommand implements ActionCommand {
                 resp.sendRedirect(req.getContextPath());
             } else {
                 req.setAttribute(Const.AttributeKey.ERRORS, errors);
-                doGet(req, resp);
+                req.getRequestDispatcher(FORWARD_SIGNUP_GET).forward(req, resp);
             }
         } catch (ServiceException e) {
             log.error(e);
         }
     }
-
     private void checkPasswords(String password, String repeatPassword, Map<String, String> errors) {
         if (password.equals(repeatPassword)) {
             if (password.length() < MIN_PASSWORD_LENGTH || password.length() > MAX_PASSWORD_LENGTH) {

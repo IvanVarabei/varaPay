@@ -9,7 +9,7 @@
 	</c:if>
 	<div class="authorization">
 		<div class="authorization__title title">Create account</div>
-		<form class="form" method="post">
+		<form class="form" method="post" action="${pageContext.servletContext.contextPath}/mainServlet?command=signup_post">
 			<p class="form__input-label">Login</p><input class="input form__input" name="login" value="${param.login}">
 			<p class="form__error">${errors.login}</p>
 			<p class="form__input-label">Password</p><input class="input form__input" name="password" type="password">

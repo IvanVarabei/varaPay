@@ -10,9 +10,11 @@ public interface UserDao{
 
     Optional<User> readByLogin(String login)throws DaoException;
 
+    Optional<User> readById(Long id) throws DaoException;
+
     Optional<User> readByEmail(String email) throws DaoException;
 
     List<User> readAll() throws DaoException;
 
-    boolean ifExists(String login, String password) throws DaoException;
+    Optional<User> findByLoginPassword(String login, String password) throws DaoException;
 }

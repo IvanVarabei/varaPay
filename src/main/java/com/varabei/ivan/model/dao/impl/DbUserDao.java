@@ -24,6 +24,8 @@ public class DbUserDao extends GenericDao implements UserDao {
                     "where sourcecardid = ? or destinationcardid = ?";
     private static final String FIND_CARD_BY_CARD_ID =
             "select accountid, cardnumber, validthru, cvc from cards where cardid = ?";
+    private static final String FIND_USER_BY_ID = "select rolename, userid, login, password, firstname, lastname," +
+            " email, birth from users join roles on users.roleid = roles.roleid and userid = ?";
     private static final String FIND_USER_BY_LOGIN = "select rolename, userid, login, password, firstname, lastname," +
             " email, birth from users join roles on users.roleid = roles.roleid and login = ?";
     private static final String FIND_USER_BY_EMAIL = "select rolename, userid, login, password, firstname, lastname," +
@@ -31,7 +33,8 @@ public class DbUserDao extends GenericDao implements UserDao {
     private static final String CREATE_USER = "insert into users(login, password, firstname, lastname, email, birth)" +
             "values (?, ?, ?, ?, ?, ?)";
     private static final String CREATE_ACCOUNT = "insert into accounts(userId) values (?)";
-    private static final String FIND_USER_BY_LOGIN_PASSWORD = "select login from users where login = ? and password = ?";
+    private static final String FIND_USER_BY_LOGIN_PASSWORD = "select rolename, userid, login, password, firstname," +
+            " lastname, email, birth from users join roles on users.roleid = roles.roleid and login = ? and password = ?";
 
     @Override
     public void create(User user) throws DaoException {
@@ -70,6 +73,16 @@ public class DbUserDao extends GenericDao implements UserDao {
     }
 
     @Override
+    public Optional<User> readById(Long id) throws DaoException {
+        Connection connection = pool.getConnection();
+        try {
+            return readById(id, connection);
+        } finally {
+            pool.releaseConnection(connection);
+        }
+    }
+
+    @Override
     public Optional<User> readByEmail(String email) throws DaoException {
         Connection connection = pool.getConnection();
         try {
@@ -90,18 +103,19 @@ public class DbUserDao extends GenericDao implements UserDao {
     }
 
     @Override
-    public boolean ifExists(String login, String password) throws DaoException {
+    public Optional<User> findByLoginPassword(String login, String password) throws DaoException {
         Connection connection = pool.getConnection();
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         DaoException daoException = null;
+        Optional<User> user = Optional.empty();
         try {
             preparedStatement = connection.prepareStatement(FIND_USER_BY_LOGIN_PASSWORD);
             preparedStatement.setString(PARAM_INDEX_1, login);
             preparedStatement.setString(PARAM_INDEX_2, password);
             resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                return true;
+                user = Optional.of(instantiateUser(resultSet, connection));
             }
         } catch (SQLException e) {
             daoException = new DaoException("can not get access to db", e);
@@ -116,7 +130,7 @@ public class DbUserDao extends GenericDao implements UserDao {
                 }
             }
         }
-        return false;
+        return user;
     }
 
     private void createAccount(String login, Connection connection) throws DaoException {
@@ -142,6 +156,30 @@ public class DbUserDao extends GenericDao implements UserDao {
         try {
             preparedStatement = connection.prepareStatement(dbQuery);
             preparedStatement.setString(PARAM_INDEX_1, fieldValue);
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                user = Optional.of(instantiateUser(resultSet, connection));
+            }
+        } catch (SQLException e) {
+            daoException = new DaoException("can not get access to db", e);
+        } finally {
+            try {
+                closeResource(resultSet, daoException);
+            } finally {
+                closeResource(preparedStatement, daoException);
+            }
+        }
+        return user;
+    }
+
+    private Optional<User> readById(Long id, Connection connection) throws DaoException {
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        DaoException daoException = null;
+        Optional<User> user = Optional.empty();
+        try {
+            preparedStatement = connection.prepareStatement(FIND_USER_BY_ID);
+            preparedStatement.setLong(PARAM_INDEX_1, id);
             resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 user = Optional.of(instantiateUser(resultSet, connection));
