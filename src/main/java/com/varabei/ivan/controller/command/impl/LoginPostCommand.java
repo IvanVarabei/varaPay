@@ -27,10 +27,10 @@ public class LoginPostCommand implements ActionCommand {
             if(user.isPresent()){
                 session.setAttribute("role", user.get().getRoleName());
                 session.setAttribute("userId", user.get().getId());
-                resp.sendRedirect(req.getContextPath());
+                resp.sendRedirect(req.getContextPath()+ "/mainServlet?command=profile");
             }else{
                 req.setAttribute(Const.AttributeKey.ERROR, Const.ErrorInfo.WRONG_LOGIN_OR_PASSWORD);
-                req.getRequestDispatcher("/mainServlet?command=profile").forward(req, resp);
+                req.getRequestDispatcher("/mainServlet?command=login_get").forward(req, resp);
             }
         } catch (ServiceException e) {
 

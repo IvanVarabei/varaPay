@@ -1,10 +1,9 @@
 package com.varabei.ivan.model.entity;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-public class Payment extends StorableItem implements Serializable {
+public class Payment extends StorableItem {
     private CardInfo sourceCardInfo;
     private CardInfo destinationCardInfo;
     private BigDecimal amount;

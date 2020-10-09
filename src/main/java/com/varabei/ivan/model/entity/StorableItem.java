@@ -1,6 +1,8 @@
 package com.varabei.ivan.model.entity;
 
-public class StorableItem {
+import java.io.Serializable;
+
+public class StorableItem implements Serializable {
     private Long id;
 
     public Long getId() {

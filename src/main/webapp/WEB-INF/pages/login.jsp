@@ -9,7 +9,7 @@
 		<form class="form" method="post" action="${pageContext.servletContext.contextPath}/mainServlet?command=login_post">
 			<p class="form__error">${requestScope.error}</p>
 			<p class="form__input-label">Login</p><input class="input form__input" name="login" value="${param.login}">
-			<p class="form__input-label">Password</p><input class="input form__input" name="password" type="password">
+			<p class="form__input-label">Password</p><input class="input form__input" name="password" type="text">
 			<button class="button form_button">login</button>
 		</form>
 	</div>

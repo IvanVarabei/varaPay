@@ -1,12 +1,11 @@
 package com.varabei.ivan.model.entity;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.List;
 
 public class Card extends CardInfo implements Serializable {
     private List<Payment> payments;
-    private Account account;
+    private AccountInfo accountInfo;
 
     public List<Payment> getPayments() {
         return payments;
@@ -16,20 +15,31 @@ public class Card extends CardInfo implements Serializable {
         this.payments = payments;
     }
 
-    public Account getAccount() {
-        return account;
+    public AccountInfo getAccountInfo() {
+        return accountInfo;
     }
 
-    public void setAccount(Account account) {
-        this.account = account;
+    public void setAccountInfo(AccountInfo accountInfo) {
+        this.accountInfo = accountInfo;
     }
 
     @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("Card{");
-        sb.append(", account=").append(account);
-        sb.append("payments=").append(payments);
-        sb.append('}');
-        return sb.toString();
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        Card card = (Card) o;
+
+        if (payments != null ? !payments.equals(card.payments) : card.payments != null) return false;
+        return accountInfo != null ? accountInfo.equals(card.accountInfo) : card.accountInfo == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (payments != null ? payments.hashCode() : 0);
+        result = 31 * result + (accountInfo != null ? accountInfo.hashCode() : 0);
+        return result;
     }
 }

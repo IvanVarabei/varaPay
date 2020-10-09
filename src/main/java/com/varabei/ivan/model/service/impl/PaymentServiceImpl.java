@@ -28,10 +28,10 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public void makePayment(Long sourceCardId, Long destinationCardId, BigDecimal amount) throws ServiceException {
+    public void makePayment(Long sourceCardId, String destinationCardNumber, BigDecimal amount) throws ServiceException {
         PaymentDao paymentDao = DaoFactory.getInstance().getPaymentDao();
         try {
-            paymentDao.makePayment(sourceCardId, destinationCardId, amount);
+            paymentDao.makePayment(sourceCardId, destinationCardNumber, amount);
         } catch (DaoException e) {
             throw new ServiceException("", e);
         }

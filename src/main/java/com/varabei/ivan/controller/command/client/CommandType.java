@@ -11,7 +11,9 @@ public enum CommandType {
     LOGIN_POST(new LoginPostCommand()),
     LOGOUT(new LogoutCommand()),
     PROFILE(new ProfileCommand()),
-    CARD_PAGE_GET(new CardPageGetCommand()),;
+    CARD_PAGE_GET(new CardPageGetCommand()),
+    MAKE_PAYMENT_POST(new MakePaymentPost()),
+    PAYMENT_OVERVIEW_GET(new PaymentOverviewGet());
     private final ActionCommand command;
 
     CommandType(ActionCommand command) {

@@ -23,7 +23,6 @@ import java.util.regex.Pattern;
 public class SignUpPostCommand implements ActionCommand {
     private static final UserService userService = ServiceFactory.getInstance().getUserService();
     private static final Logger log = LogManager.getLogger(SignUpPostCommand.class);
-    private static final String DATE_FORMAT = "yyyy-MM-dd";
     private static final String FORWARD_SIGNUP_GET = "/mainServlet?command=signup_get";
     private static final int MIN_PASSWORD_LENGTH = 3;
     private static final int MAX_PASSWORD_LENGTH = 20;
@@ -47,7 +46,6 @@ public class SignUpPostCommand implements ActionCommand {
             checkName(firstName, errors, Const.UserField.FIRST_NAME);
             checkName(lastName, errors, Const.UserField.LAST_NAME);
             checkPasswords(password, repeatPassword, errors);
-            checkDate(birth, errors);
             if (errors.isEmpty()) {
                 userService.signUp(new User(login, password, firstName, lastName, email, LocalDate.parse(birth)));
                 resp.sendRedirect(req.getContextPath());
@@ -93,16 +91,5 @@ public class SignUpPostCommand implements ActionCommand {
         } else {
             errors.put(Const.UserField.LOGIN, Const.ErrorInfo.WRONG_LOGIN);
         }
-    }
-
-    private void checkDate(String potentialDate, Map<String, String> errors) {
-        if (potentialDate != null && potentialDate.length() == DATE_FORMAT.length()) {
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_FORMAT);
-            simpleDateFormat.setLenient(true);
-            if (simpleDateFormat.parse(potentialDate, new ParsePosition(0)) != null) {
-                return;
-            }
-        }
-        errors.put(Const.UserField.BIRTH, Const.ErrorInfo.WRONG_DATE);
     }
 }

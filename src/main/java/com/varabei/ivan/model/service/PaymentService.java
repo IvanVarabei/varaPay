@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface PaymentService {
     List<Payment> findAll() throws ServiceException;
-    void makePayment(Long sourceCardId, Long destinationCardId, BigDecimal amount) throws ServiceException;
+    void makePayment(Long sourceCardId, String destinationCardLong, BigDecimal amount) throws ServiceException;
 }

@@ -22,7 +22,7 @@
 			<p class="form__error">${errors.lastName}</p>
 			<p class="form__input-label">Email</p><input class="input form__input" name="email" value="${param.email}">
 			<p class="form__error">${errors.email}</p>
-			<p class="form__input-label">Date birth</p><input class="input form__input" name="birth" value="${param.birth}" placeholder="yyyy-MM-dd">
+			<p class="form__input-label">Date birth</p><input class="input form__input" name="birth" value="${not empty param.birth ? param.birth : '2000-01-01'}" type="date" min="1920-01-01" max="2010-01-01">
 			<p class="form__error">${errors.birth}</p>
 			<button class="button form_button">sign up</button>
 		</form>
