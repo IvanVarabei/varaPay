@@ -3,7 +3,7 @@ package com.varabei.ivan.controller.command.impl;
 import com.varabei.ivan.Const;
 import com.varabei.ivan.controller.command.ActionCommand;
 import com.varabei.ivan.model.service.PaymentService;
-import com.varabei.ivan.model.service.ServiceException;
+import com.varabei.ivan.model.exception.ServiceException;
 import com.varabei.ivan.model.service.ServiceFactory;
 
 import javax.servlet.ServletException;
@@ -25,7 +25,7 @@ public class MakePaymentPost implements ActionCommand {
         //LocalDate destinationCardDate= req.getParameter("destinationCardDate");
         try {
             paymentService.makePayment(sourceCardId, destinationCardNumber, amount);
-            resp.sendRedirect(JSP_CARD_PAGE);
+            resp.sendRedirect(req.getContextPath()+  JSP_CARD_PAGE);
         } catch (ServiceException e) {
             e.printStackTrace();
         }

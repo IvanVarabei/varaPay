@@ -3,7 +3,7 @@ package com.varabei.ivan.controller.command.impl;
 import com.varabei.ivan.Const;
 import com.varabei.ivan.controller.command.ActionCommand;
 import com.varabei.ivan.model.entity.User;
-import com.varabei.ivan.model.service.ServiceException;
+import com.varabei.ivan.model.exception.ServiceException;
 import com.varabei.ivan.model.service.ServiceFactory;
 import com.varabei.ivan.model.service.UserService;
 import org.apache.logging.log4j.LogManager;
@@ -13,8 +13,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.text.ParsePosition;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
@@ -57,6 +55,7 @@ public class SignUpPostCommand implements ActionCommand {
             log.error(e);
         }
     }
+
     private void checkPasswords(String password, String repeatPassword, Map<String, String> errors) {
         if (password.equals(repeatPassword)) {
             if (password.length() < MIN_PASSWORD_LENGTH || password.length() > MAX_PASSWORD_LENGTH) {

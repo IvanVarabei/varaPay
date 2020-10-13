@@ -1,5 +1,6 @@
 package com.varabei.ivan.controller.filter;
 
+import com.varabei.ivan.Const;
 import com.varabei.ivan.controller.command.client.CommandType;
 
 import javax.servlet.*;
@@ -15,8 +16,8 @@ public class PermissionFilter implements Filter {
     Map<String, List<String>> commandNamePermittedRoles = new HashMap<>();
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
-        commandNamePermittedRoles.put(CommandType.PROFILE.name().toLowerCase(), List.of("админ", "клиент"));
+    public void init(FilterConfig filterConfig) {
+        //commandNamePermittedRoles.put(CommandType.PROFILE.name().toLowerCase(), List.of("админ", "клиент"));
         commandNamePermittedRoles.put("block_user_post", List.of("админ"));
     }
 
@@ -27,14 +28,14 @@ public class PermissionFilter implements Filter {
         HttpSession session = req.getSession();
         String command = req.getParameter("command");
         List<String> allowedRoles = commandNamePermittedRoles.get(command);
-        Object userRole = session.getAttribute("role");
+        Object userRole = session.getAttribute(Const.UserField.ROLE_NAME);
         if (userRole == null && allowedRoles != null) {
             resp.sendRedirect(req.getContextPath()+"/mainServlet?command=login_get");
         } else {
             if (allowedRoles == null || allowedRoles.contains(userRole)) {
                 chain.doFilter(req, resp);
             } else {
-                req.getRequestDispatcher(req.getContextPath()).forward(req, resp);
+                req.getRequestDispatcher("/WEB-INF/pages/welcome.jsp").forward(req, resp);
             }
         }
     }

@@ -1,10 +1,10 @@
 package com.varabei.ivan.model.service.impl;
 
-import com.varabei.ivan.model.dao.DaoException;
+import com.varabei.ivan.model.exception.DaoException;
 import com.varabei.ivan.model.dao.DaoFactory;
 import com.varabei.ivan.model.dao.UserDao;
 import com.varabei.ivan.model.entity.User;
-import com.varabei.ivan.model.service.ServiceException;
+import com.varabei.ivan.model.exception.ServiceException;
 import com.varabei.ivan.model.service.UserService;
 
 import java.util.List;
@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> findAll() throws ServiceException {
         try {
-            return userDao.readAll();
+            return userDao.findAll();
         } catch (DaoException e) {
             throw new ServiceException("", e);
         }
@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<User> findByLogin(String login) throws ServiceException {
         try {
-            return userDao.readByLogin(login);
+            return userDao.findByLogin(login);
         } catch (DaoException e) {
             throw new ServiceException("", e);
         }
@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<User> findById(Long id) throws ServiceException {
         try {
-            return userDao.readById(id);
+            return userDao.findById(id);
         } catch (DaoException e) {
             throw new ServiceException("", e);
         }
@@ -61,7 +61,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<User> findByEmail(String email) throws ServiceException {
         try {
-            return userDao.readByEmail(email);
+            return userDao.findByEmail(email);
         } catch (DaoException e) {
             throw new ServiceException("", e);
         }

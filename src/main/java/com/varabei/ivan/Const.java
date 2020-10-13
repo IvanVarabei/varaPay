@@ -9,7 +9,6 @@ public class Const {
         public static final String WRONG_LENGTH = ">=3 and <=20";
         public static final String ALREADY_EXISTS = "such a value already exists";
         public static final String DIFFERENT_PASSWORDS = "passwords are different";
-        public static final String WRONG_DATE = "wrong date format";
         public static final String WRONG_LOGIN = ">=3 and <=20 letter, number, _";
         public static final String WRONG_EMAIL = "wrong email format";
         public static final String WRONG_LOGIN_OR_PASSWORD = "wrong login or password";
@@ -37,11 +36,11 @@ public class Const {
     }
 
     public static class UserField {
-        public static final String ID = "userId";
-        public static final String ROLE_NAME = "roleName";
+        public static final String ID = "user_id";
+        public static final String ROLE_NAME = "role_name";
         public static final String LOGIN = "login";
         public static final String PASSWORD = "password";
-        public static final String REPEAT_PASSWORD = "repeatPassword";
+        public static final String REPEAT_PASSWORD = "repeat_password";
         public static final String FIRST_NAME = "firstName";
         public static final String LAST_NAME = "lastName";
         public static final String EMAIL = "email";
@@ -52,9 +51,9 @@ public class Const {
     }
 
     public static class CardField {
-        public static final String ID = "cardId";
-        public static final String NUMBER = "cardNumber";
-        public static final String VALID_THRU = "validThru";
+        public static final String ID = "card_id";
+        public static final String NUMBER = "card_number";
+        public static final String VALID_THRU = "valid_thru";
         public static final String CVC = "cvc";
 
         private CardField() {
@@ -62,22 +61,30 @@ public class Const {
     }
 
     public static class AccountField {
-        public static final String ID = "accountId";
+        public static final String ID = "account_id";
         public static final String BALANCE = "balance";
-        public static final String IS_ACTIVE = "isActive";
+        public static final String IS_ACTIVE = "is_active";
 
         private AccountField() {
         }
     }
 
     public static class PaymentField {
-        public static final String ID = "paymentId";
-        public static final String SOURCE_CARD_ID = "sourceCardId";
-        public static final String DESTINATION_CARD_ID = "destinationCardId";
+        public static final String ID = "payment_id";
+        public static final String SOURCE_CARD_ID = "source_card_id";
+        public static final String DESTINATION_CARD_ID = "destination_card_id";
         public static final String AMOUNT = "amount";
-        public static final String INSTANT = "paymentInstant";
+        public static final String INSTANT = "payment_instant";
 
         private PaymentField() {
+        }
+    }
+
+    public static class BidField {
+        public static final String ID = "bid_id";
+        public static final String PLACING_DATE_TIME = "placing_date_time";
+
+        private BidField() {
         }
     }
 }

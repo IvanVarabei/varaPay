@@ -1,4 +1,4 @@
-package com.varabei.ivan.model.dao.pool;
+package com.varabei.ivan.model.exception;
 
 public class ConnectionPoolException extends RuntimeException{
     public ConnectionPoolException() {

@@ -3,7 +3,7 @@ package com.varabei.ivan.controller.command.impl;
 import com.varabei.ivan.Const;
 import com.varabei.ivan.controller.command.ActionCommand;
 import com.varabei.ivan.model.entity.User;
-import com.varabei.ivan.model.service.ServiceException;
+import com.varabei.ivan.model.exception.ServiceException;
 import com.varabei.ivan.model.service.ServiceFactory;
 import com.varabei.ivan.model.service.UserService;
 
@@ -25,8 +25,8 @@ public class LoginPostCommand implements ActionCommand {
         try {
             Optional<User> user = userService.signIn(login, password);
             if(user.isPresent()){
-                session.setAttribute("role", user.get().getRoleName());
-                session.setAttribute("userId", user.get().getId());
+                session.setAttribute(Const.UserField.ROLE_NAME, user.get().getRoleName());
+                session.setAttribute(Const.UserField.ID, user.get().getId());
                 resp.sendRedirect(req.getContextPath()+ "/mainServlet?command=profile");
             }else{
                 req.setAttribute(Const.AttributeKey.ERROR, Const.ErrorInfo.WRONG_LOGIN_OR_PASSWORD);

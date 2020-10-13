@@ -1,5 +1,6 @@
 package com.varabei.ivan.model.dao.pool;
 
+import com.varabei.ivan.model.exception.ConnectionPoolException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

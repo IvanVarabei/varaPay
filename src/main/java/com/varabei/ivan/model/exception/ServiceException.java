@@ -1,4 +1,4 @@
-package com.varabei.ivan.model.service;
+package com.varabei.ivan.model.exception;
 
 public class ServiceException extends Exception{
     public ServiceException() {

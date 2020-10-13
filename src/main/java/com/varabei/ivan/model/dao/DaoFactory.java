@@ -1,9 +1,6 @@
 package com.varabei.ivan.model.dao;
 
-import com.varabei.ivan.model.dao.impl.DbAccountDao;
-import com.varabei.ivan.model.dao.impl.DbCardDao;
-import com.varabei.ivan.model.dao.impl.DbPaymentDao;
-import com.varabei.ivan.model.dao.impl.DbUserDao;
+import com.varabei.ivan.model.dao.impl.*;
 
 public final class DaoFactory {
     private static final DaoFactory instance = new DaoFactory();
@@ -11,6 +8,7 @@ public final class DaoFactory {
     private final AccountDao accountDao = new DbAccountDao();
     private final PaymentDao paymentDao = new DbPaymentDao();
     private final CardDao cardDao = new DbCardDao();
+    private final BidDao bidDao = new DbBidDao();
 
     private DaoFactory() {}
 
@@ -25,6 +23,9 @@ public final class DaoFactory {
     }
     public CardDao getCardDao() {
         return cardDao;
+    }
+    public BidDao getTopUpBidDao() {
+        return bidDao;
     }
 
     public static DaoFactory getInstance() {

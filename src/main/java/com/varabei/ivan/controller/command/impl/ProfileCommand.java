@@ -2,7 +2,7 @@ package com.varabei.ivan.controller.command.impl;
 
 import com.varabei.ivan.Const;
 import com.varabei.ivan.controller.command.ActionCommand;
-import com.varabei.ivan.model.service.ServiceException;
+import com.varabei.ivan.model.exception.ServiceException;
 import com.varabei.ivan.model.service.ServiceFactory;
 import com.varabei.ivan.model.service.UserService;
 

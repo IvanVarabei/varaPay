@@ -1,6 +1,7 @@
 package com.varabei.ivan.model.service;
 
 import com.varabei.ivan.model.entity.User;
+import com.varabei.ivan.model.exception.ServiceException;
 
 import java.util.List;
 import java.util.Optional;

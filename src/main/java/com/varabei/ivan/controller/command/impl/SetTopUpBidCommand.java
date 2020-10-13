@@ -1,27 +1,28 @@
 package com.varabei.ivan.controller.command.impl;
 
-import com.varabei.ivan.Const;
 import com.varabei.ivan.controller.command.ActionCommand;
-import com.varabei.ivan.model.service.CardService;
 import com.varabei.ivan.model.exception.ServiceException;
 import com.varabei.ivan.model.service.ServiceFactory;
+import com.varabei.ivan.model.service.BidService;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.math.BigDecimal;
 
-public class CardPageGetCommand implements ActionCommand {
-    private static final String JSP_CARD_PAGE = "/WEB-INF/pages/card.jsp";
-    private static final CardService cardService = ServiceFactory.getInstance().getCardService();
+public class SetTopUpBidCommand implements ActionCommand {
+    private static final BidService BID_SERVICE = ServiceFactory.getInstance().getToUpBidService();
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        Long cardId = Long.parseLong(req.getParameter(Const.CardField.ID));
+        Long accountId = Long.parseLong(req.getParameter("account_id"));
+        BigDecimal amount = new BigDecimal(req.getParameter("amount"));
+        //String message = req.getParameter("message");
         try {
-            req.setAttribute("card", cardService.findById(cardId).get());
+            BID_SERVICE.placeTopUpBid(accountId , amount.longValue(), "message");
         } catch (ServiceException e) {
             e.printStackTrace();
         }
-        req.getRequestDispatcher(JSP_CARD_PAGE).forward(req, resp);
+        resp.sendRedirect(req.getContextPath() + "/mainServlet?command=profile");
     }
 }

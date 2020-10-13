@@ -7,6 +7,10 @@
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
 
+    <listener>
+        <listener-class>com.varabei.ivan.controller.listener.ConnectionPoolDestroyerListener</listener-class>
+    </listener>
+
     <filter>
         <filter-name>CharsetFilter</filter-name>
         <filter-class>com.varabei.ivan.controller.filter.CharsetFilter</filter-class>

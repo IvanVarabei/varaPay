@@ -1,11 +1,11 @@
 package com.varabei.ivan.model.service.impl;
 
 import com.varabei.ivan.model.dao.CardDao;
-import com.varabei.ivan.model.dao.DaoException;
+import com.varabei.ivan.model.exception.DaoException;
 import com.varabei.ivan.model.dao.DaoFactory;
 import com.varabei.ivan.model.entity.Card;
 import com.varabei.ivan.model.service.CardService;
-import com.varabei.ivan.model.service.ServiceException;
+import com.varabei.ivan.model.exception.ServiceException;
 
 import java.util.Optional;
 

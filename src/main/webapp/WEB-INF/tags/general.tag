@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ tag pageEncoding="UTF-8" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ tag trimDirectiveWhitespaces="true" %>
 <%@ attribute name="pageTitle" required="true" %>
@@ -20,12 +21,20 @@
 				<li>
 					<a href="${pageContext.request.contextPath}" class="header__link">Welcome page</a>
 				</li>
-				<c:if test="${not empty sessionScope.userId}">
+				<c:if test="${not empty sessionScope.user_id}">
 					<li>
 						<a href="${pageContext.request.contextPath}/mainServlet?command=profile" class="header__link">Profile</a>
 					</li>
 				</c:if>
-				<c:if test="${empty sessionScope.userId}">
+				<c:if test="${sessionScope.role_name eq 'админ'}">
+					<li>
+						<a href="${pageContext.request.contextPath}/mainServlet?command=moderate_accounts_get" class="header__link">Moderate accounts</a>
+					</li>
+					<li>
+						<a href="${pageContext.request.contextPath}/mainServlet?command=moderate_top_up_bids_get" class="header__link">Moderate top up bids</a>
+					</li>
+				</c:if>
+				<c:if test="${empty sessionScope.user_id}">
 					<li>
 						<a href="${pageContext.request.contextPath}/mainServlet?command=signup_get" class="header__link">Create
 							account</a>
@@ -34,7 +43,7 @@
 						<a href="${pageContext.request.contextPath}/mainServlet?command=login_get" class="header__link">Login</a>
 					</li>
 				</c:if>
-				<c:if test="${not empty sessionScope.userId}">
+				<c:if test="${not empty sessionScope.user_id}">
 					<li>
 						<a href="${pageContext.request.contextPath}/mainServlet?command=logout" class="header__link">Logout</a>
 					</li>

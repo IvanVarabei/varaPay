@@ -33,7 +33,7 @@
 		<form id="makePayment" class="form" method="post" action="${pageContext.servletContext.contextPath}/mainServlet?command=make_payment_post">
 			<p class="form__input-label">Amount</p><input class="input form__input" name="amount" form="makePayment">
 			<p class="form__input-label">Your CVC</p><input class="input form__input" name="cvc">
-			<input type="hidden" name="cardId" value="${card.id}" form="makePayment">
+			<input type="hidden" name="card_id" value="${card.id}" form="makePayment">
 			<button class="button form_button">pay</button>
 		</form>
 	</div>

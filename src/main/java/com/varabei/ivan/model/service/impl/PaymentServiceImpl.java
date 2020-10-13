@@ -1,12 +1,12 @@
 package com.varabei.ivan.model.service.impl;
 
-import com.varabei.ivan.model.dao.DaoException;
 import com.varabei.ivan.model.dao.DaoFactory;
 import com.varabei.ivan.model.dao.PaymentDao;
 import com.varabei.ivan.model.dao.UserDao;
 import com.varabei.ivan.model.entity.Payment;
+import com.varabei.ivan.model.exception.DaoException;
+import com.varabei.ivan.model.exception.ServiceException;
 import com.varabei.ivan.model.service.PaymentService;
-import com.varabei.ivan.model.service.ServiceException;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -17,7 +17,7 @@ public class PaymentServiceImpl implements PaymentService {
     public List<Payment> findAll() throws ServiceException {
         UserDao userDao = DaoFactory.getInstance().getUserDao();
         try {
-            return userDao.readAll().stream()
+            return userDao.findAll().stream()
                     .flatMap(u -> u.getAccounts().stream()
                             .flatMap(a -> a.getCards().stream()
                                     .flatMap(c -> c.getPayments().stream())))

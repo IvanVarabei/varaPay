@@ -1,4 +1,4 @@
-package com.varabei.ivan.model.dao;
+package com.varabei.ivan.model.exception;
 
 public class DaoException extends Exception{
     public DaoException() {

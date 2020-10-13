@@ -1,37 +1,33 @@
 package com.varabei.ivan.model.dao.impl;
 
 import com.varabei.ivan.model.dao.AccountDao;
-import com.varabei.ivan.model.dao.DaoException;
-import com.varabei.ivan.model.entity.User;
+import com.varabei.ivan.model.entity.Account;
+import com.varabei.ivan.model.exception.DaoException;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.util.List;
 
 public class DbAccountDao extends GenericDao implements AccountDao {
-    private static final String DISABLE_ACCOUNT_BY_ID = "update accounts set isactive = false where accountid = ?";
+    private static final String CHANGE_ACTIVE_BY_ID = "update accounts set is_active = not is_active where account_id= ?";
+    private static final String CREATE_ACCOUNT = "insert into accounts (user_id) values (?)";
+    private static final String ABANDON_ACCOUNT = "update accounts set is_abandoned = true where account_id= ?";
 
-    public void create(User user)throws DaoException {
-
+    @Override
+    public void create(Long userId) throws DaoException {
+      //  executeQueryAcceptingOneValue(userId, CREATE_ACCOUNT);
     }
 
     @Override
-    public void disable(Long accountId) throws DaoException {
-        Connection connection = pool.getConnection();
-        PreparedStatement preparedStatement = null;
-        DaoException daoException = null;
-        try {
-            preparedStatement = connection.prepareStatement(DISABLE_ACCOUNT_BY_ID);
-            preparedStatement.setLong(PARAM_INDEX_1, accountId);
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            daoException = new DaoException("can not get access to db", e);
-        } finally {
-            try {
-                closeResource(preparedStatement, daoException);
-            } finally {
-                pool.releaseConnection(connection);
-            }
-        }
+    public List<Account> findDisabled() throws DaoException {
+        return null;
+    }
+
+    @Override
+    public void delete(Long accountId) throws DaoException {
+       // executeQueryAcceptingOneValue(accountId, ABANDON_ACCOUNT);
+    }
+
+    @Override
+    public void changeActive(Long accountId) throws DaoException {
+        //executeQueryAcceptingOneValue(accountId, CHANGE_ACTIVE_BY_ID);
     }
 }
