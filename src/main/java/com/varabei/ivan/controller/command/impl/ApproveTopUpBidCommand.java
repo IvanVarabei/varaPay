@@ -1,5 +1,6 @@
 package com.varabei.ivan.controller.command.impl;
 
+import com.varabei.ivan.Const;
 import com.varabei.ivan.controller.command.ActionCommand;
 import com.varabei.ivan.model.exception.ServiceException;
 import com.varabei.ivan.model.service.ServiceFactory;
@@ -9,20 +10,15 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.math.BigDecimal;
 
-public class SetTopUpBidCommand implements ActionCommand {
-    private static final BidService BID_SERVICE = ServiceFactory.getInstance().getToUpBidService();
+public class ApproveTopUpBidCommand implements ActionCommand {
+    private static final BidService bidService = ServiceFactory.getInstance().getToUpBidService();
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        Long accountId = Long.parseLong(req.getParameter("account_id"));
-        BigDecimal amount = new BigDecimal(req.getParameter("amount"));
-        //String message = req.getParameter("message");
         try {
-            BID_SERVICE.placeTopUpBid(accountId , amount.longValue(), "message");
+            bidService.approveTopUpBid(Long.parseLong(req.getParameter(Const.BidField.ID)));
         } catch (ServiceException e) {
             e.printStackTrace();
         }
-        resp.sendRedirect(req.getContextPath() + "/mainServlet?command=profile");
     }
 }

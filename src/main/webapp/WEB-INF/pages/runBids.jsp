@@ -13,10 +13,10 @@
 			<form method="post">
 				<input type="hidden" name="bid_id" value="${bid.id}">
 					${bid.id} ${bid.amount}
-				<button formaction="${pageContext.servletContext.contextPath}/mainServlet?command=approve_top_up_bid">
+				<button formaction="${pageContext.servletContext.contextPath}/mainServlet?command=approve_top_up_bid_post">
 					approve
 				</button>
-				<button formaction="${pageContext.servletContext.contextPath}/mainServlet?command=reject_top_up_bid">
+				<button formaction="${pageContext.servletContext.contextPath}/mainServlet?command=reject_top_up_bid_post">
 					reject
 				</button>
 				<br>

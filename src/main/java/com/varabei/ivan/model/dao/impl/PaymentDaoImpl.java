@@ -1,0 +1,125 @@
+package com.varabei.ivan.model.dao.impl;
+
+import com.varabei.ivan.Const;
+import com.varabei.ivan.model.dao.PaymentDao;
+import com.varabei.ivan.model.dao.builder.impl.CardBuilder;
+import com.varabei.ivan.model.entity.Card;
+import com.varabei.ivan.model.entity.Payment;
+import com.varabei.ivan.model.exception.DaoException;
+
+import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+public class PaymentDaoImpl extends GenericDao<Card> implements PaymentDao {
+    private static final String SET_PAYMENT = "insert into payments (source_card_id, destination_card_id, amount) " +
+            "values(?, ?, ?)";
+    private static final String FIND_CARD_ID_BY_NUMBER = "select card_id from cards where card_number = ?";
+    private static final String FIND_ACCOUNT_ID_BY_CARD_ID = "select account_id from cards where card_id = ?";
+    private static final String ADD_ACCOUNT_BALANCE = "update accounts set balance = balance + ? where account_id= ?";
+    private static final String FIND_CARD_BY_ID = "select card_id, card_number, valid_thru, cvc, cards.account_id,\n" +
+            "       balance, is_active, users.user_id, users.login,users.email,\n" +
+            "       users.firstname, users.lastname, users.birth, roles.role_name from cards\n" +
+            "    join accounts on card_id = ? and cards.account_id = accounts.account_id\n" +
+            "    join users on accounts.user_id = users.user_id\n" +
+            "    join roles on users.role_id = roles.role_id";
+    private static final String FIND_PAYMENTS_BY_CARD_ID = "select payment_id, amount, source_card_id, " +
+            "destination_card_id, payment_instant from payments where source_card_id = ? or destination_card_id = ?";
+    private static final String FIND_OUTGOING_PAYMENTS_BY_CARD_ID = "select payment_id, amount, source_card_id," +
+            " destination_card_id, payment_instant from payments where source_card_id = ?";
+    private static final String FIND_INCOMING_PAYMENTS_BY_CARD_ID = "select payment_id, amount, source_card_id," +
+            " destination_card_id, payment_instant from payments where destination_card_id = ?";
+
+    public PaymentDaoImpl() {
+        super(new CardBuilder());
+    }
+
+    @Override
+    public void makePayment(Long sourceCardId, String destinationCardNumber, BigDecimal amount) throws DaoException {
+        Connection connection = pool.getConnection();
+        try {
+            startTransaction(connection);
+            Long destinationCardId = findLong(FIND_CARD_ID_BY_NUMBER, connection,
+                    Const.CardField.ID, destinationCardNumber).orElseThrow(DaoException::new);
+            Long sourceAccountId = findLong(FIND_ACCOUNT_ID_BY_CARD_ID, connection,
+                    Const.AccountField.ID, sourceCardId).orElseThrow(DaoException::new);
+            Long destAccountId = findLong(FIND_ACCOUNT_ID_BY_CARD_ID, connection,
+                    Const.AccountField.ID, destinationCardId).orElseThrow(DaoException::new);
+            executeUpdate(ADD_ACCOUNT_BALANCE, connection, -amount.longValue(), sourceAccountId);
+            executeUpdate(ADD_ACCOUNT_BALANCE, connection, amount.longValue(), destAccountId);
+            executeUpdate(SET_PAYMENT, connection, sourceCardId, destinationCardId, amount.longValue());
+            endTransaction(connection);
+        } catch (SQLException | DaoException e) {
+            DaoException daoException = e instanceof DaoException ? (DaoException) e : new DaoException(e);
+            cancelTransaction(connection, daoException);
+        } finally {
+            pool.releaseConnection(connection);
+        }
+    }
+
+    @Override
+    public List<Payment> findPaymentsByCardId(Long cardId) throws DaoException {
+        return findPayments(FIND_PAYMENTS_BY_CARD_ID, cardId);
+    }
+
+    @Override
+    public List<Payment> findOutgoingPayments(Long cardId) throws DaoException {
+        return findPayments(FIND_OUTGOING_PAYMENTS_BY_CARD_ID, cardId);
+    }
+
+    @Override
+    public List<Payment> findIncomingPayments(Long cardId) throws DaoException {
+        return findPayments(FIND_INCOMING_PAYMENTS_BY_CARD_ID, cardId);
+    }
+
+    private List<Payment> findPayments(String query, Long cardId) throws DaoException {
+        Connection connection = pool.getConnection();
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        DaoException daoException = null;
+        List<Payment> payments = new ArrayList<>();
+        try {
+            preparedStatement = connection.prepareStatement(query);
+            setParameters(preparedStatement, cardId);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                payments.add(instantiatePayment(resultSet, connection));
+            }
+        } catch (SQLException e) {
+            daoException = new DaoException("can not get access to db", e);
+        } catch (DaoException e) {
+            daoException = e;
+        } finally {
+            try {
+                closeResource(resultSet, daoException);
+            } finally {
+                try {
+                    closeResource(preparedStatement, daoException);
+                } finally {
+                    pool.releaseConnection(connection);
+                }
+            }
+        }
+        return payments;
+    }
+
+    private Payment instantiatePayment(ResultSet resultSet, Connection connection) throws SQLException, DaoException {
+        Payment payment = new Payment();
+        Long sourceCardId = resultSet.getLong(Const.PaymentField.SOURCE_CARD_ID);
+        Long destinationCardId = resultSet.getLong(Const.PaymentField.DESTINATION_CARD_ID);
+        Card sourceCard = executeForSingleResult(FIND_CARD_BY_ID, connection, sourceCardId)
+                .orElseThrow(DaoException::new);
+        Card destinationCard = executeForSingleResult(FIND_CARD_BY_ID, connection, destinationCardId)
+                .orElseThrow(DaoException::new);
+        payment.setSourceCard(sourceCard);
+        payment.setDestinationCard(destinationCard);
+        payment.setId(resultSet.getLong(Const.PaymentField.ID));
+        payment.setAmount(new BigDecimal(resultSet.getLong(Const.PaymentField.AMOUNT)));
+        payment.setPaymentInstant(resultSet.getTimestamp(Const.PaymentField.INSTANT).toLocalDateTime());
+        return payment;
+    }
+}

@@ -14,7 +14,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Optional;
 
-public class LoginPostCommand implements ActionCommand {
+public class LoginCommand implements ActionCommand {
     private static final UserService userService = ServiceFactory.getInstance().getUserService();
 
     @Override
@@ -27,7 +27,7 @@ public class LoginPostCommand implements ActionCommand {
             if(user.isPresent()){
                 session.setAttribute(Const.UserField.ROLE_NAME, user.get().getRoleName());
                 session.setAttribute(Const.UserField.ID, user.get().getId());
-                resp.sendRedirect(req.getContextPath()+ "/mainServlet?command=profile");
+                resp.sendRedirect(req.getContextPath()+ "/mainServlet?command=profile_get");
             }else{
                 req.setAttribute(Const.AttributeKey.ERROR, Const.ErrorInfo.WRONG_LOGIN_OR_PASSWORD);
                 req.getRequestDispatcher("/mainServlet?command=login_get").forward(req, resp);

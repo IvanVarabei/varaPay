@@ -23,15 +23,15 @@
 				</li>
 				<c:if test="${not empty sessionScope.user_id}">
 					<li>
-						<a href="${pageContext.request.contextPath}/mainServlet?command=profile" class="header__link">Profile</a>
+						<a href="${pageContext.request.contextPath}/mainServlet?command=profile_get" class="header__link">Profile</a>
 					</li>
 				</c:if>
 				<c:if test="${sessionScope.role_name eq 'админ'}">
 					<li>
-						<a href="${pageContext.request.contextPath}/mainServlet?command=moderate_accounts_get" class="header__link">Moderate accounts</a>
+						<a href="${pageContext.request.contextPath}/mainServlet?command=run_accounts_get" class="header__link">Run accounts</a>
 					</li>
 					<li>
-						<a href="${pageContext.request.contextPath}/mainServlet?command=moderate_top_up_bids_get" class="header__link">Moderate top up bids</a>
+						<a href="${pageContext.request.contextPath}/mainServlet?command=run_bids_get" class="header__link">Run top up bids</a>
 					</li>
 				</c:if>
 				<c:if test="${empty sessionScope.user_id}">

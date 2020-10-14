@@ -10,12 +10,12 @@ import com.varabei.ivan.model.service.BidService;
 import java.util.List;
 
 public class BidServiceImpl implements BidService {
-    private static final BidDao BID_DAO = DaoFactory.getInstance().getTopUpBidDao();
+    private static final BidDao bidDao = DaoFactory.getInstance().getTopUpBidDao();
 
     @Override
-    public List<Bid> findAll() throws ServiceException {
+    public List<Bid> findInProgressBids() throws ServiceException {
         try {
-            return BID_DAO.findAll();
+            return bidDao.findInProgressBids();
         } catch (DaoException daoException) {
             throw new ServiceException(daoException);
         }
@@ -24,7 +24,16 @@ public class BidServiceImpl implements BidService {
     @Override
     public void placeTopUpBid(Long accountId, Long amount, String message) throws ServiceException {
         try {
-            BID_DAO.placeTopUpBid(accountId, amount, message);
+            bidDao.placeTopUpBid(accountId, amount, message);
+        } catch (DaoException daoException) {
+            throw new ServiceException(daoException);
+        }
+    }
+
+    @Override
+    public void placeWithdrawBid(Long accountId, Long amount, String message) throws ServiceException {
+        try {
+            bidDao.placeWithdrawBid(accountId, amount, message);
         } catch (DaoException daoException) {
             throw new ServiceException(daoException);
         }
@@ -33,14 +42,36 @@ public class BidServiceImpl implements BidService {
     @Override
     public void approveTopUpBid(Long topUpBidId) throws ServiceException {
         try {
-            BID_DAO.approveTopUpBid(topUpBidId);
+            bidDao.approveTopUpBid(topUpBidId);
         } catch (DaoException daoException) {
             throw new ServiceException(daoException);
         }
     }
 
     @Override
-    public void rejectTopUpBid(Long topUpBidId) throws ServiceException {
+    public void approveWithdrawBid(Long withdrawBidId) throws ServiceException {
+        try {
+            bidDao.approveWithdrawBid(withdrawBidId);
+        } catch (DaoException daoException) {
+            throw new ServiceException(daoException);
+        }
+    }
 
+    @Override
+    public void rejectTopUpBid(Long topUpBidId, String adminComment) throws ServiceException {
+        try {
+            bidDao.rejectTopUpBid(topUpBidId, adminComment);
+        } catch (DaoException daoException) {
+            throw new ServiceException(daoException);
+        }
+    }
+
+    @Override
+    public void rejectWithdrawBid(Long withdrawBidId, String adminComment) throws ServiceException {
+        try {
+            bidDao.rejectWithdrawBid(withdrawBidId, adminComment);
+        } catch (DaoException daoException) {
+            throw new ServiceException(daoException);
+        }
     }
 }

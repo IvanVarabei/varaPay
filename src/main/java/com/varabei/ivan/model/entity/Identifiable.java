@@ -2,7 +2,7 @@ package com.varabei.ivan.model.entity;
 
 import java.io.Serializable;
 
-public class StorableItem implements Serializable {
+public class Identifiable implements Serializable {
     private Long id;
 
     public Long getId() {
@@ -21,7 +21,7 @@ public class StorableItem implements Serializable {
         if (o == null || getClass() != o.getClass()){
             return false;
         }
-        StorableItem that = (StorableItem) o;
+        Identifiable that = (Identifiable) o;
         return id != null ? id.equals(that.id) : that.id == null;
     }
 

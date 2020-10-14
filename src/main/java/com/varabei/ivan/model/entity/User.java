@@ -1,10 +1,8 @@
 package com.varabei.ivan.model.entity;
 
-import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.List;
 
-public class User extends StorableItem implements Serializable {
+public class User extends Identifiable {
     private String roleName;
     private String login;
     private String password;
@@ -12,9 +10,8 @@ public class User extends StorableItem implements Serializable {
     private String lastName;
     private String email;
     private LocalDate birth;
-    private List<Account> accounts;
 
-    public User(){
+    public User() {
     }
 
     public User(String login, String password, String firstName, String lastName, String email, LocalDate birth) {
@@ -82,14 +79,6 @@ public class User extends StorableItem implements Serializable {
         this.birth = birth;
     }
 
-    public List<Account> getAccounts() {
-        return accounts;
-    }
-
-    public void setAccounts(List<Account> accounts) {
-        this.accounts = accounts;
-    }
-
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("User{");
@@ -100,7 +89,6 @@ public class User extends StorableItem implements Serializable {
         sb.append(", lastName='").append(lastName).append('\'');
         sb.append(", email='").append(email).append('\'');
         sb.append(", birth=").append(birth);
-        sb.append(", accounts=").append(accounts);
         sb.append('}');
         return sb.toString();
     }

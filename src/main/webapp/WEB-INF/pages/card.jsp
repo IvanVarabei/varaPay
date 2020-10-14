@@ -10,7 +10,7 @@
 		<div class="card__payment">
 			<div class="card__sub-title1 sub-title">from</div>
 			<div class="card__img1">
-				<div class="sub-title card__balance">${card.accountInfo.balance}$</div>
+				<div class="sub-title card__balance">${card.account.balance}$</div>
 				<div>
 					<input class="input card__input-number" value="${card.cardNumber}" readonly>
 				</div>

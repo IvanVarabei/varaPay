@@ -18,7 +18,7 @@ public class WelcomeCommand implements ActionCommand {
     public void execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         try {
             req.setAttribute(Const.AttributeKey.USER_AMOUNT, new UserServiceImpl().findAll().size());
-            req.setAttribute(Const.AttributeKey.PAYMENT_AMOUNT, new PaymentServiceImpl().findAll().size());
+            //req.setAttribute(Const.AttributeKey.PAYMENT_AMOUNT, new PaymentServiceImpl().findAll().size());
         } catch (ServiceException e) {
             e.printStackTrace();
         }

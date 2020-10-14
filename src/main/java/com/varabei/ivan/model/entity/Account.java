@@ -1,16 +1,34 @@
 package com.varabei.ivan.model.entity;
 
-import java.util.List;
+import java.math.BigDecimal;
 
-public class Account extends AccountInfo {
-    private List<Card> cards;
+public class Account extends Identifiable {
+    private BigDecimal balance;
+    private boolean isActive;
+    private User user;
 
-    public List<Card> getCards() {
-        return cards;
+    public BigDecimal getBalance() {
+        return balance;
     }
 
-    public void setCards(List<Card> cards) {
-        this.cards = cards;
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override
@@ -21,20 +39,26 @@ public class Account extends AccountInfo {
 
         Account account = (Account) o;
 
-        return cards != null ? cards.equals(account.cards) : account.cards == null;
+        if (isActive != account.isActive) return false;
+        if (balance != null ? !balance.equals(account.balance) : account.balance != null) return false;
+        return user != null ? user.equals(account.user) : account.user == null;
     }
 
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + (cards != null ? cards.hashCode() : 0);
+        result = 31 * result + (balance != null ? balance.hashCode() : 0);
+        result = 31 * result + (isActive ? 1 : 0);
+        result = 31 * result + (user != null ? user.hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Account{");
-        sb.append(", cards=").append(cards);
+        sb.append("balance=").append(balance);
+        sb.append(", isActive=").append(isActive);
+        sb.append(", user=").append(user);
         sb.append('}');
         return sb.toString();
     }

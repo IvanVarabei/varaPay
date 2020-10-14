@@ -3,26 +3,26 @@ package com.varabei.ivan.model.entity;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-public class Payment extends StorableItem {
-    private CardInfo sourceCardInfo;
-    private CardInfo destinationCardInfo;
+public class Payment extends Identifiable {
+    private Card sourceCard;
+    private Card destinationCard;
     private BigDecimal amount;
     private LocalDateTime paymentInstant;
 
-    public CardInfo getSourceCardInfo() {
-        return sourceCardInfo;
+    public Card getSourceCard() {
+        return sourceCard;
     }
 
-    public void setSourceCardInfo(CardInfo sourceCardInfo) {
-        this.sourceCardInfo = sourceCardInfo;
+    public void setSourceCard(Card sourceCard) {
+        this.sourceCard = sourceCard;
     }
 
-    public CardInfo getDestinationCardInfo() {
-        return destinationCardInfo;
+    public Card getDestinationCard() {
+        return destinationCard;
     }
 
-    public void setDestinationCardInfo(CardInfo destinationCardInfo) {
-        this.destinationCardInfo = destinationCardInfo;
+    public void setDestinationCard(Card destinationCard) {
+        this.destinationCard = destinationCard;
     }
 
     public BigDecimal getAmount() {
@@ -43,33 +43,24 @@ public class Payment extends StorableItem {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        if (!super.equals(o)) {
-            return false;
-        }
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
         Payment payment = (Payment) o;
-        if (sourceCardInfo != null ? !sourceCardInfo.equals(payment.sourceCardInfo) : payment.sourceCardInfo != null) {
+
+        if (sourceCard != null ? !sourceCard.equals(payment.sourceCard) : payment.sourceCard != null) return false;
+        if (destinationCard != null ? !destinationCard.equals(payment.destinationCard) : payment.destinationCard != null)
             return false;
-        }
-        if (destinationCardInfo != null ? !destinationCardInfo.equals(payment.destinationCardInfo) : payment.destinationCardInfo != null) {
-            return false;
-        }
-        if (amount != null ? !amount.equals(payment.amount) : payment.amount != null) {
-            return false;
-        }
+        if (amount != null ? !amount.equals(payment.amount) : payment.amount != null) return false;
         return paymentInstant != null ? paymentInstant.equals(payment.paymentInstant) : payment.paymentInstant == null;
     }
 
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + (sourceCardInfo != null ? sourceCardInfo.hashCode() : 0);
-        result = 31 * result + (destinationCardInfo != null ? destinationCardInfo.hashCode() : 0);
+        result = 31 * result + (sourceCard != null ? sourceCard.hashCode() : 0);
+        result = 31 * result + (destinationCard != null ? destinationCard.hashCode() : 0);
         result = 31 * result + (amount != null ? amount.hashCode() : 0);
         result = 31 * result + (paymentInstant != null ? paymentInstant.hashCode() : 0);
         return result;
@@ -78,8 +69,8 @@ public class Payment extends StorableItem {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Payment{");
-        sb.append(", sourceCardInfo=").append(sourceCardInfo);
-        sb.append(", destinationCardInfo=").append(destinationCardInfo);
+        sb.append("sourceCard=").append(sourceCard);
+        sb.append(", destinationCard=").append(destinationCard);
         sb.append(", amount=").append(amount);
         sb.append(", paymentInstant=").append(paymentInstant);
         sb.append('}');

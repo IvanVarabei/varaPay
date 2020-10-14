@@ -4,11 +4,11 @@ import com.varabei.ivan.model.dao.impl.*;
 
 public final class DaoFactory {
     private static final DaoFactory instance = new DaoFactory();
-    private final UserDao userDao = new DbUserDao();
-    private final AccountDao accountDao = new DbAccountDao();
-    private final PaymentDao paymentDao = new DbPaymentDao();
-    private final CardDao cardDao = new DbCardDao();
-    private final BidDao bidDao = new DbBidDao();
+    private final UserDao userDao = new UserDaoImpl();
+    private final AccountDao accountDao = new AccountDaoImpl();
+    private final PaymentDao paymentDao = new PaymentDaoImpl();
+    private final CardDao cardDao = new CardDaoImpl();
+    private final BidDao bidDao = new BidDaoImpl();
 
     private DaoFactory() {}
 

@@ -83,6 +83,10 @@ public class Const {
     public static class BidField {
         public static final String ID = "bid_id";
         public static final String PLACING_DATE_TIME = "placing_date_time";
+        public static final String AMOUNT = "amount";
+        public static final String ACCOUNT_ID = "account_id";
+        public static final String CLIENT_MESSAGE = "client_message";
+        public static final String ADMIN_COMMENT = "admin_comment";
 
         private BidField() {
         }

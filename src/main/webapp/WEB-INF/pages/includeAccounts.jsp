@@ -14,7 +14,7 @@
 			<input type="hidden" name="account_id" value="${account.id}">
 			<input name="amount">
 			<button class="button"
-							formaction="${pageContext.servletContext.contextPath}/mainServlet?command=set_top_up_bid_post">top
+							formaction="${pageContext.servletContext.contextPath}/mainServlet?command=place_top_up_bid_post">top
 				up
 			</button>
 			<button class="button"
@@ -25,16 +25,7 @@
 	</form>
 	<div class="profile__cards">
 		<div class="sub-sub-title profile__cards-sub-sub-title">cards</div>
-		<c:forEach var="card" items="${account.cards}">
-			<a href="${pageContext.request.contextPath}/mainServlet?command=card_page_get&card_id=${card.id}"
-				 class="profile__card">
-				<p class="profile__card-text">${card.cardNumber}</p>
-				<p class="profile__card-text">${card.validThruDate}</p>
-				<form action="/mainServlet">
-					<button class="button">delete</button>
-				</form>
-			</a>
-		</c:forEach>
+		<jsp:include page="/mainServlet?command=include_cards&account_id=${account.id}"/>
 		<button class="button profile__card-button">add new card</button>
 	</div>
 </c:forEach>

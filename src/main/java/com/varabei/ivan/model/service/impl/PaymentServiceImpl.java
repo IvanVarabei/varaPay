@@ -13,27 +13,41 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class PaymentServiceImpl implements PaymentService {
+    PaymentDao paymentDao = DaoFactory.getInstance().getPaymentDao();
+
     @Override
-    public List<Payment> findAll() throws ServiceException {
-        UserDao userDao = DaoFactory.getInstance().getUserDao();
+    public void makePayment(Long sourceCardId, String destinationCardNumber, BigDecimal amount) throws ServiceException {
         try {
-            return userDao.findAll().stream()
-                    .flatMap(u -> u.getAccounts().stream()
-                            .flatMap(a -> a.getCards().stream()
-                                    .flatMap(c -> c.getPayments().stream())))
-                    .distinct().collect(Collectors.toList());
-        } catch (DaoException daoException) {
-            throw new ServiceException(daoException);
+            paymentDao.makePayment(sourceCardId, destinationCardNumber, amount);
+        } catch (DaoException e) {
+            throw new ServiceException(e);
         }
     }
 
     @Override
-    public void makePayment(Long sourceCardId, String destinationCardNumber, BigDecimal amount) throws ServiceException {
-        PaymentDao paymentDao = DaoFactory.getInstance().getPaymentDao();
+    public List<Payment> findPaymentsByCardId(Long cardId) throws ServiceException {
         try {
-            paymentDao.makePayment(sourceCardId, destinationCardNumber, amount);
+            return paymentDao.findPaymentsByCardId(cardId);
         } catch (DaoException e) {
-            throw new ServiceException("", e);
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public List<Payment> findOutgoingPayments(Long cardId) throws ServiceException {
+        try {
+            return paymentDao.findOutgoingPayments(cardId);
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public List<Payment> findIncomingPayments(Long cardId) throws ServiceException {
+        try {
+            return paymentDao.findIncomingPayments(cardId);
+        } catch (DaoException e) {
+            throw new ServiceException(e);
         }
     }
 }

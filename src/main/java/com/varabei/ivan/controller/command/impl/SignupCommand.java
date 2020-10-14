@@ -18,9 +18,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-public class SignUpPostCommand implements ActionCommand {
+public class SignupCommand implements ActionCommand {
     private static final UserService userService = ServiceFactory.getInstance().getUserService();
-    private static final Logger log = LogManager.getLogger(SignUpPostCommand.class);
+    private static final Logger log = LogManager.getLogger(SignupCommand.class);
     private static final String FORWARD_SIGNUP_GET = "/mainServlet?command=signup_get";
     private static final int MIN_PASSWORD_LENGTH = 3;
     private static final int MAX_PASSWORD_LENGTH = 20;

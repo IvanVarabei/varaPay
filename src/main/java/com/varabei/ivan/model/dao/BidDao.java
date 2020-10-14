@@ -6,7 +6,7 @@ import com.varabei.ivan.model.exception.DaoException;
 import java.util.List;
 
 public interface BidDao {
-    List<Bid> findAll() throws DaoException;
+    List<Bid> findInProgressBids() throws DaoException;
 
     void placeTopUpBid(Long accountId, Long amount, String message) throws DaoException;
 

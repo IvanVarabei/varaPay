@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
 
-public class MakePaymentPost implements ActionCommand {
+public class MakePaymentCommand implements ActionCommand {
     private static final String JSP_CARD_PAGE = "/mainServlet?command=payment_overview_get";
     private static final PaymentService paymentService = ServiceFactory.getInstance().getPaymentService();
     @Override

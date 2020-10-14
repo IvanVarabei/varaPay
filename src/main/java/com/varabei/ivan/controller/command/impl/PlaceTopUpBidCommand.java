@@ -1,28 +1,28 @@
 package com.varabei.ivan.controller.command.impl;
 
 import com.varabei.ivan.controller.command.ActionCommand;
-import com.varabei.ivan.model.entity.Account;
-import com.varabei.ivan.model.service.AccountService;
 import com.varabei.ivan.model.exception.ServiceException;
 import com.varabei.ivan.model.service.ServiceFactory;
+import com.varabei.ivan.model.service.BidService;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
+import java.math.BigDecimal;
 
-public class ModerateAccountsGet implements ActionCommand {
-    private static final String JSP_ACCOUNTS = "/WEB-INF/pages/accounts.jsp";
-    private static final AccountService accountService = ServiceFactory.getInstance().getAccountService();
+public class PlaceTopUpBidCommand implements ActionCommand {
+    private static final BidService BID_SERVICE = ServiceFactory.getInstance().getToUpBidService();
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        Long accountId = Long.parseLong(req.getParameter("account_id"));
+        BigDecimal amount = new BigDecimal(req.getParameter("amount"));
+        //String message = req.getParameter("message");
         try {
-            List<Account> a= accountService.findDisabled();
-            req.setAttribute("accounts" , accountService.findDisabled());
+            BID_SERVICE.placeTopUpBid(accountId , amount.longValue(), "message");
         } catch (ServiceException e) {
             e.printStackTrace();
         }
-        req.getRequestDispatcher(JSP_ACCOUNTS).forward(req, resp);
+        resp.sendRedirect(req.getContextPath() + "/mainServlet?command=profile_get");
     }
 }
