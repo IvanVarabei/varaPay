@@ -1,0 +1,46 @@
+.run-bids {}
+.run-bids__title{
+    margin: 0 0 30px 0;
+}
+.run-bids__header{
+    display: grid;
+    grid-template: 1fr / 1fr 1.2fr 2fr;
+}
+.run-bids__row {
+    display: grid;
+    grid-template: repeat(4, 1fr) / 1fr 1.2fr 2fr;
+    grid-template-areas: "id message form"
+                         "bid-type message form"
+                         "email message form"
+                         "date message form"
+                         "edge edge edge";
+}
+.run-bids__id {
+    grid-area: id;
+}
+.run-bids__item {
+    padding: 5px;
+    border: white 2px solid;
+}
+.run-bids__operation-type {
+    grid-area: bid-type;
+}
+.run-bids__email {
+    grid-area: email;
+}
+.run-bids__date {
+    grid-area: date;
+}
+.run-bids__user-message {
+    grid-area: message;
+}
+.run-bids__form {
+    grid-area: form;
+    display: grid;
+    grid-template: 2fr 1fr 1fr / 1fr;
+}
+.run-bids__edge{
+    grid-area: edge;
+    background: white;
+}
+.button {}

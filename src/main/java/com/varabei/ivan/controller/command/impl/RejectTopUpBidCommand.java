@@ -19,5 +19,6 @@ public class RejectTopUpBidCommand implements ActionCommand {
         } catch (ServiceException e) {
             e.printStackTrace();
         }
+        resp.sendRedirect(req.getContextPath()+"/mainServlet?command=RUN_BIDS_GET");
     }
 }

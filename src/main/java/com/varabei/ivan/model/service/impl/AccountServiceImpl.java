@@ -8,6 +8,7 @@ import com.varabei.ivan.model.service.AccountService;
 import com.varabei.ivan.model.exception.ServiceException;
 
 import java.util.List;
+import java.util.Optional;
 
 public class AccountServiceImpl implements AccountService {
     private static AccountDao accountDao = DaoFactory.getInstance().getAccountDao();
@@ -16,6 +17,15 @@ public class AccountServiceImpl implements AccountService {
     public void create(Long userId) throws ServiceException {
         try {
             accountDao.create(userId);
+        } catch (DaoException daoException) {
+            throw new ServiceException(daoException);
+        }
+    }
+
+    @Override
+    public Optional<Account> findById(Long accountId) throws ServiceException {
+        try {
+            return accountDao.findById(accountId);
         } catch (DaoException daoException) {
             throw new ServiceException(daoException);
         }
@@ -51,7 +61,12 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public void delete(Long accountId) throws ServiceException {
         try {
-            accountDao.delete(accountId);
+            Optional<Long> balance = accountDao.findAccountBalance(accountId);
+            if (balance.isPresent() && balance.get() == 0) {
+                accountDao.delete(accountId);
+            } else {
+                throw new ServiceException("You can`t delete not nil balance account");
+            }
         } catch (DaoException daoException) {
             throw new ServiceException(daoException);
         }

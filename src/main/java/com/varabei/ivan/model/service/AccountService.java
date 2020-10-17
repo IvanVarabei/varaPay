@@ -5,9 +5,12 @@ import com.varabei.ivan.model.exception.ServiceException;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public interface AccountService {
     void create(Long userId)throws ServiceException;
+
+    Optional<Account> findById(Long accountId) throws ServiceException;
 
     List<Account> findByUserId(Long userId) throws ServiceException;
 

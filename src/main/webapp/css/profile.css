@@ -40,7 +40,7 @@
 	display: grid;
 	text-align: center;
 	align-items: center;
-	grid-template: 1fr auto / repeat(7, 1fr);
+	grid-template: 1fr auto / repeat(4, 1fr);
 	background: #7a956b;
 }
 .profile__account-text {}

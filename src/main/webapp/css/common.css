@@ -6,6 +6,12 @@
 @import "authorization.css";
 @import "profile.css";
 @import "card.css";
+@import "account.css";
+@import "topup1.css";
+@import "topup2.css";
+@import "runAccounts.css";
+@import "runBids.css";
+
 .wrapper {
 	min-height: 100%;
 	display: grid;

@@ -18,7 +18,7 @@ public class AccountBuilder implements IdentifiableBuilder<Account> {
         User user = userBuilder.build(resultSet);
         account.setUser(user);
         account.setId(resultSet.getLong(Const.AccountField.ID));
-        account.setBalance(new BigDecimal(resultSet.getLong(Const.AccountField.BALANCE)));
+        account.setBalance(BigDecimal.valueOf(resultSet.getLong(Const.AccountField.BALANCE)).movePointLeft(2));
         account.setActive(resultSet.getBoolean(Const.AccountField.IS_ACTIVE));
         return account;
     }

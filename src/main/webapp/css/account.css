@@ -1,0 +1,61 @@
+.account{
+
+}
+.account__title{
+    margin: 0 0 30px 0;
+}
+.account__sub-title{
+    margin: 0 0 15px 0;
+}
+.account__info {
+    display: flex;
+    justify-content:space-between;
+}
+
+.account__buttons{
+    display: grid;
+    grid-template: 1fr / repeat(3, 1fr);
+    margin: 0 0 30px 0;
+}
+.operation-header {
+    display: grid;
+    grid-template:  1fr / 0.6fr repeat(2, 1fr);
+}
+.operation-header__info {}
+.operation-header__client-message {}
+.operation-header__admin-comment {}
+.operation {
+    display: grid;
+    grid-template: repeat(4, 1fr) / 0.6fr repeat(2, 1fr);
+    grid-template-areas: "id client-message admin-comment"
+                         "state client-message admin-comment"
+                             "type client-message admin-comment"
+                             "date client-message admin-comment"
+                            "edge edge edge";
+}
+.operation__part{
+    padding: 4px;
+    border: white 2px solid;
+}
+.operation__id {
+    grid-area: id;
+}
+.operation__state {
+    grid-area: state;
+}
+.operation__type {
+    grid-area: type;
+}
+.operation__client-message {
+    grid-area: client-message;
+}
+.operation__admin-comment {
+    grid-area: admin-comment;
+}
+.operation__date {
+    grid-area: date;
+}
+.operation__edge{
+    grid-area: edge;
+    background: white;
+}

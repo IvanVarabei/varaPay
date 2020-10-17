@@ -18,4 +18,10 @@ public interface UserService {
     Optional<User> findById(Long id) throws ServiceException;
 
     Optional<User> findByEmail(String email) throws ServiceException;
+
+    void updatePassword(String email, String newPassword) throws ServiceException;
+
+    void updatePassword(Long id, String newPassword) throws ServiceException;
+
+    boolean checkPresenceByIdPassword(Long id, String password) throws ServiceException;
 }

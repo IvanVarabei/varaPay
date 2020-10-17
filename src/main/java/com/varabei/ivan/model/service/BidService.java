@@ -4,14 +4,17 @@ import com.varabei.ivan.model.entity.Bid;
 import com.varabei.ivan.model.exception.ServiceException;
 import com.varabei.ivan.model.exception.ServiceException;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface BidService {
     List<Bid> findInProgressBids() throws ServiceException;
 
-    void placeTopUpBid(Long accountId, Long amount, String message) throws ServiceException;
+    List<Bid> findByAccountId(Long accountId) throws ServiceException;
 
-    void placeWithdrawBid(Long accountId, Long amount, String message) throws ServiceException;
+    void placeTopUpBid(Long accountId, BigDecimal amount, String message) throws ServiceException;
+
+    void placeWithdrawBid(Long accountId, BigDecimal amount, String message) throws ServiceException;
 
     void approveTopUpBid(Long topUpBidId) throws ServiceException;
 

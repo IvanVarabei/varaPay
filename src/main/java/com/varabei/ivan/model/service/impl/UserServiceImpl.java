@@ -66,4 +66,32 @@ public class UserServiceImpl implements UserService {
             throw new ServiceException("", e);
         }
     }
+
+    @Override
+    public void updatePassword(String email, String newPassword) throws ServiceException {
+        try {
+             userDao.updatePassword(email, newPassword);
+        } catch (DaoException e) {
+            throw new ServiceException("", e);
+        }
+    }
+
+    @Override
+    public void updatePassword(Long id, String newPassword) throws ServiceException {
+        try {
+            userDao.updatePassword(id, newPassword);
+        } catch (DaoException e) {
+            throw new ServiceException("", e);
+        }
+    }
+
+    @Override
+    public boolean checkPresenceByIdPassword(Long id, String password) throws ServiceException {
+        try {
+            return userDao.checkPresenceByIdPassword(id, password);
+        } catch (DaoException e) {
+            throw new ServiceException("", e);
+        }
+    }
+
 }

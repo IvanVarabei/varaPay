@@ -21,7 +21,7 @@ public class MakePaymentCommand implements ActionCommand {
         Long sourceCardId = Long.parseLong(s);
         String destinationCardNumber= req.getParameter("destinationCardNumber");
         String sourceCardCvc= req.getParameter(Const.CardField.CVC);
-        BigDecimal amount = new BigDecimal(req.getParameter("amount"));
+        BigDecimal amount = BigDecimal.valueOf(Double.parseDouble(req.getParameter("amount")));
         //LocalDate destinationCardDate= req.getParameter("destinationCardDate");
         try {
             paymentService.makePayment(sourceCardId, destinationCardNumber, amount);

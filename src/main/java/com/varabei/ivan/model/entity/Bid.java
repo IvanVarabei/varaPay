@@ -12,7 +12,7 @@ public class Bid extends Identifiable {
     private LocalDateTime placingDateTime;
     private boolean isTopUp;
 
-    public Account getAccountInfo() {
+    public Account getAccount() {
         return account;
     }
 

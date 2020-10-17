@@ -147,6 +147,28 @@ public class GenericDao<T extends Identifiable> {
         return foundValue.map(o -> Long.parseLong(String.valueOf(o)));
     }
 
+    protected boolean findBoolean(String query, String columnLabel, Object... params)
+            throws DaoException {
+        Connection connection = pool.getConnection();
+        try {
+            Optional<Object> foundValue = findObject(query, connection, columnLabel, params);
+            return (boolean) foundValue.get();
+        } finally {
+            pool.releaseConnection(connection);
+        }
+    }
+
+    protected Optional<Long> findLong(String query, String columnLabel, Object... params)
+            throws DaoException {
+        Connection connection = pool.getConnection();
+        try {
+            Optional<Object> foundValue = findObject(query, connection, columnLabel, params);
+            return foundValue.map(o -> Long.parseLong(String.valueOf(o)));
+        } finally {
+            pool.releaseConnection(connection);
+        }
+    }
+
     private Optional<Object> findObject(String query, Connection connection, String columnLabel, Object... params)
             throws DaoException {
         PreparedStatement preparedStatement = null;

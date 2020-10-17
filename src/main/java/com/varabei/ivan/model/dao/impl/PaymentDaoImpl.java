@@ -28,7 +28,10 @@ public class PaymentDaoImpl extends GenericDao<Card> implements PaymentDao {
             "    join users on accounts.user_id = users.user_id\n" +
             "    join roles on users.role_id = roles.role_id";
     private static final String FIND_PAYMENTS_BY_CARD_ID = "select payment_id, amount, source_card_id, " +
-            "destination_card_id, payment_instant from payments where source_card_id = ? or destination_card_id = ?";
+            "destination_card_id, payment_instant from payments where source_card_id = ? or destination_card_id = ? " +
+            "order by payment_instant desc limit ? offset ?";
+    private static final String FIND_NUMBER_OF_RECORDS="select count(*) from payments where source_card_id = ?" +
+            " or destination_card_id = ?;";
     private static final String FIND_OUTGOING_PAYMENTS_BY_CARD_ID = "select payment_id, amount, source_card_id," +
             " destination_card_id, payment_instant from payments where source_card_id = ?";
     private static final String FIND_INCOMING_PAYMENTS_BY_CARD_ID = "select payment_id, amount, source_card_id," +
@@ -39,7 +42,12 @@ public class PaymentDaoImpl extends GenericDao<Card> implements PaymentDao {
     }
 
     @Override
-    public void makePayment(Long sourceCardId, String destinationCardNumber, BigDecimal amount) throws DaoException {
+    public Long findNumberOfRecordsByCardId(Long cardId) throws DaoException {
+        return findLong(FIND_NUMBER_OF_RECORDS, "count", cardId, cardId).orElseThrow(DaoException::new);
+    }
+
+    @Override
+    public void makePayment(Long sourceCardId, String destinationCardNumber, Long amount) throws DaoException {
         Connection connection = pool.getConnection();
         try {
             startTransaction(connection);
@@ -49,9 +57,9 @@ public class PaymentDaoImpl extends GenericDao<Card> implements PaymentDao {
                     Const.AccountField.ID, sourceCardId).orElseThrow(DaoException::new);
             Long destAccountId = findLong(FIND_ACCOUNT_ID_BY_CARD_ID, connection,
                     Const.AccountField.ID, destinationCardId).orElseThrow(DaoException::new);
-            executeUpdate(ADD_ACCOUNT_BALANCE, connection, -amount.longValue(), sourceAccountId);
-            executeUpdate(ADD_ACCOUNT_BALANCE, connection, amount.longValue(), destAccountId);
-            executeUpdate(SET_PAYMENT, connection, sourceCardId, destinationCardId, amount.longValue());
+            executeUpdate(ADD_ACCOUNT_BALANCE, connection, -amount, sourceAccountId);
+            executeUpdate(ADD_ACCOUNT_BALANCE, connection, amount, destAccountId);
+            executeUpdate(SET_PAYMENT, connection, sourceCardId, destinationCardId, amount);
             endTransaction(connection);
         } catch (SQLException | DaoException e) {
             DaoException daoException = e instanceof DaoException ? (DaoException) e : new DaoException(e);
@@ -62,21 +70,21 @@ public class PaymentDaoImpl extends GenericDao<Card> implements PaymentDao {
     }
 
     @Override
-    public List<Payment> findPaymentsByCardId(Long cardId) throws DaoException {
-        return findPayments(FIND_PAYMENTS_BY_CARD_ID, cardId);
+    public List<Payment> findPaymentsByCardId(Long cardId, int limit, int offset) throws DaoException {
+        return findPayments(FIND_PAYMENTS_BY_CARD_ID, cardId, limit, offset);
     }
 
     @Override
     public List<Payment> findOutgoingPayments(Long cardId) throws DaoException {
-        return findPayments(FIND_OUTGOING_PAYMENTS_BY_CARD_ID, cardId);
+        return null;//findPayments(FIND_OUTGOING_PAYMENTS_BY_CARD_ID, cardId);
     }
 
     @Override
     public List<Payment> findIncomingPayments(Long cardId) throws DaoException {
-        return findPayments(FIND_INCOMING_PAYMENTS_BY_CARD_ID, cardId);
+        return null;// findPayments(FIND_INCOMING_PAYMENTS_BY_CARD_ID, cardId);
     }
 
-    private List<Payment> findPayments(String query, Long cardId) throws DaoException {
+    private List<Payment> findPayments(String query, Long cardId, int limit, int offset) throws DaoException {
         Connection connection = pool.getConnection();
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -84,7 +92,7 @@ public class PaymentDaoImpl extends GenericDao<Card> implements PaymentDao {
         List<Payment> payments = new ArrayList<>();
         try {
             preparedStatement = connection.prepareStatement(query);
-            setParameters(preparedStatement, cardId);
+            setParameters(preparedStatement, cardId, cardId, limit, offset);
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 payments.add(instantiatePayment(resultSet, connection));
@@ -118,7 +126,7 @@ public class PaymentDaoImpl extends GenericDao<Card> implements PaymentDao {
         payment.setSourceCard(sourceCard);
         payment.setDestinationCard(destinationCard);
         payment.setId(resultSet.getLong(Const.PaymentField.ID));
-        payment.setAmount(new BigDecimal(resultSet.getLong(Const.PaymentField.AMOUNT)));
+        payment.setAmount(BigDecimal.valueOf(resultSet.getLong(Const.PaymentField.AMOUNT)).movePointLeft(2));
         payment.setPaymentInstant(resultSet.getTimestamp(Const.PaymentField.INSTANT).toLocalDateTime());
         return payment;
     }

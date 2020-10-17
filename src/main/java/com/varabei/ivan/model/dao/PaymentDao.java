@@ -7,9 +7,11 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public interface PaymentDao {
-    void makePayment(Long sourceCardId, String destinationCardNumber, BigDecimal amount) throws DaoException;
+    Long findNumberOfRecordsByCardId(Long cardId) throws DaoException;
 
-    List<Payment> findPaymentsByCardId(Long cardId) throws DaoException;
+    void makePayment(Long sourceCardId, String destinationCardNumber, Long amount) throws DaoException;
+
+    List<Payment> findPaymentsByCardId(Long cardId, int limit, int offset) throws DaoException;
 
     List<Payment> findOutgoingPayments(Long cardId) throws DaoException;
 

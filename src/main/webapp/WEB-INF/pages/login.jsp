@@ -12,5 +12,6 @@
 			<p class="form__input-label">Password</p><input class="input form__input" name="password" type="text">
 			<button class="button form_button">login</button>
 		</form>
+		<a href="${pageContext.servletContext.contextPath}/mainServlet?command=RECOVER_PASSWORD_GET">Recover password</a>
 	</div>
 </tags:general>

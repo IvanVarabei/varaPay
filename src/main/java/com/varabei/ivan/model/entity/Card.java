@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 public class Card extends Identifiable {
     private String cardNumber;
-    private LocalDate validThruDate;
+    private LocalDate validThru;
     private String cvc;
     private Account account;
 
@@ -16,12 +16,12 @@ public class Card extends Identifiable {
         this.cardNumber = cardNumber;
     }
 
-    public LocalDate getValidThruDate() {
-        return validThruDate;
+    public LocalDate getValidThru() {
+        return validThru;
     }
 
-    public void setValidThruDate(LocalDate validThruDate) {
-        this.validThruDate = validThruDate;
+    public void setValidThru(LocalDate validThru) {
+        this.validThru = validThru;
     }
 
     public String getCvc() {
@@ -49,7 +49,7 @@ public class Card extends Identifiable {
         Card card = (Card) o;
 
         if (cardNumber != null ? !cardNumber.equals(card.cardNumber) : card.cardNumber != null) return false;
-        if (validThruDate != null ? !validThruDate.equals(card.validThruDate) : card.validThruDate != null)
+        if (validThru != null ? !validThru.equals(card.validThru) : card.validThru != null)
             return false;
         if (cvc != null ? !cvc.equals(card.cvc) : card.cvc != null) return false;
         return account != null ? account.equals(card.account) : card.account == null;
@@ -59,7 +59,7 @@ public class Card extends Identifiable {
     public int hashCode() {
         int result = super.hashCode();
         result = 31 * result + (cardNumber != null ? cardNumber.hashCode() : 0);
-        result = 31 * result + (validThruDate != null ? validThruDate.hashCode() : 0);
+        result = 31 * result + (validThru != null ? validThru.hashCode() : 0);
         result = 31 * result + (cvc != null ? cvc.hashCode() : 0);
         result = 31 * result + (account != null ? account.hashCode() : 0);
         return result;
@@ -69,7 +69,7 @@ public class Card extends Identifiable {
     public String toString() {
         final StringBuilder sb = new StringBuilder("Card{");
         sb.append("cardNumber='").append(cardNumber).append('\'');
-        sb.append(", validThruDate=").append(validThruDate);
+        sb.append(", validThruDate=").append(validThru);
         sb.append(", cvc='").append(cvc).append('\'');
         sb.append(", account=").append(account);
         sb.append('}');

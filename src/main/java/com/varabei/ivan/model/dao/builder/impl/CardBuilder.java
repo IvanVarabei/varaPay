@@ -19,7 +19,7 @@ public class CardBuilder implements IdentifiableBuilder<Card> {
         card.setAccount(account);
         card.setId(resultSet.getLong(Const.CardField.ID));
         card.setCardNumber(resultSet.getString(Const.CardField.NUMBER));
-        card.setValidThruDate(LocalDate.parse(resultSet.getString(Const.CardField.VALID_THRU)));
+        card.setValidThru(LocalDate.parse(resultSet.getString(Const.CardField.VALID_THRU)));
         card.setCvc(resultSet.getString(Const.CardField.CVC));
         return card;
     }

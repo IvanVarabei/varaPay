@@ -18,16 +18,28 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public void makePayment(Long sourceCardId, String destinationCardNumber, BigDecimal amount) throws ServiceException {
         try {
-            paymentDao.makePayment(sourceCardId, destinationCardNumber, amount);
+            String properNumber = destinationCardNumber.replaceAll("\\D+","");
+            if(properNumber.length() == 16) {
+                paymentDao.makePayment(sourceCardId, properNumber, amount.movePointRight(2).longValue());
+            }
         } catch (DaoException e) {
             throw new ServiceException(e);
         }
     }
 
     @Override
-    public List<Payment> findPaymentsByCardId(Long cardId) throws ServiceException {
+    public Long findNumberOfRecordsByCardId(Long cardId) throws ServiceException{
         try {
-            return paymentDao.findPaymentsByCardId(cardId);
+            return paymentDao.findNumberOfRecordsByCardId(cardId);
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public List<Payment> findPaymentsByCardId(Long cardId, int limit, int offset) throws ServiceException {
+        try {
+            return paymentDao.findPaymentsByCardId(cardId, limit, offset);
         } catch (DaoException e) {
             throw new ServiceException(e);
         }

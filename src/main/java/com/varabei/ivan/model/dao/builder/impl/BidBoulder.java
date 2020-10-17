@@ -18,7 +18,9 @@ public class BidBoulder implements IdentifiableBuilder<Bid> {
         Account account = accountBuilder.build(resultSet);
         bid.setAccount(account);
         bid.setId(resultSet.getLong(Const.BidField.ID));
-        bid.setAmount(BigDecimal.valueOf(resultSet.getLong(Const.BidField.AMOUNT)));
+        bid.setState(resultSet.getString(Const.BidField.STATE));
+        bid.setTopUp(resultSet.getBoolean(Const.BidField.IS_TOP_UP));
+        bid.setAmount(BigDecimal.valueOf(resultSet.getLong(Const.BidField.AMOUNT)).movePointLeft(2));
         bid.setPlacingDateTime((resultSet.getTimestamp(Const.BidField.PLACING_DATE_TIME).toLocalDateTime()));
         bid.setClientMessage(resultSet.getString(Const.BidField.CLIENT_MESSAGE));
         bid.setAdminComment(resultSet.getString(Const.BidField.ADMIN_COMMENT));

@@ -19,7 +19,7 @@ public class PlaceTopUpBidCommand implements ActionCommand {
         BigDecimal amount = new BigDecimal(req.getParameter("amount"));
         //String message = req.getParameter("message");
         try {
-            BID_SERVICE.placeTopUpBid(accountId , amount.longValue(), "message");
+            BID_SERVICE.placeTopUpBid(accountId , amount, "message");
         } catch (ServiceException e) {
             e.printStackTrace();
         }

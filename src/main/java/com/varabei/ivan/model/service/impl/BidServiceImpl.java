@@ -7,6 +7,7 @@ import com.varabei.ivan.model.entity.Bid;
 import com.varabei.ivan.model.exception.ServiceException;
 import com.varabei.ivan.model.service.BidService;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class BidServiceImpl implements BidService {
@@ -22,18 +23,27 @@ public class BidServiceImpl implements BidService {
     }
 
     @Override
-    public void placeTopUpBid(Long accountId, Long amount, String message) throws ServiceException {
+    public List<Bid> findByAccountId(Long accountId) throws ServiceException {
         try {
-            bidDao.placeTopUpBid(accountId, amount, message);
+            return bidDao.findByAccountId(accountId);
         } catch (DaoException daoException) {
             throw new ServiceException(daoException);
         }
     }
 
     @Override
-    public void placeWithdrawBid(Long accountId, Long amount, String message) throws ServiceException {
+    public void placeTopUpBid(Long accountId, BigDecimal amount, String message) throws ServiceException {
         try {
-            bidDao.placeWithdrawBid(accountId, amount, message);
+            bidDao.placeTopUpBid(accountId,  amount.movePointRight(2).longValue(), message);
+        } catch (DaoException daoException) {
+            throw new ServiceException(daoException);
+        }
+    }
+
+    @Override
+    public void placeWithdrawBid(Long accountId, BigDecimal amount, String message) throws ServiceException {
+        try {
+            bidDao.placeWithdrawBid(accountId,  amount.movePointRight(2).longValue(), message);
         } catch (DaoException daoException) {
             throw new ServiceException(daoException);
         }
