@@ -8,7 +8,7 @@
 		<div class="authorization__title title">Verify email</div>
 		<form class="form" method="post" action="${pageContext.servletContext.contextPath}/mainServlet?command=verify_email_post">
 			<p class="form__error">${requestScope.error}</p>
-			<p class="form__input-label">Temp password</p><input class="input form__input" name="tempPassword">
+			<p class="form__input-label">Temp password</p><input class="input form__input" name="tempCode">
 			<button class="button form_button">Submit</button>
 		</form>
 	</div>

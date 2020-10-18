@@ -25,7 +25,7 @@
 					<div class="run-bids__user-message run-bids__item">${bid.clientMessage}</div>
 					<form class="run-bids__form run-bids__item" method="post">
 						<input type="hidden" name="bid_id" value="${bid.id}">
-						<textarea name=""></textarea>
+						<textarea name="admin_comment"></textarea>
 						<button class="button"
 										formaction="${pageContext.servletContext.contextPath}/mainServlet?command=reject_top_up_bid_post">
 							reject

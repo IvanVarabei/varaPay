@@ -10,6 +10,16 @@
 		<form class="form" method="post" action="${pageContext.servletContext.contextPath}/mainServlet?command=top_up_page_get">
 			<input type="hidden" name="account_id" value="${account_id}">
 			<p class="form__input-label">You want to add</p><input type="text" name="amount" class="input form__input">
+			<p class="form__input-label">Choose currency</p>
+			<select class="input" name="currency">
+				<option>${param['currency']}</option>
+				<c:forEach var="currency" items="${requestScope.currencies}">
+					<c:if test="${currency != param['currency']}">
+						<option>${currency}</option>
+					</c:if>
+				</c:forEach>
+			</select>
+
 			<button class="button form_button">Continue</button>
 		</form>
 	</div>

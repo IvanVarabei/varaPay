@@ -49,30 +49,4 @@ public class CardDaoImpl extends GenericDao<Card> implements CardDao {
     public void delete(Long cardId) throws DaoException {
         executeUpdate(ABANDON_CARD, cardId);
     }
-
-//    public static void main(String[] args) {
-//        try {
-//            URL queryUrl = new URL("https://api.livecoin.net/exchange/order_book?currencyPair=BTC/USD");
-//            HttpURLConnection connection = (HttpURLConnection) queryUrl.openConnection();
-//            connection.setDoOutput(true);
-//
-//            BufferedReader rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-//            StringBuilder sb = new StringBuilder();
-//            String line;
-//            while ((line = rd.readLine()) != null) {
-//                sb.append(line + '\n');
-//            }
-//            System.out.println("before");
-//            Double d = parseBitcoinCost(sb.toString());
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//    }
-//
-//    static double parseBitcoinCost(String s) {
-//        Pattern pattern = Pattern.compile("(?<=\"asks\":\\[\\[\").+?(?=\")");
-//        Matcher matcher = pattern.matcher(s);
-//        matcher.find();
-//        return Double.parseDouble(matcher.group());
-//    }
 }

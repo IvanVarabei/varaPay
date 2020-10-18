@@ -1,6 +1,8 @@
 package com.varabei.ivan.model.service.impl;
 
 import com.varabei.ivan.model.service.MailService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.mail.*;
 import javax.mail.internet.AddressException;
@@ -11,55 +13,47 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class MailServiceImpl implements MailService {
-    Properties properties = new Properties();
-    {
-        try {
-            InputStream is = getClass().getClassLoader().getResourceAsStream("mail.properties");
+    private static Session session;
+    private static final Logger log = LogManager.getLogger(MailServiceImpl.class);
+    private static final String MAIL_PROPERTIES_FILE = "mail.properties";
+    private static final String MAIL_USER_NAME_KEY = "mail.user.name";
+    private static final String MAIL_PASSWORD_KEY = "mail.user.password";
+    private static final String CONTENT_TYPE = "text/html";
+
+    static {
+        try (InputStream is = MailService.class.getClassLoader().getResourceAsStream(MAIL_PROPERTIES_FILE)) {
+            Properties properties = new Properties();
             properties.load(is);
+            String userName = properties.getProperty(MAIL_USER_NAME_KEY);
+            String userPassword = properties.getProperty(MAIL_PASSWORD_KEY);
+            session = Session.getDefaultInstance(properties,
+                    new Authenticator() {
+                        @Override
+                        protected PasswordAuthentication getPasswordAuthentication() {
+                            return new PasswordAuthentication(userName, userPassword);
+                        }
+                    });
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("could`t read mail.properties", e);
         }
     }
 
     @Override
-    public void sendVerificationCode(String mailTo, String code) {
-        String subject = "Verification code";
-        MailSender sender = new MailSender(mailTo, subject, code, properties);
+    public void sendEmail(String mailTo, String subject, String message) {
+        MailSender sender = new MailSender(mailTo, subject, message);
         sender.send();
     }
 
-    @Override
-    public void recoverPassword(String mailTo, String newPassword) {
-        String subject = "New password";
-        MailSender sender = new MailSender(mailTo, subject, newPassword, properties);
-        sender.send();
-    }
-
-    public static Session createSession(Properties configProperties) {
-        String userName = configProperties.getProperty("mail.user.name");
-        String userPassword = configProperties.getProperty("mail.user.password");
-        return Session.getDefaultInstance(configProperties,
-                new javax.mail.Authenticator() {
-                    @Override
-                    protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(userName, userPassword);
-                    }
-                });
-    }
-
-    public class MailSender {
+    private static class MailSender {
         private MimeMessage message;
         private String sendToEmail;
         private String mailSubject;
         private String mailText;
-        private Properties properties;
 
-        public MailSender(String sendToEmail, String mailSubject, String mailText,
-                          Properties properties) {
+        public MailSender(String sendToEmail, String mailSubject, String mailText) {
             this.sendToEmail = sendToEmail;
             this.mailSubject = mailSubject;
             this.mailText = mailText;
-            this.properties = properties;
         }
 
         public void send() {
@@ -67,18 +61,16 @@ public class MailServiceImpl implements MailService {
                 initMessage();
                 Transport.send(message);
             } catch (AddressException e) {
-                System.err.println("Invalid address: " + sendToEmail + "  " + e);
+                log.error(String.format("Invalid address: %s", sendToEmail), e);
             } catch (MessagingException e) {
-                System.err.println("Error generating or sending message: " + e);
+                log.error("Error generating or sending message: ", e);
             }
         }
 
         private void initMessage() throws MessagingException {
-            Session mailSession = createSession(properties);
-            mailSession.setDebug(true);
-            message = new MimeMessage(mailSession);
+            message = new MimeMessage(session);
             message.setSubject(mailSubject);
-            message.setContent(mailText, "text/html");
+            message.setContent(mailText, CONTENT_TYPE);
             message.setRecipient(Message.RecipientType.TO, new InternetAddress(sendToEmail));
         }
     }

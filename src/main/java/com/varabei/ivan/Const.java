@@ -12,6 +12,11 @@ public class Const {
         public static final String WRONG_LOGIN = ">=3 and <=20 letter, number, _";
         public static final String WRONG_EMAIL = "wrong email format";
         public static final String WRONG_LOGIN_OR_PASSWORD = "wrong login or password";
+        public static final String WRONG_OLD_PASSWORD = "wrong old password";
+        public static final String WRONG_TEMP_CODE = "wrong temporary code";
+        public static final String LOGIN_TAKEN = "During your registration an another user`s took '%s' login. " +
+                "Repeat registration from scratch.";
+        public static final int SERVER_ERROR_CODE = 500;
 
         private ErrorInfo() {
         }
@@ -19,6 +24,13 @@ public class Const {
 
     public static class RequestParam {
         public static final String COMMAND = "command";
+        public static final String CURRENCY = "currency";
+        public static final String PAGE = "page";
+        public static final String OLD_PASSWORD = "oldPassword";
+        public static final String REPEAT_PASSWORD = "repeatPassword";
+        public static final String TEMP_CODE = "tempCode";
+        public static final String DESTINATION_CARD_NUMBER = "destinationCardNumber";
+        public static final String DESTINATION_CARD_VALID_THRU = "destinationCardValidThru";
 
         private RequestParam() {
         }
@@ -26,10 +38,19 @@ public class Const {
 
     public static class AttributeKey {
         public static final String USER_AMOUNT = "userAmount";
-        public static final String PAYMENT_AMOUNT = "paymentAmount";
+        public static final String ACCOUNT = "account";
+        public static final String ACCOUNTS = "accounts";
+        public static final String CURRENCIES = "currencies";
         public static final String ERRORS = "errors";
         public static final String ERROR = "error";
         public static final String USER = "user";
+        public static final String BIDS = "bids";
+        public static final String CARD = "card";
+        public static final String CARDS = "cards";
+        public static final String PAYMENTS = "payments";
+        public static final String AMOUNT_OF_PAGES = "amountOfPages";
+        public static final String CURRENT_PAGE = "currentPage";
+        public static final String AMOUNT_IN_CHOSEN_CURRENCY = "amountInChosenCurrency";
 
         private AttributeKey() {
         }
@@ -40,7 +61,6 @@ public class Const {
         public static final String ROLE_NAME = "role_name";
         public static final String LOGIN = "login";
         public static final String PASSWORD = "password";
-        public static final String REPEAT_PASSWORD = "repeat_password";
         public static final String FIRST_NAME = "firstName";
         public static final String LAST_NAME = "lastName";
         public static final String EMAIL = "email";
@@ -91,6 +111,13 @@ public class Const {
         public static final String ADMIN_COMMENT = "admin_comment";
 
         private BidField() {
+        }
+    }
+
+    public static class WebPageConfig {
+        public static final int RECORDS_PER_PAGE = 8;
+
+        private WebPageConfig() {
         }
     }
 }

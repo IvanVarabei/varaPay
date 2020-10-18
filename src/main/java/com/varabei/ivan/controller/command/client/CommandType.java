@@ -13,7 +13,7 @@ public enum CommandType {
     PROFILE_GET(new ProfileCommand()),
     CARD_PAGE_GET(new CardPageCommand()),
     MAKE_PAYMENT_POST(new MakePaymentCommand()),
-    PAYMENT_OVERVIEW_GET(new PaymentOverviewCommand()),
+    SUCCESS_GET(new SuccessPageCommand()),
     BLOCK_ACCOUNT_POST(new BlockAccountCommand()),
     PLACE_TOP_UP_BID_POST(new PlaceTopUpBidCommand()),
     PLACE_WITHDRAW_BID_POST(new PlaceWithdrawBidCommand()),
@@ -38,8 +38,8 @@ public enum CommandType {
     REJECT_WITHDRAW_BID_POST(new RejectWithdrawBidCommand()),
     UNBLOCK_ACCOUNT_POST(new UnblockAccountCommand()),
 
-    INCLUDE_ACCOUNTS(new IncludeAccountsGet()),
-    INCLUDE_CARDS(new IncludeCards());
+    INCLUDE_ACCOUNTS(new IncludeAccountsCommand()),
+    INCLUDE_CARDS(new IncludeCardsCommand());
     private final ActionCommand command;
 
     CommandType(ActionCommand command) {

@@ -1,5 +1,6 @@
 package com.varabei.ivan.model.service.impl;
 
+import com.varabei.ivan.Const;
 import com.varabei.ivan.model.dao.DaoFactory;
 import com.varabei.ivan.model.dao.PaymentDao;
 import com.varabei.ivan.model.dao.UserDao;
@@ -9,17 +10,21 @@ import com.varabei.ivan.model.exception.ServiceException;
 import com.varabei.ivan.model.service.PaymentService;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class PaymentServiceImpl implements PaymentService {
-    PaymentDao paymentDao = DaoFactory.getInstance().getPaymentDao();
+    private static final PaymentDao paymentDao = DaoFactory.getInstance().getPaymentDao();
+    private static final int AMOUNT_OF_FIGURES_IN_CARD_NUMBER = 16;
+    private static final String REGEX_NOT_DIGIT = "\\D+";
 
     @Override
-    public void makePayment(Long sourceCardId, String destinationCardNumber, BigDecimal amount) throws ServiceException {
+    public void makePayment(Long sourceCardId, String sourceCardCvc, String destinationCardNumber,
+                            LocalDate destinationCardValidThru, BigDecimal amount) throws ServiceException {
         try {
-            String properNumber = destinationCardNumber.replaceAll("\\D+","");
-            if(properNumber.length() == 16) {
+            String properNumber = destinationCardNumber.replaceAll(REGEX_NOT_DIGIT, "");
+            if (properNumber.length() == AMOUNT_OF_FIGURES_IN_CARD_NUMBER) {
                 paymentDao.makePayment(sourceCardId, properNumber, amount.movePointRight(2).longValue());
             }
         } catch (DaoException e) {
@@ -28,18 +33,19 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public Long findNumberOfRecordsByCardId(Long cardId) throws ServiceException{
+    public int findAmountOfPagesByCardId(Long cardId, int limit) throws ServiceException {
         try {
-            return paymentDao.findNumberOfRecordsByCardId(cardId);
+            Long numberOfRecords = paymentDao.findNumberOfRecordsByCardId(cardId);
+            return (int) Math.ceil(numberOfRecords * 1d / Const.WebPageConfig.RECORDS_PER_PAGE);
         } catch (DaoException e) {
             throw new ServiceException(e);
         }
     }
 
     @Override
-    public List<Payment> findPaymentsByCardId(Long cardId, int limit, int offset) throws ServiceException {
+    public List<Payment> findPaymentsByCardId(Long cardId, int limit, int pageIndex) throws ServiceException {
         try {
-            return paymentDao.findPaymentsByCardId(cardId, limit, offset);
+            return paymentDao.findPaymentsByCardId(cardId, limit, (pageIndex - 1) * limit);
         } catch (DaoException e) {
             throw new ServiceException(e);
         }

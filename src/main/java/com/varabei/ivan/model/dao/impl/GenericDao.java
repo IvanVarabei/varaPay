@@ -40,12 +40,13 @@ public class GenericDao<T extends Identifiable> {
 
     protected void startTransaction(Connection connection) throws SQLException {
         connection.setAutoCommit(false);
-        connection.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
+        connection.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
     }
 
     protected void endTransaction(Connection connection) throws SQLException {
         connection.commit();
         connection.setAutoCommit(true);
+        connection.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
     }
 
     protected void cancelTransaction(Connection connection, DaoException daoException) throws DaoException {

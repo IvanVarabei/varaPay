@@ -3,9 +3,9 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 
-<tags:general pageTitle="Card">
+<tags:general pageTitle="Success">
 	<div class="card">
-		<div class="title">Payment overview</div>
-
+		<div class="title">Success</div>
+		<div class="sub-sub-title">The operation`s been performed successfully!</div>
 	</div>
 </tags:general>

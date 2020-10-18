@@ -7,6 +7,7 @@ import com.varabei.ivan.model.exception.ServiceException;
 import com.varabei.ivan.model.service.MailService;
 import com.varabei.ivan.model.service.ServiceFactory;
 import com.varabei.ivan.model.service.UserService;
+import com.varabei.ivan.util.MathUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -25,8 +26,12 @@ public class SignupCommand implements ActionCommand {
     private static final Logger log = LogManager.getLogger(SignupCommand.class);
     private static final String FORWARD_SIGNUP_GET = "/mainServlet?command=signup_get";
     private static final String FORWARD_VERIFY_EMAIL_PAGE_GET = "/WEB-INF/pages/verifyEmail.jsp";
+    private static final String MAIL_SUBJECT_EMAIL_VERIFICATION = "Email verification";
+    private static final String MAIL_CONTENT = "Hi! Your verification code is : %s. " +
+            "Enter code into the form.";
     private static final int MIN_PASSWORD_LENGTH = 3;
     private static final int MAX_PASSWORD_LENGTH = 20;
+    private static final int VERIFICATION_CODE_BIT_DEPTH = 4;
     private static final Pattern LOGIN_PATTERN = Pattern.compile("^\\w{3,20}$");
     private static final Pattern NAME_PATTERN = Pattern.compile("^[A-Za-z]{3,20}$");//todo rus
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
@@ -35,7 +40,7 @@ public class SignupCommand implements ActionCommand {
     public void execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         String login = req.getParameter(Const.UserField.LOGIN);
         String password = req.getParameter(Const.UserField.PASSWORD);
-        String repeatPassword = req.getParameter(Const.UserField.REPEAT_PASSWORD);
+        String repeatPassword = req.getParameter(Const.RequestParam.REPEAT_PASSWORD);
         String firstName = req.getParameter(Const.UserField.FIRST_NAME);
         String lastName = req.getParameter(Const.UserField.LAST_NAME);
         String email = req.getParameter(Const.UserField.EMAIL);
@@ -48,12 +53,10 @@ public class SignupCommand implements ActionCommand {
             checkName(lastName, errors, Const.UserField.LAST_NAME);
             checkPasswords(password, repeatPassword, errors);
             if (errors.isEmpty()) {
-                //userService.signUp(new User(login, password, firstName, lastName, email, LocalDate.parse(birth)));
-                //resp.sendRedirect(req.getContextPath());
-                String random = "tempPassword";
-                mailService.sendVerificationCode(email, random);
-                req.getSession().setAttribute("tempPassword", random);
-                req.getSession().setAttribute("user", new User(login, password, firstName, lastName, email, LocalDate.parse(birth)));
+                String tempCode = MathUtil.generateRandom(VERIFICATION_CODE_BIT_DEPTH);
+                mailService.sendEmail(email, MAIL_SUBJECT_EMAIL_VERIFICATION, String.format(MAIL_CONTENT, tempCode));
+                req.getSession().setAttribute(Const.RequestParam.TEMP_CODE, tempCode);
+                req.getSession().setAttribute(Const.AttributeKey.USER, new User(login, password, firstName, lastName, email, LocalDate.parse(birth)));
                 req.getRequestDispatcher(FORWARD_VERIFY_EMAIL_PAGE_GET).forward(req, resp);
             } else {
                 req.setAttribute(Const.AttributeKey.ERRORS, errors);
@@ -61,6 +64,7 @@ public class SignupCommand implements ActionCommand {
             }
         } catch (ServiceException e) {
             log.error(e);
+            resp.sendError(Const.ErrorInfo.SERVER_ERROR_CODE);
         }
     }
 
@@ -70,7 +74,7 @@ public class SignupCommand implements ActionCommand {
                 errors.put(Const.UserField.PASSWORD, Const.ErrorInfo.WRONG_LENGTH);
             }
         } else {
-            errors.put(Const.UserField.REPEAT_PASSWORD, Const.ErrorInfo.DIFFERENT_PASSWORDS);
+            errors.put(Const.RequestParam.REPEAT_PASSWORD, Const.ErrorInfo.DIFFERENT_PASSWORDS);
         }
     }
 

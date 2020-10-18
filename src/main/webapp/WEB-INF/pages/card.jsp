@@ -27,7 +27,7 @@
 					<input class="input card__input-number" name="destinationCardNumber" form="makePayment">
 				</div>
 				<div>
-					<input class="input card__input-date" type="month" name="destinationCardDate" form="makePayment">
+					<input class="input card__input-date" type="month" name="destinationCardValidThru" form="makePayment">
 				</div>
 				<img src="img/card1.png"/>
 			</div>
@@ -59,65 +59,9 @@
 					</div>
 				</c:forEach>
 			</div>
-			<table border="1" cellpadding="5" cellspacing="5">
-				<tr>
-					<c:forEach begin="${1}" end="${noOfPages}" var="i">
-						<c:choose>
-							<c:when test="${i < currentPage - 2 and i eq 1}">
-								<td><a href="${pageContext.servletContext.contextPath}/mainServlet?command=card_page_get&page=${i}&card_id=${card.id}">${i}...</a></td>
-							</c:when>
-							<c:when test="${i eq noOfPages and currentPage < i -2}">
-								<td><a href="${pageContext.servletContext.contextPath}/mainServlet?command=card_page_get&page=${i}&card_id=${card.id}">...${i}</a></td>
-							</c:when>
-							<c:when test="${i eq currentPage}">
-								<td>${i}</td>
-							</c:when>
-							<c:when test="${i < currentPage - 2}">
-							</c:when>
-							<c:when test="${i > currentPage + 2}">
-							</c:when>
-
-							<c:otherwise>
-								<td><a href="${pageContext.servletContext.contextPath}/mainServlet?command=card_page_get&page=${i}&card_id=${card.id}">${i}</a></td>
-							</c:otherwise>
-						</c:choose>
-					</c:forEach>
-				</tr>
-			</table>
-
-<%--			<table border="1" cellpadding="5" cellspacing="5">--%>
-<%--				<tr>--%>
-<%--					<c:forEach begin="${currentPage < 4 ? 1 : currentPage-2}" end="${currentPage < noOfPages -2 ? currentPage+2 : noOfPages}" var="i">--%>
-<%--						<c:choose>--%>
-<%--							<c:when test="${currentPage eq i}">--%>
-<%--								<td>${i}</td>--%>
-<%--							</c:when>--%>
-<%--							<c:otherwise>--%>
-<%--								<td><a href="${pageContext.servletContext.contextPath}/mainServlet?command=card_page_get&page=${i}&card_id=${card.id}">${i}</a></td>--%>
-<%--							</c:otherwise>--%>
-<%--						</c:choose>--%>
-<%--					</c:forEach>--%>
-<%--				</tr>--%>
-<%--			</table>--%>
-
-
-<%--			<table border="1" cellpadding="5" cellspacing="5">--%>
-<%--				<tr>--%>
-<%--					<c:forEach begin="1" end="${noOfPages}" var="i">--%>
-<%--						<c:choose>--%>
-<%--							<c:when test="${currentPage eq i}">--%>
-<%--								<td>${i}</td>--%>
-<%--							</c:when>--%>
-<%--							<c:otherwise>--%>
-<%--								<td><a href="${pageContext.servletContext.contextPath}/mainServlet?command=card_page_get&page=${i}&card_id=${card.id}">${i}</a></td>--%>
-<%--							</c:otherwise>--%>
-<%--						</c:choose>--%>
-<%--					</c:forEach>--%>
-<%--				</tr>--%>
-<%--			</table>--%>
-			<c:if test="${currentPage lt noOfPages}">
-				<td><a href="${pageContext.servletContext.contextPath}/mainServlet?command=card_page_get&page=${currentPage + 1}&card_id=${card.id}">Next</a></td>
-			</c:if>
+		<div class="pagination">
+			<tags:pagination amountOfPages="${requestScope.amountOfPages}" currentPage="${requestScope.currentPage}" url="
+			${pageContext.servletContext.contextPath}/mainServlet?command=card_page_get&card_id=${card.id}"/>
 		</c:if>
 	</div>
 </tags:general>

@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-public final class FormatExpressionLanguage {
+public class FormatExpressionLanguage {
     private FormatExpressionLanguage() {
     }
 

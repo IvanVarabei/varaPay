@@ -10,11 +10,11 @@
 	<div class="authorization">
 		<div class="authorization__title title">Create account</div>
 		<form class="form" method="post" action="${pageContext.servletContext.contextPath}/mainServlet?command=change_password_post">
-			<p class="form__input-label">Old password</p><input class="input form__input" name="old_password" type="password">
+			<p class="form__input-label">Old password</p><input class="input form__input" name="oldPassword" type="password">
 			<p class="form__error">${errors.oldPassword}</p>
 			<p class="form__input-label">New password</p><input class="input form__input" name="password" type="password">
 			<p class="form__error">${errors.password}</p>
-			<p class="form__input-label">Repeat new password</p><input class="input form__input" name="repeat_password" type="password">
+			<p class="form__input-label">Repeat new password</p><input class="input form__input" name="repeatPassword" type="password">
 			<p class="form__error">${errors.repeatPassword}</p>
 			<button class="button form_button">Change password</button>
 		</form>

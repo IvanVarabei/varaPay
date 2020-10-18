@@ -11,6 +11,7 @@ public final class ServiceFactory {
     private final AccountService accountService = new AccountServiceImpl();
     private final BidService bidService = new BidServiceImpl();
     private final MailService mailService = new MailServiceImpl();
+    private final CurrencyService currencyService = new CurrencyServiceImpl();
 
     private ServiceFactory() {
     }
@@ -37,6 +38,10 @@ public final class ServiceFactory {
 
     public MailService getMailService() {
         return mailService;
+    }
+
+    public CurrencyService getCurrencyService() {
+        return currencyService;
     }
 
     public static ServiceFactory getInstance() {
