@@ -13,7 +13,9 @@ import java.util.List;
 import java.util.Map;
 
 public class PermissionFilter implements Filter {
-    Map<String, List<String>> commandNamePermittedRoles = new HashMap<>();
+    private static final Map<String, List<String>> commandNamePermittedRoles = new HashMap<>();
+    private static final String JSP_WELCOME = "/WEB-INF/pages/welcome.jsp";
+    private static final String REDIRECT_TO_LOGIN = "%s/mainServlet?command=login_get";
 
     @Override
     public void init(FilterConfig filterConfig) {
@@ -28,16 +30,16 @@ public class PermissionFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse resp = (HttpServletResponse) response;
         HttpSession session = req.getSession();
-        String command = req.getParameter("command");
+        String command = req.getParameter(Const.RequestParam.COMMAND);
         List<String> allowedRoles = commandNamePermittedRoles.get(command);
         Object userRole = session.getAttribute(Const.UserField.ROLE_NAME);
         if (userRole == null && allowedRoles != null) {
-            resp.sendRedirect(req.getContextPath()+"/mainServlet?command=login_get");
+            resp.sendRedirect(String.format(REDIRECT_TO_LOGIN, req.getContextPath()));
         } else {
             if (allowedRoles == null || allowedRoles.contains(userRole)) {
                 chain.doFilter(req, resp);
             } else {
-                req.getRequestDispatcher("/WEB-INF/pages/welcome.jsp").forward(req, resp);
+                req.getRequestDispatcher(JSP_WELCOME).forward(req, resp);
             }
         }
     }
