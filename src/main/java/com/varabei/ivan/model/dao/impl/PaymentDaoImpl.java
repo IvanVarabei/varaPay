@@ -36,6 +36,7 @@ public class PaymentDaoImpl extends GenericDao<Card> implements PaymentDao {
             " destination_card_id, payment_instant from payments where source_card_id = ?";
     private static final String FIND_INCOMING_PAYMENTS_BY_CARD_ID = "select payment_id, amount, source_card_id," +
             " destination_card_id, payment_instant from payments where destination_card_id = ?";
+    private static final String RESULT_SET_COLUMN_LABEL_COUNT = "count";
 
     public PaymentDaoImpl() {
         super(new CardBuilder());
@@ -43,7 +44,8 @@ public class PaymentDaoImpl extends GenericDao<Card> implements PaymentDao {
 
     @Override
     public Long findNumberOfRecordsByCardId(Long cardId) throws DaoException {
-        return findLong(FIND_NUMBER_OF_RECORDS, "count", cardId, cardId).orElseThrow(DaoException::new);
+        return findLong(FIND_NUMBER_OF_RECORDS, RESULT_SET_COLUMN_LABEL_COUNT,
+                cardId, cardId).orElseThrow(DaoException::new);
     }
 
     @Override

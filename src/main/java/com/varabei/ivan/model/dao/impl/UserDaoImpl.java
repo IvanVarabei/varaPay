@@ -26,6 +26,7 @@ public class UserDaoImpl extends GenericDao<User> implements UserDao {
     private static final String UPDATE_PASSWORD_BY_ID = "update users\n" +
             "set password = ?, salt = ? where user_id = ?";
     private static final String IF_PRESENT_BY_ID_AND_PASSWORD = "select exists(select 1 from users where user_id = ? and password = ?)";
+    private static final String RESULT_SET_COLUMN_LABEL_EXISTS = "exists";
 
     public UserDaoImpl() {
         super(new UserBuilder());
@@ -74,6 +75,6 @@ public class UserDaoImpl extends GenericDao<User> implements UserDao {
 
     @Override
     public boolean checkPresenceByIdPassword(Long id, String password) throws DaoException {
-        return findBoolean(IF_PRESENT_BY_ID_AND_PASSWORD, "exists", id, password);
+        return findBoolean(IF_PRESENT_BY_ID_AND_PASSWORD, RESULT_SET_COLUMN_LABEL_EXISTS, id, password);
     }
 }
