@@ -17,8 +17,10 @@ public class PermissionFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) {
-        //commandNamePermittedRoles.put(CommandType.PROFILE.name().toLowerCase(), List.of("админ", "клиент"));
-        commandNamePermittedRoles.put("block_user_post", List.of("админ"));
+        List<String> adminClient = List.of("админ", "клиент");
+        List<String> admin = List.of("админ");
+        commandNamePermittedRoles.put(CommandType.PROFILE_GET.name().toLowerCase(), adminClient);
+        commandNamePermittedRoles.put(CommandType.RUN_BIDS_GET.name(), admin);
     }
 
     @Override
