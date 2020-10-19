@@ -18,8 +18,11 @@
 								formaction="${pageContext.servletContext.contextPath}/mainServlet?command=block_account_post"
 					${account.active eq true ? '' : 'disabled'}>block
 				</button>
-				<button class="button" formaction="${pageContext.servletContext.contextPath}/mainServlet?command=top_up_amount_page_get">top up</button>
-				<button class="button">withdraw</button>
+				<button class="button"
+								formaction="${pageContext.servletContext.contextPath}/mainServlet?command=top_up_amount_page_get"
+					${account.active eq true ? '' : 'disabled'}>top up
+				</button>
+				<button class="button" ${account.active eq true ? '' : 'disabled'}>withdraw</button>
 			</div>
 		</form>
 			<jsp:useBean id="bids" type="java.util.List" scope="request"/>

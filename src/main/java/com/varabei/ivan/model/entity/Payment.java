@@ -43,16 +43,25 @@ public class Payment extends Identifiable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-
-        Payment payment = (Payment) o;
-
-        if (sourceCard != null ? !sourceCard.equals(payment.sourceCard) : payment.sourceCard != null) return false;
-        if (destinationCard != null ? !destinationCard.equals(payment.destinationCard) : payment.destinationCard != null)
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
             return false;
-        if (amount != null ? !amount.equals(payment.amount) : payment.amount != null) return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
+        Payment payment = (Payment) o;
+        if (sourceCard != null ? !sourceCard.equals(payment.sourceCard) : payment.sourceCard != null) {
+            return false;
+        }
+        if (destinationCard != null ? !destinationCard.equals(payment.destinationCard) : payment.destinationCard != null) {
+            return false;
+        }
+        if (amount != null ? !amount.equals(payment.amount) : payment.amount != null) {
+            return false;
+        }
         return paymentInstant != null ? paymentInstant.equals(payment.paymentInstant) : payment.paymentInstant == null;
     }
 

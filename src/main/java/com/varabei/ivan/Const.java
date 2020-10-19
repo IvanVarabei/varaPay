@@ -16,6 +16,7 @@ public class Const {
         public static final String WRONG_TEMP_CODE = "wrong temporary code";
         public static final String LOGIN_TAKEN = "During your registration an another user`s took '%s' login. " +
                 "Repeat registration from scratch.";
+        public static final String EMAIL_DOES_NOT_EXISTS = "such an email does`t exists";
         public static final int SERVER_ERROR_CODE = 500;
 
         private ErrorInfo() {

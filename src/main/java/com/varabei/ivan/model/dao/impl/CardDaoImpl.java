@@ -1,10 +1,13 @@
 package com.varabei.ivan.model.dao.impl;
 
+import com.varabei.ivan.Const;
 import com.varabei.ivan.model.dao.CardDao;
 import com.varabei.ivan.model.dao.builder.impl.CardBuilder;
 import com.varabei.ivan.model.entity.Card;
 import com.varabei.ivan.model.exception.DaoException;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,14 +28,30 @@ public class CardDaoImpl extends GenericDao<Card> implements CardDao {
             "    join roles on users.role_id = roles.role_id";
     private static final String ABANDON_CARD = "update cards set is_abandoned = true where card_Id = ?";
     private static final String CREATE_CARD = "insert into cards (account_id) values (?)";
+    private static final String FIND_CVC_OF_THE_LAST_CREATED_CARD = "select cvc from cards where account_id = ?" +
+            " order by card_id desc limit 1";
 
     public CardDaoImpl() {
         super(new CardBuilder());
     }
 
     @Override
-    public void create(Long accountId) throws DaoException {
-        executeUpdate(CREATE_CARD, accountId);
+    public String createCardAndReturnCvc(Long accountId) throws DaoException {
+        Connection connection = pool.getConnection();
+        try {
+            startTransaction(connection);
+            executeUpdate(CREATE_CARD, connection, accountId);
+            String cvcOfTheLastCreatedCard = findString(FIND_CVC_OF_THE_LAST_CREATED_CARD, connection,
+                    Const.CardField.CVC, accountId).orElseThrow(DaoException::new);
+            endTransaction(connection);
+            return cvcOfTheLastCreatedCard;
+        } catch (SQLException | DaoException e) {
+            DaoException daoException = e instanceof DaoException ? (DaoException) e : new DaoException(e);
+            cancelTransaction(connection, daoException);
+            throw daoException;
+        } finally {
+            pool.releaseConnection(connection);
+        }
     }
 
     @Override

@@ -23,6 +23,7 @@ public class RecoverPasswordCommand implements ActionCommand {
     private static final String MAIL_CONTENT = "Hi! Your new password is : %s. " +
             "You can change password in your profile.";
     private static final String REDIRECT_TO_LOGIN = "%s/mainServlet?command=login_get";
+    private static final String JSP_RECOVER_PASSWORD = "/WEB-INF/pages/recoverPassword.jsp";
     private static final int DEFAULT_PASSWORD_LENGTH = 20;
 
     @Override
@@ -30,9 +31,14 @@ public class RecoverPasswordCommand implements ActionCommand {
         String email = req.getParameter(Const.UserField.EMAIL);
         String newPassword = CustomSecurity.generateRandom(DEFAULT_PASSWORD_LENGTH);
         try {
-            mailService.sendEmail(email, MAIL_SUBJECT_NEW_PASSWORD, String.format(MAIL_CONTENT, newPassword));
-            userService.updatePassword(email, newPassword);
-            resp.sendRedirect(String.format(REDIRECT_TO_LOGIN, req.getContextPath()));
+            if (userService.findByEmail(email).isPresent()) {
+                mailService.sendEmail(email, MAIL_SUBJECT_NEW_PASSWORD, String.format(MAIL_CONTENT, newPassword));
+                userService.updatePassword(email, newPassword);
+                resp.sendRedirect(String.format(REDIRECT_TO_LOGIN, req.getContextPath()));
+            } else {
+                req.setAttribute(Const.AttributeKey.ERROR, Const.ErrorInfo.EMAIL_DOES_NOT_EXISTS);
+                req.getRequestDispatcher(JSP_RECOVER_PASSWORD).forward(req, resp);
+            }
         } catch (ServiceException e) {
             log.error(e);
             resp.sendError(Const.ErrorInfo.SERVER_ERROR_CODE);

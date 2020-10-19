@@ -14,9 +14,9 @@ public class CardServiceImpl implements CardService {
     private static final CardDao cardDao = DaoFactory.getInstance().getCardDao();
 
     @Override
-    public void create(Long accountId) throws ServiceException {
+    public String createCardAndReturnCvc(Long accountId) throws ServiceException {
         try {
-            cardDao.create(accountId);
+            return cardDao.createCardAndReturnCvc(accountId);
         } catch (DaoException daoException) {
             throw new ServiceException(daoException);
         }

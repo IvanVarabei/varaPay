@@ -33,14 +33,22 @@ public class Account extends Identifiable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
         Account account = (Account) o;
-
-        if (isActive != account.isActive) return false;
-        if (balance != null ? !balance.equals(account.balance) : account.balance != null) return false;
+        if (isActive != account.isActive) {
+            return false;
+        }
+        if (balance != null ? !balance.equals(account.balance) : account.balance != null) {
+            return false;
+        }
         return user != null ? user.equals(account.user) : account.user == null;
     }
 

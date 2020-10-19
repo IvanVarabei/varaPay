@@ -18,7 +18,7 @@
 			<c:forEach var="bid" items="${bids}">
 				<div class="run-bids__row">
 					<div class="run-bids__id run-bids__item">№${bid.id}</div>
-					<div class="run-bids__operation-type run-bids__item">withdraw ${bid.amount}$</div>
+					<div class="run-bids__operation-type run-bids__item">${bid.topUp eq true ? 'top up' : 'withdraw'} ${bid.amount}$</div>
 					<div class="run-bids__email run-bids__item">${bid.account.user.email}</div>
 					<div class="run-bids__date run-bids__item">
 						<javatime:format value="${bid.placingDateTime}" style="MS"/></div>

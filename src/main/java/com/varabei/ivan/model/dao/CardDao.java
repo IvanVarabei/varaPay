@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CardDao {
-    void create(Long accountId) throws DaoException;
+    String createCardAndReturnCvc(Long accountId) throws DaoException;
 
     Optional<Card> findById(Long id) throws DaoException;
 

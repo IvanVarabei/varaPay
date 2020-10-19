@@ -31,7 +31,7 @@
 						<a href="${pageContext.request.contextPath}/mainServlet?command=run_accounts_get" class="header__link">Run accounts</a>
 					</li>
 					<li>
-						<a href="${pageContext.request.contextPath}/mainServlet?command=run_bids_get" class="header__link">Run top up bids</a>
+						<a href="${pageContext.request.contextPath}/mainServlet?command=run_bids_get" class="header__link">Run bids</a>
 					</li>
 				</c:if>
 				<c:if test="${empty sessionScope.user_id}">

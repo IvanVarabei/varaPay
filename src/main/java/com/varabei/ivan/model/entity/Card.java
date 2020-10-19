@@ -42,15 +42,22 @@ public class Card extends Identifiable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-
-        Card card = (Card) o;
-
-        if (cardNumber != null ? !cardNumber.equals(card.cardNumber) : card.cardNumber != null) return false;
-        if (validThru != null ? !validThru.equals(card.validThru) : card.validThru != null)
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
             return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
+        Card card = (Card) o;
+        if (cardNumber != null ? !cardNumber.equals(card.cardNumber) : card.cardNumber != null) {
+            return false;
+        }
+        if (validThru != null ? !validThru.equals(card.validThru) : card.validThru != null) {
+            return false;
+        }
         if (cvc != null ? !cvc.equals(card.cvc) : card.cvc != null) return false;
         return account != null ? account.equals(card.account) : card.account == null;
     }

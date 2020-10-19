@@ -40,7 +40,7 @@ public class GenericDao<T extends Identifiable> {
 
     protected void startTransaction(Connection connection) throws SQLException {
         connection.setAutoCommit(false);
-        connection.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
+        connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
     }
 
     protected void endTransaction(Connection connection) throws SQLException {
@@ -146,6 +146,12 @@ public class GenericDao<T extends Identifiable> {
             throws DaoException {
         Optional<Object> foundValue = findObject(query, connection, columnLabel, params);
         return foundValue.map(o -> Long.parseLong(String.valueOf(o)));
+    }
+
+    protected Optional<String> findString(String query, Connection connection, String columnLabel, Object... params)
+            throws DaoException {
+        Optional<Object> foundValue = findObject(query, connection, columnLabel, params);
+        return foundValue.map(String::valueOf);
     }
 
     protected boolean findBoolean(String query, String columnLabel, Object... params)

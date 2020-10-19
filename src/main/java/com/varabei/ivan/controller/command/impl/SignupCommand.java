@@ -56,7 +56,8 @@ public class SignupCommand implements ActionCommand {
                 String tempCode = CustomSecurity.generateRandom(VERIFICATION_CODE_LENGTH);
                 mailService.sendEmail(email, MAIL_SUBJECT_EMAIL_VERIFICATION, String.format(MAIL_CONTENT, tempCode));
                 req.getSession().setAttribute(Const.RequestParam.TEMP_CODE, tempCode);
-                req.getSession().setAttribute(Const.AttributeKey.USER, new User(login, password, firstName, lastName, email, LocalDate.parse(birth)));
+                req.getSession().setAttribute(Const.AttributeKey.USER,
+                        new User(login, password, firstName, lastName, email, LocalDate.parse(birth)));
                 req.getRequestDispatcher(FORWARD_VERIFY_EMAIL_PAGE_GET).forward(req, resp);
             } else {
                 req.setAttribute(Const.AttributeKey.ERRORS, errors);

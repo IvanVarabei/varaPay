@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CardService {
-    void create(Long accountId) throws ServiceException;
+    String createCardAndReturnCvc(Long accountId) throws ServiceException;
     Optional<Card> findById(Long id) throws ServiceException;
     List<Card> findByAccountId(Long accountId) throws ServiceException;
     void delete(Long cardId) throws ServiceException;

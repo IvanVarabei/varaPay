@@ -70,18 +70,34 @@ public class Bid extends Identifiable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
         Bid bid = (Bid) o;
-
-        if (isTopUp != bid.isTopUp) return false;
-        if (account != null ? !account.equals(bid.account) : bid.account != null) return false;
-        if (state != null ? !state.equals(bid.state) : bid.state != null) return false;
-        if (amount != null ? !amount.equals(bid.amount) : bid.amount != null) return false;
-        if (clientMessage != null ? !clientMessage.equals(bid.clientMessage) : bid.clientMessage != null) return false;
-        if (adminComment != null ? !adminComment.equals(bid.adminComment) : bid.adminComment != null) return false;
+        if (isTopUp != bid.isTopUp) {
+            return false;
+        }
+        if (account != null ? !account.equals(bid.account) : bid.account != null) {
+            return false;
+        }
+        if (state != null ? !state.equals(bid.state) : bid.state != null) {
+            return false;
+        }
+        if (amount != null ? !amount.equals(bid.amount) : bid.amount != null) {
+            return false;
+        }
+        if (clientMessage != null ? !clientMessage.equals(bid.clientMessage) : bid.clientMessage != null) {
+            return false;
+        }
+        if (adminComment != null ? !adminComment.equals(bid.adminComment) : bid.adminComment != null) {
+            return false;
+        }
         return placingDateTime != null ? placingDateTime.equals(bid.placingDateTime) : bid.placingDateTime == null;
     }
 
@@ -101,7 +117,7 @@ public class Bid extends Identifiable {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Bid{");
-        sb.append("accountInfo=").append(account);
+        sb.append("account=").append(account);
         sb.append(", state='").append(state).append('\'');
         sb.append(", amount=").append(amount);
         sb.append(", clientMessage='").append(clientMessage).append('\'');

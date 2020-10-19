@@ -2,6 +2,7 @@ package com.varabei.ivan.controller.command.impl;
 
 import com.varabei.ivan.Const;
 import com.varabei.ivan.controller.command.ActionCommand;
+import com.varabei.ivan.model.entity.Bid;
 import com.varabei.ivan.model.exception.ServiceException;
 import com.varabei.ivan.model.service.BidService;
 import com.varabei.ivan.model.service.ServiceFactory;
@@ -12,6 +13,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 public class RunBidsCommand implements ActionCommand {
     private static final Logger log = LogManager.getLogger(RunBidsCommand.class);
