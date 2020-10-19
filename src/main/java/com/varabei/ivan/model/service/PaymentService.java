@@ -6,11 +6,12 @@ import com.varabei.ivan.model.exception.ServiceException;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.List;
 
 public interface PaymentService {
     void makePayment(Long sourceCardId, String sourceCardCvc, String destinationCardNumber,
-                     LocalDate destinationCardValidThru, BigDecimal amount) throws ServiceException;
+                     YearMonth destinationCardValidThru, BigDecimal amount) throws ServiceException;
 
     int findAmountOfPagesByCardId(Long cardId, int limit) throws ServiceException;
 

@@ -37,7 +37,7 @@
 				<c:if test="${empty sessionScope.user_id}">
 					<li>
 						<a href="${pageContext.request.contextPath}/mainServlet?command=signup_get" class="header__link">Create
-							account</a>
+							profile</a>
 					</li>
 					<li>
 						<a href="${pageContext.request.contextPath}/mainServlet?command=login_get" class="header__link">Login</a>

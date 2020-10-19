@@ -22,7 +22,7 @@ public class PaymentDaoImpl extends GenericDao<Card> implements PaymentDao {
     private static final String FIND_ACCOUNT_ID_BY_CARD_ID = "select account_id from cards where card_id = ?";
     private static final String ADD_ACCOUNT_BALANCE = "update accounts set balance = balance + ? where account_id= ?";
     private static final String FIND_CARD_BY_ID = "select card_id, card_number, valid_thru, cvc, cards.account_id,\n" +
-            "       balance, is_active, users.user_id, users.login,users.email,\n" +
+            "       balance, is_active, users.user_id, users.login, password, salt,users.email,\n" +
             "       users.firstname, users.lastname, users.birth, roles.role_name from cards\n" +
             "    join accounts on card_id = ? and cards.account_id = accounts.account_id\n" +
             "    join users on accounts.user_id = users.user_id\n" +

@@ -6,7 +6,7 @@ import com.varabei.ivan.model.exception.ServiceException;
 import com.varabei.ivan.model.service.MailService;
 import com.varabei.ivan.model.service.ServiceFactory;
 import com.varabei.ivan.model.service.UserService;
-import com.varabei.ivan.util.MathUtil;
+import com.varabei.ivan.util.CustomSecurity;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -22,15 +22,17 @@ public class RecoverPasswordCommand implements ActionCommand {
     private static final String MAIL_SUBJECT_NEW_PASSWORD = "Your new password";
     private static final String MAIL_CONTENT = "Hi! Your new password is : %s. " +
             "You can change password in your profile.";
-    private static final int DEFAULT_PASSWORD_LENGTH = 10;
+    private static final String REDIRECT_TO_LOGIN = "%s/mainServlet?command=login_get";
+    private static final int DEFAULT_PASSWORD_LENGTH = 20;
 
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         String email = req.getParameter(Const.UserField.EMAIL);
-        String newPassword = MathUtil.generateRandom(DEFAULT_PASSWORD_LENGTH);
+        String newPassword = CustomSecurity.generateRandom(DEFAULT_PASSWORD_LENGTH);
         try {
             mailService.sendEmail(email, MAIL_SUBJECT_NEW_PASSWORD, String.format(MAIL_CONTENT, newPassword));
             userService.updatePassword(email, newPassword);
+            resp.sendRedirect(String.format(REDIRECT_TO_LOGIN, req.getContextPath()));
         } catch (ServiceException e) {
             log.error(e);
             resp.sendError(Const.ErrorInfo.SERVER_ERROR_CODE);

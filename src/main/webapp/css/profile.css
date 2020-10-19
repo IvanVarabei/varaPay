@@ -1,15 +1,17 @@
 .profile {
 }
+.profile a{
+	color: white;
+}
 .profile__info {
 	margin: 30px 0 30px 0;
 	display: grid;
-	grid-template: repeat(5, 1fr) /  1fr 2fr;
-	grid-row-gap: 20px;
+	grid-template: repeat(6, 1fr) /  1fr 2fr;
 	grid-column-gap: 30px;
 }
 .profile__photo {
 	grid-row-start: 1;
-	grid-row-end: 6;
+	grid-row-end: 7;
 	grid-column-start: 1;
 	grid-column-end: 2;
 	position: relative;
@@ -24,7 +26,11 @@
 	height: 100%;
 	object-fit: fill;
 }
-.profile__text {}
+.profile__text {
+}
+.profile__text a{
+	text-transform: uppercase;
+}
 @media(max-width: 700px){
 	.profile__info {
 		grid-template:  1fr/  1fr;

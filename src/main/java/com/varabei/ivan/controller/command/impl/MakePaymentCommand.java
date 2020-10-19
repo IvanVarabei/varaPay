@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.time.YearMonth;
 
 public class MakePaymentCommand implements ActionCommand {
     private static final Logger log = LogManager.getLogger(MakePaymentCommand.class);
@@ -26,10 +27,10 @@ public class MakePaymentCommand implements ActionCommand {
         String destinationCardNumber = req.getParameter(Const.RequestParam.DESTINATION_CARD_NUMBER);
         String sourceCardCvc = req.getParameter(Const.CardField.CVC);
         BigDecimal amount = BigDecimal.valueOf(Double.parseDouble(req.getParameter(Const.PaymentField.AMOUNT)));
-        //LocalDate destinationCardValidThru = LocalDate.parse(req.getParameter(Const.RequestParam.DESTINATION_CARD_VALID_THRU));
+        YearMonth destinationCardValidThru = YearMonth.parse(req.getParameter(Const.RequestParam.DESTINATION_CARD_VALID_THRU));
         try {
             paymentService.makePayment(sourceCardId, sourceCardCvc,
-                    destinationCardNumber, null, amount);
+                    destinationCardNumber, destinationCardValidThru, amount);
             resp.sendRedirect(String.format(REDIRECT_SUCCESS_PAGE, req.getContextPath()));
         } catch (ServiceException e) {
             log.error(e);

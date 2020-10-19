@@ -24,7 +24,7 @@ public class BidDaoImpl extends GenericDao<Bid> implements BidDao {
     private static final String FIND_IN_PROGRESS_BIDS =
             "select bid_id, bid_states.state,bids.amount,is_top_up, bids.client_message, bids.admin_comment,\n" +
             "       placing_date_time, accounts.account_id, accounts.account_id\n" +
-            "       balance, is_active, users.user_id, users.login,users.email,\n" +
+            "       balance, is_active, users.user_id, users.login, password, salt,users.email,\n" +
             "       users.firstname, users.lastname, users.birth, roles.role_name from bids\n" +
             "       join bid_states on bids.bid_state_id = bid_states.bid_state_id\n" +
             "    join accounts on bids.account_id = accounts.account_id\n" +
@@ -34,7 +34,7 @@ public class BidDaoImpl extends GenericDao<Bid> implements BidDao {
     private static final String FIND_BY_ACCOUNT_ID =
             "select bid_id, bid_states.state,bids.amount, is_top_up, bids.client_message, bids.admin_comment,\n" +
                     "       placing_date_time, accounts.account_id, accounts.account_id\n" +
-                    "       balance, is_active, users.user_id, users.login,users.email,\n" +
+                    "       balance, is_active, users.user_id, users.login, password, salt,users.email,\n" +
                     "       users.firstname, users.lastname, users.birth, roles.role_name from bids\n" +
                     "       join bid_states on bids.bid_state_id = bid_states.bid_state_id\n" +
                     "    join accounts on bids.account_id = ? and  bids.account_id = accounts.account_id\n" +

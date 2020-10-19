@@ -20,9 +20,9 @@ public interface UserDao{
 
     Optional<User> findByLoginPassword(String login, String password) throws DaoException;
 
-    void updatePassword(String email, String newPassword) throws DaoException;
+    void updatePassword(String email, String newPassword, String newSalt) throws DaoException;
 
-    void updatePassword(Long id, String newPassword) throws DaoException;
+    void updatePassword(Long id, String newPassword, String newSalt) throws DaoException;
 
     boolean checkPresenceByIdPassword(Long id, String password) throws DaoException;
 }

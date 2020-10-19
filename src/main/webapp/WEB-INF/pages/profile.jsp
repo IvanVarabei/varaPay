@@ -16,7 +16,7 @@
 			<div class="profile__text">${user.lastName}</div>
 			<div class="profile__text">${user.email}</div>
 			<div class="profile__text">${user.birth}</div>
-			<div class="profile__text"><a href="${pageContext.servletContext.contextPath}/mainServlet?command=change_password_get">change password</a></div>
+			<div class="profile__text"><a href="${pageContext.servletContext.contextPath}/mainServlet?command=change_password_get"><b>change password</b></a></div>
 		</div>
 		<div class="sub-title">Accounts</div>
 		<div class="profile__accounts">

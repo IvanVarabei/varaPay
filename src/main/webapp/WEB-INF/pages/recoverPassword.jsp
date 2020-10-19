@@ -5,9 +5,9 @@
 
 <tags:general pageTitle="Login">
 	<div class="authorization">
-		<div class="authorization__title title">Login</div>
+		<div class="authorization__title title">Recover password</div>
 		<form class="form" method="post" action="${pageContext.servletContext.contextPath}/mainServlet?command=recover_password_post">
-			<p class="form__error">${requestScope.error}</p>
+			<c:if test="${not empty requestScope.error}"><p class="form__error">${requestScope.error}</p></c:if>
 			<p class="form__input-label">Email</p><input class="input form__input" name="email" value="${param.login}">
 			<button class="button form_button">Recover</button>
 		</form>

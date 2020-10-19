@@ -6,6 +6,7 @@ public class User extends Identifiable {
     private String roleName;
     private String login;
     private String password;
+    private String salt;
     private String firstName;
     private String lastName;
     private String email;
@@ -47,6 +48,14 @@ public class User extends Identifiable {
         this.password = password;
     }
 
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
+    }
+
     public String getFirstName() {
         return firstName;
     }
@@ -82,9 +91,10 @@ public class User extends Identifiable {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("User{");
-        sb.append(", role='").append(roleName).append('\'');
+        sb.append("roleName='").append(roleName).append('\'');
         sb.append(", login='").append(login).append('\'');
         sb.append(", password='").append(password).append('\'');
+        sb.append(", salt='").append(salt).append('\'');
         sb.append(", firstName='").append(firstName).append('\'');
         sb.append(", lastName='").append(lastName).append('\'');
         sb.append(", email='").append(email).append('\'');

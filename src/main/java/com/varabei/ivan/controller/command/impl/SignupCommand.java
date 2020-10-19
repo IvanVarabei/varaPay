@@ -7,7 +7,7 @@ import com.varabei.ivan.model.exception.ServiceException;
 import com.varabei.ivan.model.service.MailService;
 import com.varabei.ivan.model.service.ServiceFactory;
 import com.varabei.ivan.model.service.UserService;
-import com.varabei.ivan.util.MathUtil;
+import com.varabei.ivan.util.CustomSecurity;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -31,7 +31,7 @@ public class SignupCommand implements ActionCommand {
             "Enter code into the form.";
     private static final int MIN_PASSWORD_LENGTH = 3;
     private static final int MAX_PASSWORD_LENGTH = 20;
-    private static final int VERIFICATION_CODE_BIT_DEPTH = 4;
+    private static final int VERIFICATION_CODE_LENGTH = 4;
     private static final Pattern LOGIN_PATTERN = Pattern.compile("^\\w{3,20}$");
     private static final Pattern NAME_PATTERN = Pattern.compile("^[A-Za-z]{3,20}$");//todo rus
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
@@ -53,7 +53,7 @@ public class SignupCommand implements ActionCommand {
             checkName(lastName, errors, Const.UserField.LAST_NAME);
             checkPasswords(password, repeatPassword, errors);
             if (errors.isEmpty()) {
-                String tempCode = MathUtil.generateRandom(VERIFICATION_CODE_BIT_DEPTH);
+                String tempCode = CustomSecurity.generateRandom(VERIFICATION_CODE_LENGTH);
                 mailService.sendEmail(email, MAIL_SUBJECT_EMAIL_VERIFICATION, String.format(MAIL_CONTENT, tempCode));
                 req.getSession().setAttribute(Const.RequestParam.TEMP_CODE, tempCode);
                 req.getSession().setAttribute(Const.AttributeKey.USER, new User(login, password, firstName, lastName, email, LocalDate.parse(birth)));
