@@ -1,7 +1,8 @@
 package com.varabei.ivan.controller.filter;
 
-import com.varabei.ivan.Const;
+import com.varabei.ivan.controller.RequestParam;
 import com.varabei.ivan.controller.command.client.CommandType;
+import com.varabei.ivan.model.entity.name.UserField;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -30,9 +31,9 @@ public class PermissionFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse resp = (HttpServletResponse) response;
         HttpSession session = req.getSession();
-        String command = req.getParameter(Const.RequestParam.COMMAND);
+        String command = req.getParameter(RequestParam.COMMAND);
         List<String> allowedRoles = commandNamePermittedRoles.get(command);
-        Object userRole = session.getAttribute(Const.UserField.ROLE_NAME);
+        Object userRole = session.getAttribute(UserField.ROLE_NAME);
         if (userRole == null && allowedRoles != null) {
             resp.sendRedirect(String.format(REDIRECT_TO_LOGIN, req.getContextPath()));
         } else {

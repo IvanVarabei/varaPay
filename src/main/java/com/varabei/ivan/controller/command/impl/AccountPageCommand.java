@@ -1,9 +1,11 @@
 package com.varabei.ivan.controller.command.impl;
 
-import com.varabei.ivan.Const;
+import com.varabei.ivan.common.ErrorInfo;
+import com.varabei.ivan.controller.AttributeKey;
 import com.varabei.ivan.controller.command.ActionCommand;
 import com.varabei.ivan.model.entity.Account;
 import com.varabei.ivan.model.entity.Bid;
+import com.varabei.ivan.model.entity.name.AccountField;
 import com.varabei.ivan.model.exception.ServiceException;
 import com.varabei.ivan.model.service.ServiceFactory;
 import org.apache.logging.log4j.LogManager;
@@ -21,16 +23,16 @@ public class AccountPageCommand implements ActionCommand {
 
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        Long accountId = Long.parseLong(req.getParameter(Const.AccountField.ID));
+        Long accountId = Long.parseLong(req.getParameter(AccountField.ID));
         try {
             Account account = ServiceFactory.getInstance().getAccountService().findById(accountId).orElse(null);
-            req.setAttribute(Const.AttributeKey.ACCOUNT, account);
+            req.setAttribute(AttributeKey.ACCOUNT, account);
             List<Bid> bids = ServiceFactory.getInstance().getToUpBidService().findByAccountId(accountId);
-            req.setAttribute(Const.AttributeKey.BIDS, bids);
+            req.setAttribute(AttributeKey.BIDS, bids);
             req.getRequestDispatcher(JSP_ACCOUNT).forward(req, resp);
         } catch (ServiceException e) {
             log.error(e);
-            resp.sendError(Const.ErrorInfo.SERVER_ERROR_CODE);
+            resp.sendError(ErrorInfo.SERVER_ERROR_CODE);
         }
     }
 }

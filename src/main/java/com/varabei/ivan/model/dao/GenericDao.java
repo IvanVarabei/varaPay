@@ -1,7 +1,7 @@
-package com.varabei.ivan.model.dao.impl;
+package com.varabei.ivan.model.dao;
 
 import com.varabei.ivan.model.dao.builder.IdentifiableBuilder;
-import com.varabei.ivan.model.dao.pool.ConnectionPool;
+import com.varabei.ivan.model.pool.ConnectionPool;
 import com.varabei.ivan.model.entity.Identifiable;
 import com.varabei.ivan.model.exception.DaoException;
 import org.apache.logging.log4j.LogManager;
@@ -13,8 +13,8 @@ import java.util.List;
 import java.util.Optional;
 
 public class GenericDao<T extends Identifiable> {
+    private static final Logger log = LogManager.getLogger(GenericDao.class);
     protected static final ConnectionPool pool = ConnectionPool.getInstance();
-    private final Logger log = LogManager.getLogger(GenericDao.class);
     private final IdentifiableBuilder<T> builder;
 
     protected GenericDao(IdentifiableBuilder<T> builder) {

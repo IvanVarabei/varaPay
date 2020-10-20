@@ -3,12 +3,12 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 
-<tags:general pageTitle="Create account">
+<tags:general pageTitle="Create profile">
 	<c:if test="${not empty requestScope.errors}">
 		<jsp:useBean id="errors" type="java.util.Map" scope="request"/>
 	</c:if>
 	<div class="authorization">
-		<div class="authorization__title title">Create account</div>
+		<div class="authorization__title title">Create profile</div>
 		<form class="form" method="post" action="${pageContext.servletContext.contextPath}/mainServlet?command=signup_post">
 			<p class="form__input-label">Login</p><input class="input form__input" name="login" value="${param.login}">
 			<p class="form__error">${errors.login}</p>

@@ -1,10 +1,13 @@
 package com.varabei.ivan.model.dao.impl;
 
-import com.varabei.ivan.Const;
+import com.varabei.ivan.model.dao.GenericDao;
 import com.varabei.ivan.model.dao.PaymentDao;
 import com.varabei.ivan.model.dao.builder.impl.CardBuilder;
 import com.varabei.ivan.model.entity.Card;
 import com.varabei.ivan.model.entity.Payment;
+import com.varabei.ivan.model.entity.name.AccountField;
+import com.varabei.ivan.model.entity.name.CardField;
+import com.varabei.ivan.model.entity.name.PaymentField;
 import com.varabei.ivan.model.exception.DaoException;
 
 import java.math.BigDecimal;
@@ -54,11 +57,11 @@ public class PaymentDaoImpl extends GenericDao<Card> implements PaymentDao {
         try {
             startTransaction(connection);
             Long destinationCardId = findLong(FIND_CARD_ID_BY_NUMBER, connection,
-                    Const.CardField.ID, destinationCardNumber).orElseThrow(DaoException::new);
+                    CardField.ID, destinationCardNumber).orElseThrow(DaoException::new);
             Long sourceAccountId = findLong(FIND_ACCOUNT_ID_BY_CARD_ID, connection,
-                    Const.AccountField.ID, sourceCardId).orElseThrow(DaoException::new);
+                    AccountField.ID, sourceCardId).orElseThrow(DaoException::new);
             Long destAccountId = findLong(FIND_ACCOUNT_ID_BY_CARD_ID, connection,
-                    Const.AccountField.ID, destinationCardId).orElseThrow(DaoException::new);
+                    AccountField.ID, destinationCardId).orElseThrow(DaoException::new);
             executeUpdate(ADD_ACCOUNT_BALANCE, connection, -amount, sourceAccountId);
             executeUpdate(ADD_ACCOUNT_BALANCE, connection, amount, destAccountId);
             executeUpdate(SET_PAYMENT, connection, sourceCardId, destinationCardId, amount);
@@ -119,17 +122,17 @@ public class PaymentDaoImpl extends GenericDao<Card> implements PaymentDao {
 
     private Payment instantiatePayment(ResultSet resultSet, Connection connection) throws SQLException, DaoException {
         Payment payment = new Payment();
-        Long sourceCardId = resultSet.getLong(Const.PaymentField.SOURCE_CARD_ID);
-        Long destinationCardId = resultSet.getLong(Const.PaymentField.DESTINATION_CARD_ID);
+        Long sourceCardId = resultSet.getLong(PaymentField.SOURCE_CARD_ID);
+        Long destinationCardId = resultSet.getLong(PaymentField.DESTINATION_CARD_ID);
         Card sourceCard = executeForSingleResult(FIND_CARD_BY_ID, connection, sourceCardId)
                 .orElseThrow(DaoException::new);
         Card destinationCard = executeForSingleResult(FIND_CARD_BY_ID, connection, destinationCardId)
                 .orElseThrow(DaoException::new);
         payment.setSourceCard(sourceCard);
         payment.setDestinationCard(destinationCard);
-        payment.setId(resultSet.getLong(Const.PaymentField.ID));
-        payment.setAmount(BigDecimal.valueOf(resultSet.getLong(Const.PaymentField.AMOUNT)).movePointLeft(2));
-        payment.setPaymentInstant(resultSet.getTimestamp(Const.PaymentField.INSTANT).toLocalDateTime());
+        payment.setId(resultSet.getLong(PaymentField.ID));
+        payment.setAmount(BigDecimal.valueOf(resultSet.getLong(PaymentField.AMOUNT)).movePointLeft(2));
+        payment.setPaymentInstant(resultSet.getTimestamp(PaymentField.INSTANT).toLocalDateTime());
         return payment;
     }
 }

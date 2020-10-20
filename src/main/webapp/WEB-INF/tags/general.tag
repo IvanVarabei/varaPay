@@ -49,8 +49,30 @@
 					</li>
 				</c:if>
 				<li>
-					<a href="" class="header__link">EN / RU</a>
+<%--					<a href="" class="header__link">EN / RU</a>--%>
+	<select name="locale" form="change_language" onchange="this.form.submit()">
+				<li>
+					<option value="en-US"
+									<c:if test="${sessionScope.locale.language eq 'en'}">
+										selected="selected"
+									</c:if>
+					>EN</option>
+					<option value="ru-RU"
+									<c:if test="${sessionScope.locale.language eq 'ru'}">
+										selected="selected"
+									</c:if>
+					>RU</option>
+					<option value="be-BY"
+									<c:if test="${sessionScope.locale.language eq 'be'}">
+										selected="selected"
+									</c:if>
+					>BE</option>
 				</li>
+				</select>
+				</li>
+				<form id="change_language" action="${pageContext.request.contextPath}/mainServlet">
+					<input type="hidden" name="command" value="change_language">
+				</form>
 			</ul>
 			<div class="header__burger">
 				<span></span>

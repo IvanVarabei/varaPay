@@ -1,7 +1,8 @@
 package com.varabei.ivan.controller.command.impl;
 
-import com.varabei.ivan.Const;
+import com.varabei.ivan.common.ErrorInfo;
 import com.varabei.ivan.controller.command.ActionCommand;
+import com.varabei.ivan.model.entity.name.AccountField;
 import com.varabei.ivan.model.exception.ServiceException;
 import com.varabei.ivan.model.service.AccountService;
 import com.varabei.ivan.model.service.ServiceFactory;
@@ -20,13 +21,13 @@ public class BlockAccountCommand implements ActionCommand {
 
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        Long accountId = Long.parseLong(req.getParameter(Const.AccountField.ID));
+        Long accountId = Long.parseLong(req.getParameter(AccountField.ID));
         try {
             accountService.changeActive(accountId);
             resp.sendRedirect(String.format(REDIRECT_AFTER_BLOCKING, req.getContextPath()));
         } catch (ServiceException e) {
             log.error(e);
-            resp.sendError(Const.ErrorInfo.SERVER_ERROR_CODE);
+            resp.sendError(ErrorInfo.SERVER_ERROR_CODE);
         }
     }
 }

@@ -26,5 +26,15 @@
 			<button class="button">add new account</button>
 			</form>
 		</div>
+		<div id="popup" class="popup ${not empty param.cvc ? 'popup_visible' : ''}">
+			<div class="popup__body">
+				<div class="popup__content">
+					<a href="${pageContext.servletContext.contextPath}/mainServlet?command=profile_get" class="popup__close">X</a>
+					<div class="popup__title">Card`s been created</div>
+					<div class="popup__text">Your cvc for this card <b>${param.cvc}</b>. Don`t lose it! If you forget cvc, you can`t use the card!</div>
+				</div>
+			</div>
+		</div>
+
 	</div>
 </tags:general>

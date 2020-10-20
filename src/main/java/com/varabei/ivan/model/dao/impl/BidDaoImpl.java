@@ -1,9 +1,10 @@
 package com.varabei.ivan.model.dao.impl;
 
-import com.varabei.ivan.Const;
 import com.varabei.ivan.model.dao.BidDao;
+import com.varabei.ivan.model.dao.GenericDao;
 import com.varabei.ivan.model.dao.builder.impl.BidBoulder;
 import com.varabei.ivan.model.entity.Bid;
+import com.varabei.ivan.model.entity.name.BidField;
 import com.varabei.ivan.model.exception.DaoException;
 
 import java.sql.Connection;
@@ -97,9 +98,9 @@ public class BidDaoImpl extends GenericDao<Bid> implements BidDao {
         try {
             startTransaction(connection);
             Long bidAmount = findLong(FIND_BID_AMOUNT_BY_ID, connection,
-                    Const.BidField.AMOUNT, topUpBidId).orElseThrow(DaoException::new);
+                    BidField.AMOUNT, topUpBidId).orElseThrow(DaoException::new);
             Long bidAccountId = findLong(FIND_BID_ACCOUNT_BY_BID_ID, connection,
-                    Const.BidField.ACCOUNT_ID, topUpBidId).orElseThrow(DaoException::new);
+                    BidField.ACCOUNT_ID, topUpBidId).orElseThrow(DaoException::new);
             executeUpdate(ADD_ACCOUNT_BALANCE, connection, bidAmount, bidAccountId);
             executeUpdate(SET_STATE_APPROVED, connection, topUpBidId);
             endTransaction(connection);

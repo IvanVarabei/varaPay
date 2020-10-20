@@ -1,21 +1,17 @@
 package com.varabei.ivan.model.service.impl;
 
-import com.varabei.ivan.Const;
+import com.varabei.ivan.controller.WebPageConfig;
 import com.varabei.ivan.model.dao.CardDao;
 import com.varabei.ivan.model.dao.DaoFactory;
 import com.varabei.ivan.model.dao.PaymentDao;
-import com.varabei.ivan.model.dao.UserDao;
-import com.varabei.ivan.model.entity.Card;
 import com.varabei.ivan.model.entity.Payment;
 import com.varabei.ivan.model.exception.DaoException;
 import com.varabei.ivan.model.exception.ServiceException;
 import com.varabei.ivan.model.service.PaymentService;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class PaymentServiceImpl implements PaymentService {
     private static final PaymentDao paymentDao = DaoFactory.getInstance().getPaymentDao();
@@ -42,7 +38,7 @@ public class PaymentServiceImpl implements PaymentService {
     public int findAmountOfPagesByCardId(Long cardId, int limit) throws ServiceException {
         try {
             Long numberOfRecords = paymentDao.findNumberOfRecordsByCardId(cardId);
-            return (int) Math.ceil(numberOfRecords * 1d / Const.WebPageConfig.RECORDS_PER_PAGE);
+            return (int) Math.ceil(numberOfRecords * 1d / WebPageConfig.RECORDS_PER_PAGE);
         } catch (DaoException e) {
             throw new ServiceException(e);
         }

@@ -1,7 +1,9 @@
 package com.varabei.ivan.controller.command.impl;
 
-import com.varabei.ivan.Const;
+import com.varabei.ivan.common.ErrorInfo;
+import com.varabei.ivan.controller.AttributeKey;
 import com.varabei.ivan.controller.command.ActionCommand;
+import com.varabei.ivan.model.entity.name.UserField;
 import com.varabei.ivan.model.exception.ServiceException;
 import com.varabei.ivan.model.service.MailService;
 import com.varabei.ivan.model.service.ServiceFactory;
@@ -28,7 +30,7 @@ public class RecoverPasswordCommand implements ActionCommand {
 
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        String email = req.getParameter(Const.UserField.EMAIL);
+        String email = req.getParameter(UserField.EMAIL);
         String newPassword = CustomSecurity.generateRandom(DEFAULT_PASSWORD_LENGTH);
         try {
             if (userService.findByEmail(email).isPresent()) {
@@ -36,12 +38,12 @@ public class RecoverPasswordCommand implements ActionCommand {
                 userService.updatePassword(email, newPassword);
                 resp.sendRedirect(String.format(REDIRECT_TO_LOGIN, req.getContextPath()));
             } else {
-                req.setAttribute(Const.AttributeKey.ERROR, Const.ErrorInfo.EMAIL_DOES_NOT_EXISTS);
+                req.setAttribute(AttributeKey.ERROR, ErrorInfo.EMAIL_DOES_NOT_EXISTS);
                 req.getRequestDispatcher(JSP_RECOVER_PASSWORD).forward(req, resp);
             }
         } catch (ServiceException e) {
             log.error(e);
-            resp.sendError(Const.ErrorInfo.SERVER_ERROR_CODE);
+            resp.sendError(ErrorInfo.SERVER_ERROR_CODE);
         }
     }
 }

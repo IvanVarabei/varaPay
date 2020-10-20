@@ -1,4 +1,4 @@
-package com.varabei.ivan.model.dao.pool;
+package com.varabei.ivan.model.pool;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

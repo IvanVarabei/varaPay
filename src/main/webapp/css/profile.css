@@ -1,8 +1,5 @@
 .profile {
 }
-.profile a{
-	color: white;
-}
 .profile__info {
 	margin: 30px 0 30px 0;
 	display: grid;
@@ -41,6 +38,9 @@
 	margin: 30px 0 0 0;
 	display: grid;
 	gap: 20px;
+}
+.profile__accounts a{
+	color: white;
 }
 .profile__account {
 	display: grid;

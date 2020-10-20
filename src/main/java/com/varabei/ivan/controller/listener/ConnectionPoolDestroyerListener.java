@@ -1,6 +1,6 @@
 package com.varabei.ivan.controller.listener;
 
-import com.varabei.ivan.model.dao.pool.ConnectionPool;
+import com.varabei.ivan.model.pool.ConnectionPool;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;

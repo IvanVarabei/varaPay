@@ -1,8 +1,11 @@
 package com.varabei.ivan.controller.command.impl;
 
-import com.varabei.ivan.Const;
+import com.varabei.ivan.common.ErrorInfo;
+import com.varabei.ivan.controller.RequestParam;
 import com.varabei.ivan.controller.command.ActionCommand;
 import com.varabei.ivan.model.entity.User;
+import com.varabei.ivan.model.entity.name.AccountField;
+import com.varabei.ivan.model.entity.name.UserField;
 import com.varabei.ivan.model.exception.ServiceException;
 import com.varabei.ivan.model.service.MailService;
 import com.varabei.ivan.model.service.ServiceFactory;
@@ -27,18 +30,18 @@ public class CreateCardCommand implements ActionCommand {
 
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        Long accountId = Long.parseLong(req.getParameter(Const.AccountField.ID));
+        Long accountId = Long.parseLong(req.getParameter(AccountField.ID));
         try {
-            Long userId = Long.parseLong(req.getSession().getAttribute(Const.UserField.ID).toString());
+            Long userId = Long.parseLong(req.getSession().getAttribute(UserField.ID).toString());
             String tempCode = CustomSecurity.generateRandom(TEMP_CODE_LENGTH);
             User user = userService.findById(userId).get();
             mailService.sendEmail(user.getEmail(), MAIL_SUBJECT, String.format(MAIL_BODY, tempCode));
-            req.getSession().setAttribute(Const.RequestParam.TEMP_CODE, tempCode);
-            req.getSession().setAttribute(Const.AccountField.ID, accountId);
+            req.getSession().setAttribute(RequestParam.TEMP_CODE, tempCode);
+            req.getSession().setAttribute(AccountField.ID, accountId);
             req.getRequestDispatcher(JSP_VERIFY_CREATE_CARD).forward(req, resp);
         } catch (ServiceException e) {
             log.error(e);
-            resp.sendError(Const.ErrorInfo.SERVER_ERROR_CODE);
+            resp.sendError(ErrorInfo.SERVER_ERROR_CODE);
         }
     }
 }

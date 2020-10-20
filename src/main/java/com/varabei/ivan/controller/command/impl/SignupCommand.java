@@ -1,8 +1,11 @@
 package com.varabei.ivan.controller.command.impl;
 
-import com.varabei.ivan.Const;
+import com.varabei.ivan.common.ErrorInfo;
+import com.varabei.ivan.controller.AttributeKey;
+import com.varabei.ivan.controller.RequestParam;
 import com.varabei.ivan.controller.command.ActionCommand;
 import com.varabei.ivan.model.entity.User;
+import com.varabei.ivan.model.entity.name.UserField;
 import com.varabei.ivan.model.exception.ServiceException;
 import com.varabei.ivan.model.service.MailService;
 import com.varabei.ivan.model.service.ServiceFactory;
@@ -21,9 +24,9 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 public class SignupCommand implements ActionCommand {
+    private static final Logger log = LogManager.getLogger(SignupCommand.class);
     private static final UserService userService = ServiceFactory.getInstance().getUserService();
     private static final MailService mailService = ServiceFactory.getInstance().getMailService();
-    private static final Logger log = LogManager.getLogger(SignupCommand.class);
     private static final String FORWARD_SIGNUP_GET = "/mainServlet?command=signup_get";
     private static final String FORWARD_VERIFY_EMAIL_PAGE_GET = "/WEB-INF/pages/verifyEmail.jsp";
     private static final String MAIL_SUBJECT_EMAIL_VERIFICATION = "Email verification";
@@ -38,70 +41,70 @@ public class SignupCommand implements ActionCommand {
 
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        String login = req.getParameter(Const.UserField.LOGIN);
-        String password = req.getParameter(Const.UserField.PASSWORD);
-        String repeatPassword = req.getParameter(Const.RequestParam.REPEAT_PASSWORD);
-        String firstName = req.getParameter(Const.UserField.FIRST_NAME);
-        String lastName = req.getParameter(Const.UserField.LAST_NAME);
-        String email = req.getParameter(Const.UserField.EMAIL);
-        String birth = req.getParameter(Const.UserField.BIRTH);
+        String login = req.getParameter(UserField.LOGIN);
+        String password = req.getParameter(UserField.PASSWORD);
+        String repeatPassword = req.getParameter(RequestParam.REPEAT_PASSWORD);
+        String firstName = req.getParameter(UserField.FIRST_NAME);
+        String lastName = req.getParameter(UserField.LAST_NAME);
+        String email = req.getParameter(UserField.EMAIL);
+        String birth = req.getParameter(UserField.BIRTH);
         Map<String, String> errors = new HashMap<>();
         try {
             checkLogin(login, errors);
             checkEmail(email, errors);
-            checkName(firstName, errors, Const.UserField.FIRST_NAME);
-            checkName(lastName, errors, Const.UserField.LAST_NAME);
+            checkName(firstName, errors, UserField.FIRST_NAME);
+            checkName(lastName, errors, UserField.LAST_NAME);
             checkPasswords(password, repeatPassword, errors);
             if (errors.isEmpty()) {
                 String tempCode = CustomSecurity.generateRandom(VERIFICATION_CODE_LENGTH);
                 mailService.sendEmail(email, MAIL_SUBJECT_EMAIL_VERIFICATION, String.format(MAIL_CONTENT, tempCode));
-                req.getSession().setAttribute(Const.RequestParam.TEMP_CODE, tempCode);
-                req.getSession().setAttribute(Const.AttributeKey.USER,
+                req.getSession().setAttribute(RequestParam.TEMP_CODE, tempCode);
+                req.getSession().setAttribute(AttributeKey.USER,
                         new User(login, password, firstName, lastName, email, LocalDate.parse(birth)));
                 req.getRequestDispatcher(FORWARD_VERIFY_EMAIL_PAGE_GET).forward(req, resp);
             } else {
-                req.setAttribute(Const.AttributeKey.ERRORS, errors);
+                req.setAttribute(AttributeKey.ERRORS, errors);
                 req.getRequestDispatcher(FORWARD_SIGNUP_GET).forward(req, resp);
             }
         } catch (ServiceException e) {
             log.error(e);
-            resp.sendError(Const.ErrorInfo.SERVER_ERROR_CODE);
+            resp.sendError(ErrorInfo.SERVER_ERROR_CODE);
         }
     }
 
     private void checkPasswords(String password, String repeatPassword, Map<String, String> errors) {
         if (password.equals(repeatPassword)) {
             if (password.length() < MIN_PASSWORD_LENGTH || password.length() > MAX_PASSWORD_LENGTH) {
-                errors.put(Const.UserField.PASSWORD, Const.ErrorInfo.WRONG_LENGTH);
+                errors.put(UserField.PASSWORD, ErrorInfo.WRONG_LENGTH);
             }
         } else {
-            errors.put(Const.RequestParam.REPEAT_PASSWORD, Const.ErrorInfo.DIFFERENT_PASSWORDS);
+            errors.put(RequestParam.REPEAT_PASSWORD, ErrorInfo.DIFFERENT_PASSWORDS);
         }
     }
 
     private void checkName(String potentialName, Map<String, String> errors, String errorKey) {
         if (!NAME_PATTERN.matcher(potentialName).find()) {
-            errors.put(errorKey, Const.ErrorInfo.WRONG_NAME);
+            errors.put(errorKey, ErrorInfo.WRONG_NAME);
         }
     }
 
     private void checkEmail(String potentialEmail, Map<String, String> errors) throws ServiceException {
         if (EMAIL_PATTERN.matcher(potentialEmail).find()) {
             if (userService.findByEmail(potentialEmail).isPresent()) {
-                errors.put(Const.UserField.EMAIL, Const.ErrorInfo.ALREADY_EXISTS);
+                errors.put(UserField.EMAIL, ErrorInfo.ALREADY_EXISTS);
             }
         } else {
-            errors.put(Const.UserField.EMAIL, Const.ErrorInfo.WRONG_EMAIL);
+            errors.put(UserField.EMAIL, ErrorInfo.WRONG_EMAIL);
         }
     }
 
     private void checkLogin(String potentialLogin, Map<String, String> errors) throws ServiceException {
         if (LOGIN_PATTERN.matcher(potentialLogin).find()) {
             if (userService.findByLogin(potentialLogin).isPresent()) {
-                errors.put(Const.UserField.LOGIN, Const.ErrorInfo.ALREADY_EXISTS);
+                errors.put(UserField.LOGIN, ErrorInfo.ALREADY_EXISTS);
             }
         } else {
-            errors.put(Const.UserField.LOGIN, Const.ErrorInfo.WRONG_LOGIN);
+            errors.put(UserField.LOGIN, ErrorInfo.WRONG_LOGIN);
         }
     }
 }

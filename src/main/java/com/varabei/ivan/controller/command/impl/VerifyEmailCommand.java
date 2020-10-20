@@ -1,6 +1,8 @@
 package com.varabei.ivan.controller.command.impl;
 
-import com.varabei.ivan.Const;
+import com.varabei.ivan.common.ErrorInfo;
+import com.varabei.ivan.controller.AttributeKey;
+import com.varabei.ivan.controller.RequestParam;
 import com.varabei.ivan.controller.command.ActionCommand;
 import com.varabei.ivan.model.entity.User;
 import com.varabei.ivan.model.exception.ServiceException;
@@ -23,13 +25,13 @@ public class VerifyEmailCommand implements ActionCommand {
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         HttpSession session = req.getSession();
-        String tempCode = req.getParameter(Const.RequestParam.TEMP_CODE);
-        if (tempCode.equals(session.getAttribute(Const.RequestParam.TEMP_CODE).toString())) {
+        String tempCode = req.getParameter(RequestParam.TEMP_CODE);
+        if (tempCode.equals(session.getAttribute(RequestParam.TEMP_CODE).toString())) {
             try {
-                User user = (User) session.getAttribute(Const.AttributeKey.USER);
+                User user = (User) session.getAttribute(AttributeKey.USER);
                 String login = user.getLogin();
                 if (userService.findByLogin(login).isPresent()) {
-                    req.setAttribute(Const.AttributeKey.ERROR, String.format(Const.ErrorInfo.LOGIN_TAKEN, login));
+                    req.setAttribute(AttributeKey.ERROR, String.format(ErrorInfo.LOGIN_TAKEN, login));
                     req.getRequestDispatcher(JSP_VERIFY_EMAIL).forward(req, resp);
                 } else {
                     userService.signUp(user);
@@ -37,10 +39,10 @@ public class VerifyEmailCommand implements ActionCommand {
                 }
             } catch (ServiceException e) {
                 log.error(e);
-                resp.sendError(Const.ErrorInfo.SERVER_ERROR_CODE);
+                resp.sendError(ErrorInfo.SERVER_ERROR_CODE);
             }
         } else {
-            req.setAttribute(Const.AttributeKey.ERROR, Const.ErrorInfo.WRONG_TEMP_CODE);
+            req.setAttribute(AttributeKey.ERROR, ErrorInfo.WRONG_TEMP_CODE);
             req.getRequestDispatcher(JSP_VERIFY_EMAIL).forward(req, resp);
         }
     }

@@ -1,6 +1,6 @@
 package com.varabei.ivan.controller.invoker;
 
-import com.varabei.ivan.Const;
+import com.varabei.ivan.controller.RequestParam;
 import com.varabei.ivan.controller.command.ActionCommand;
 import com.varabei.ivan.controller.command.provider.ActionProvider;
 
@@ -13,7 +13,7 @@ import java.io.IOException;
 public class RequestProcessor extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        ActionCommand actionCommand = ActionProvider.defineAction(req.getParameter(Const.RequestParam.COMMAND));
+        ActionCommand actionCommand = ActionProvider.defineAction(req.getParameter(RequestParam.COMMAND));
         actionCommand.execute(req, resp);
     }
 

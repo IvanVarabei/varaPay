@@ -1,7 +1,8 @@
 package com.varabei.ivan.controller.command.impl;
 
-import com.varabei.ivan.Const;
+import com.varabei.ivan.common.ErrorInfo;
 import com.varabei.ivan.controller.command.ActionCommand;
+import com.varabei.ivan.model.entity.name.BidField;
 import com.varabei.ivan.model.exception.ServiceException;
 import com.varabei.ivan.model.service.BidService;
 import com.varabei.ivan.model.service.ServiceFactory;
@@ -21,11 +22,11 @@ public class ApproveTopUpBidCommand implements ActionCommand {
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         try {
-            bidService.approveTopUpBid(Long.parseLong(req.getParameter(Const.BidField.ID)));
+            bidService.approveTopUpBid(Long.parseLong(req.getParameter(BidField.ID)));
             resp.sendRedirect(String.format(REDIRECT_AFTER_APPROVING, req.getContextPath()));
         } catch (ServiceException e) {
             log.error(e);
-            resp.sendError(Const.ErrorInfo.SERVER_ERROR_CODE);
+            resp.sendError(ErrorInfo.SERVER_ERROR_CODE);
         }
     }
 }

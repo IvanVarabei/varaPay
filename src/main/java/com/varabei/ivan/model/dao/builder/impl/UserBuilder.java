@@ -1,8 +1,8 @@
 package com.varabei.ivan.model.dao.builder.impl;
 
-import com.varabei.ivan.Const;
 import com.varabei.ivan.model.dao.builder.IdentifiableBuilder;
 import com.varabei.ivan.model.entity.User;
+import com.varabei.ivan.model.entity.name.UserField;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,16 +12,16 @@ public class UserBuilder implements IdentifiableBuilder<User> {
     @Override
     public User build(ResultSet resultSet) throws SQLException {
         User user = new User();
-        Long userId = resultSet.getLong(Const.UserField.ID);
+        Long userId = resultSet.getLong(UserField.ID);
         user.setId(userId);
-        user.setRoleName(resultSet.getString(Const.UserField.ROLE_NAME));
-        user.setLogin(resultSet.getString(Const.UserField.LOGIN));
-        user.setPassword(resultSet.getString(Const.UserField.PASSWORD));
-        user.setSalt(resultSet.getString(Const.UserField.SALT));
-        user.setFirstName(resultSet.getString(Const.UserField.FIRST_NAME));
-        user.setLastName(resultSet.getString(Const.UserField.LAST_NAME));
-        user.setEmail(resultSet.getString(Const.UserField.EMAIL));
-        user.setBirth(LocalDate.parse(resultSet.getString(Const.UserField.BIRTH)));
+        user.setRoleName(resultSet.getString(UserField.ROLE_NAME));
+        user.setLogin(resultSet.getString(UserField.LOGIN));
+        user.setPassword(resultSet.getString(UserField.PASSWORD));
+        user.setSalt(resultSet.getString(UserField.SALT));
+        user.setFirstName(resultSet.getString(UserField.FIRST_NAME));
+        user.setLastName(resultSet.getString(UserField.LAST_NAME));
+        user.setEmail(resultSet.getString(UserField.EMAIL));
+        user.setBirth(LocalDate.parse(resultSet.getString(UserField.BIRTH)));
         return user;
     }
 }

@@ -1,9 +1,8 @@
 package com.varabei.ivan.controller.command.impl;
 
-import com.varabei.ivan.Const;
+import com.varabei.ivan.controller.AttributeKey;
 import com.varabei.ivan.controller.command.ActionCommand;
 import com.varabei.ivan.model.exception.ServiceException;
-import com.varabei.ivan.model.service.impl.PaymentServiceImpl;
 import com.varabei.ivan.model.service.impl.UserServiceImpl;
 
 import javax.servlet.ServletException;
@@ -17,8 +16,8 @@ public class WelcomeCommand implements ActionCommand {
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         try {
-            req.setAttribute(Const.AttributeKey.USER_AMOUNT, new UserServiceImpl().findAll().size());
-            //req.setAttribute(Const.AttributeKey.PAYMENT_AMOUNT, new PaymentServiceImpl().findAll().size());
+            req.setAttribute(AttributeKey.USER_AMOUNT, new UserServiceImpl().findAll().size());
+            //req.setAttribute(AttributeKey.PAYMENT_AMOUNT, new PaymentServiceImpl().findAll().size());
         } catch (ServiceException e) {
             e.printStackTrace();
         }

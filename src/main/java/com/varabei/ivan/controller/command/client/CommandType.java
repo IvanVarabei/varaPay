@@ -29,6 +29,7 @@ public enum CommandType {
     RECOVER_PASSWORD_POST(new RecoverPasswordCommand()),
     CHANGE_PASSWORD_GET(new ChangePasswordPageCommand()),
     CHANGE_PASSWORD_POST(new ChangePasswordCommand()),
+    CHANGE_LANGUAGE(new ChangeLanguageCommand()),
 
     RUN_ACCOUNTS_GET(new RunAccountsPageCommand()),
     RUN_BIDS_GET(new RunBidsCommand()),

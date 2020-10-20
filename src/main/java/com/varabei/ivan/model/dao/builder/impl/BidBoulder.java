@@ -1,9 +1,9 @@
 package com.varabei.ivan.model.dao.builder.impl;
 
-import com.varabei.ivan.Const;
 import com.varabei.ivan.model.dao.builder.IdentifiableBuilder;
 import com.varabei.ivan.model.entity.Account;
 import com.varabei.ivan.model.entity.Bid;
+import com.varabei.ivan.model.entity.name.BidField;
 
 import java.math.BigDecimal;
 import java.sql.ResultSet;
@@ -17,13 +17,13 @@ public class BidBoulder implements IdentifiableBuilder<Bid> {
         Bid bid = new Bid();
         Account account = accountBuilder.build(resultSet);
         bid.setAccount(account);
-        bid.setId(resultSet.getLong(Const.BidField.ID));
-        bid.setState(resultSet.getString(Const.BidField.STATE));
-        bid.setTopUp(resultSet.getBoolean(Const.BidField.IS_TOP_UP));
-        bid.setAmount(BigDecimal.valueOf(resultSet.getLong(Const.BidField.AMOUNT)).movePointLeft(2));
-        bid.setPlacingDateTime((resultSet.getTimestamp(Const.BidField.PLACING_DATE_TIME).toLocalDateTime()));
-        bid.setClientMessage(resultSet.getString(Const.BidField.CLIENT_MESSAGE));
-        bid.setAdminComment(resultSet.getString(Const.BidField.ADMIN_COMMENT));
+        bid.setId(resultSet.getLong(BidField.ID));
+        bid.setState(resultSet.getString(BidField.STATE));
+        bid.setTopUp(resultSet.getBoolean(BidField.IS_TOP_UP));
+        bid.setAmount(BigDecimal.valueOf(resultSet.getLong(BidField.AMOUNT)).movePointLeft(2));
+        bid.setPlacingDateTime((resultSet.getTimestamp(BidField.PLACING_DATE_TIME).toLocalDateTime()));
+        bid.setClientMessage(resultSet.getString(BidField.CLIENT_MESSAGE));
+        bid.setAdminComment(resultSet.getString(BidField.ADMIN_COMMENT));
         return bid;
     }
 }

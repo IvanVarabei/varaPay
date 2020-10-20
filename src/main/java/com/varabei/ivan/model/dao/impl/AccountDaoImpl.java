@@ -1,9 +1,10 @@
 package com.varabei.ivan.model.dao.impl;
 
-import com.varabei.ivan.Const;
 import com.varabei.ivan.model.dao.AccountDao;
+import com.varabei.ivan.model.dao.GenericDao;
 import com.varabei.ivan.model.dao.builder.impl.AccountBuilder;
 import com.varabei.ivan.model.entity.Account;
+import com.varabei.ivan.model.entity.name.AccountField;
 import com.varabei.ivan.model.exception.DaoException;
 
 import java.util.List;
@@ -68,7 +69,7 @@ public class AccountDaoImpl extends GenericDao<Account> implements AccountDao {
 
     @Override
     public Optional<Long> findAccountBalance(Long accountId) throws DaoException {
-        return findLong(FIND_ACCOUNT_BALANCE_BY_ID, Const.AccountField.BALANCE, accountId);
+        return findLong(FIND_ACCOUNT_BALANCE_BY_ID, AccountField.BALANCE, accountId);
     }
 
     @Override

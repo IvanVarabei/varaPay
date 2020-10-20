@@ -12,6 +12,7 @@
 @import "runAccounts.css";
 @import "runBids.css";
 @import "pagination.css";
+@import "popup.css";
 
 .wrapper {
 	min-height: 100%;

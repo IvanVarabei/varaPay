@@ -1,7 +1,9 @@
 package com.varabei.ivan.controller.command.impl;
 
-import com.varabei.ivan.Const;
+import com.varabei.ivan.common.ErrorInfo;
+import com.varabei.ivan.controller.AttributeKey;
 import com.varabei.ivan.controller.command.ActionCommand;
+import com.varabei.ivan.model.entity.name.UserField;
 import com.varabei.ivan.model.exception.ServiceException;
 import com.varabei.ivan.model.service.ServiceFactory;
 import com.varabei.ivan.model.service.UserService;
@@ -22,13 +24,13 @@ public class ProfileCommand implements ActionCommand {
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         HttpSession session = req.getSession();
-        Long userId = (Long) session.getAttribute(Const.UserField.ID);
+        Long userId = (Long) session.getAttribute(UserField.ID);
         try {
-            req.setAttribute(Const.AttributeKey.USER, userService.findById(userId).orElse(null));
+            req.setAttribute(AttributeKey.USER, userService.findById(userId).orElse(null));
             req.getRequestDispatcher(JSP_PROFILE).forward(req, resp);
         } catch (ServiceException e) {
             log.error(e);
-            resp.sendError(Const.ErrorInfo.SERVER_ERROR_CODE);
+            resp.sendError(ErrorInfo.SERVER_ERROR_CODE);
         }
     }
 }

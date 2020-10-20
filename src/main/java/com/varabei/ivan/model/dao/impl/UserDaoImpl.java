@@ -1,5 +1,6 @@
 package com.varabei.ivan.model.dao.impl;
 
+import com.varabei.ivan.model.dao.GenericDao;
 import com.varabei.ivan.model.dao.UserDao;
 import com.varabei.ivan.model.dao.builder.impl.UserBuilder;
 import com.varabei.ivan.model.entity.User;

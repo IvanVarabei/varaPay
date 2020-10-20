@@ -1,8 +1,10 @@
 package com.varabei.ivan.controller.command.impl;
 
-import com.varabei.ivan.Const;
+import com.varabei.ivan.common.ErrorInfo;
+import com.varabei.ivan.controller.AttributeKey;
 import com.varabei.ivan.controller.command.ActionCommand;
 import com.varabei.ivan.model.entity.User;
+import com.varabei.ivan.model.entity.name.UserField;
 import com.varabei.ivan.model.exception.ServiceException;
 import com.varabei.ivan.model.service.ServiceFactory;
 import com.varabei.ivan.model.service.UserService;
@@ -24,22 +26,22 @@ public class LoginCommand implements ActionCommand {
 
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        String login = req.getParameter(Const.UserField.LOGIN);
-        String password = req.getParameter(Const.UserField.PASSWORD);
+        String login = req.getParameter(UserField.LOGIN);
+        String password = req.getParameter(UserField.PASSWORD);
         HttpSession session = req.getSession();
         try {
             Optional<User> user = userService.signIn(login, password);
             if (user.isPresent()) {
-                session.setAttribute(Const.UserField.ROLE_NAME, user.get().getRoleName());
-                session.setAttribute(Const.UserField.ID, user.get().getId());
+                session.setAttribute(UserField.ROLE_NAME, user.get().getRoleName());
+                session.setAttribute(UserField.ID, user.get().getId());
                 resp.sendRedirect(String.format(REDIRECT_AFTER_LOGIN, req.getContextPath()));
             } else {
-                req.setAttribute(Const.AttributeKey.ERROR, Const.ErrorInfo.WRONG_LOGIN_OR_PASSWORD);
+                req.setAttribute(AttributeKey.ERROR, ErrorInfo.WRONG_LOGIN_OR_PASSWORD);
                 req.getRequestDispatcher(JSP_LOGIN).forward(req, resp);
             }
         } catch (ServiceException e) {
             log.error(e);
-            resp.sendError(Const.ErrorInfo.SERVER_ERROR_CODE);
+            resp.sendError(ErrorInfo.SERVER_ERROR_CODE);
         }
     }
 }

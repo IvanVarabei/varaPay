@@ -1,7 +1,10 @@
 package com.varabei.ivan.controller.command.impl;
 
-import com.varabei.ivan.Const;
+import com.varabei.ivan.common.ErrorInfo;
+import com.varabei.ivan.controller.AttributeKey;
+import com.varabei.ivan.controller.RequestParam;
 import com.varabei.ivan.controller.command.ActionCommand;
+import com.varabei.ivan.model.entity.name.UserField;
 import com.varabei.ivan.model.exception.ServiceException;
 import com.varabei.ivan.model.service.ServiceFactory;
 import com.varabei.ivan.model.service.UserService;
@@ -25,36 +28,36 @@ public class ChangePasswordCommand implements ActionCommand {
 
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        String oldPassword = req.getParameter(Const.RequestParam.OLD_PASSWORD);
-        String password = req.getParameter(Const.UserField.PASSWORD);
-        String repeatPassword = req.getParameter(Const.RequestParam.REPEAT_PASSWORD);
-        Long userId = Long.parseLong(req.getSession().getAttribute(Const.UserField.ID).toString());
+        String oldPassword = req.getParameter(RequestParam.OLD_PASSWORD);
+        String password = req.getParameter(UserField.PASSWORD);
+        String repeatPassword = req.getParameter(RequestParam.REPEAT_PASSWORD);
+        Long userId = Long.parseLong(req.getSession().getAttribute(UserField.ID).toString());
         Map<String, String> errors = new HashMap<>();
         try {
             checkPasswords(password, repeatPassword, errors);
             if (!userService.checkPresenceByIdPassword(userId, oldPassword)) {
-                errors.put(Const.RequestParam.OLD_PASSWORD, Const.ErrorInfo.WRONG_OLD_PASSWORD);
+                errors.put(RequestParam.OLD_PASSWORD, ErrorInfo.WRONG_OLD_PASSWORD);
             }
             if (errors.isEmpty()) {
                 userService.updatePassword(userId, password);
                 resp.sendRedirect(String.format(REDIRECT_AFTER_CHANGING_PASSWORD, req.getContextPath()));
             } else {
-                req.setAttribute(Const.AttributeKey.ERRORS, errors);
+                req.setAttribute(AttributeKey.ERRORS, errors);
                 req.getRequestDispatcher(JSP_CHANGE_PASSWORD).forward(req, resp);
             }
         } catch (ServiceException e) {
             log.error(e);
-            resp.sendError(Const.ErrorInfo.SERVER_ERROR_CODE);
+            resp.sendError(ErrorInfo.SERVER_ERROR_CODE);
         }
     }
 
     private void checkPasswords(String password, String repeatPassword, Map<String, String> errors) {
         if (password.equals(repeatPassword)) {
             if (password.length() < MIN_PASSWORD_LENGTH || password.length() > MAX_PASSWORD_LENGTH) {
-                errors.put(Const.UserField.PASSWORD, Const.ErrorInfo.WRONG_LENGTH);
+                errors.put(UserField.PASSWORD, ErrorInfo.WRONG_LENGTH);
             }
         } else {
-            errors.put(Const.RequestParam.REPEAT_PASSWORD, Const.ErrorInfo.DIFFERENT_PASSWORDS);
+            errors.put(RequestParam.REPEAT_PASSWORD, ErrorInfo.DIFFERENT_PASSWORDS);
         }
     }
 }
