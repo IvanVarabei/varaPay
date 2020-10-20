@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.util.Locale;
 
 public class LocaleFilter implements Filter {
-
     private static final String LOCALE_ATTRIBUTE = "locale";
 
     @Override

@@ -27,7 +27,7 @@ public class SignupCommand implements ActionCommand {
     private static final Logger log = LogManager.getLogger(SignupCommand.class);
     private static final UserService userService = ServiceFactory.getInstance().getUserService();
     private static final MailService mailService = ServiceFactory.getInstance().getMailService();
-    private static final String FORWARD_SIGNUP_GET = "/mainServlet?command=signup_get";
+    private static final String FORWARD_SIGNUP_GET = "/WEB-INF/pages/signup.jsp";
     private static final String FORWARD_VERIFY_EMAIL_PAGE_GET = "/WEB-INF/pages/verifyEmail.jsp";
     private static final String MAIL_SUBJECT_EMAIL_VERIFICATION = "Email verification";
     private static final String MAIL_CONTENT = "Hi! Your verification code is : %s. " +

@@ -70,7 +70,7 @@
 				</li>
 				</select>
 				</li>
-				<form id="change_language" action="${pageContext.request.contextPath}/mainServlet">
+				<form id="change_language" action="${pageContext.request.contextPath}/mainServlet?">
 					<input type="hidden" name="command" value="change_language">
 				</form>
 			</ul>
