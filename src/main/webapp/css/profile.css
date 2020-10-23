@@ -37,17 +37,19 @@
 .profile__accounts {
 	margin: 30px 0 0 0;
 	display: grid;
-	gap: 20px;
+	gap: 10px;
 }
 .profile__accounts a{
+	text-decoration: none;
 	color: white;
 }
 .profile__account {
+	margin: 20px 0 5px 0;
 	display: grid;
 	text-align: center;
 	align-items: center;
 	grid-template: 1fr auto / repeat(4, 1fr);
-	background: #7a956b;
+	background: #353535;
 }
 .profile__account-text {}
 .profile__cards-sub-sub-title{
@@ -56,15 +58,15 @@
 }
 .profile__cards {
 	display: grid;
-	gap: 20px;
+	gap: 10px;
 	grid-template: auto / repeat(7, 1fr);
-	margin: 0 0 30px 0;
+
 }
 .profile__card {
 	display: grid;
 	text-align: center;
 	align-items: center;
-	background: #77608d;
+	background: #383b40;
 	grid-template-columns: 4fr 2fr 1fr;
 	grid-column-start: 2;
 	grid-column-end: 8;

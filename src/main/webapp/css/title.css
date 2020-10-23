@@ -1,18 +1,24 @@
 .title {
-	font-size: 32px;
+	font-size: 26px;
 	letter-spacing: 5px;
 	text-transform: uppercase;
 	line-height: 32px;
 }
 .sub-title{
-	font-size: 26px;
+	font-size: 20px;
 	letter-spacing: 3px;
 	text-transform: uppercase;
 	line-height: 30px;
 }
 .sub-sub-title{
-	font-size: 20px;
+	font-size: 18px;
 	letter-spacing: 2px;
 	text-transform: uppercase;
 	line-height: 26px;
+}
+.green{
+	color:#149a6e;
+}
+.red{
+	color: #e84c36;
 }

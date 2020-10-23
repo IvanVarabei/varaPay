@@ -9,7 +9,7 @@
 	<div class="account">
 		<div class="account__info account__title">
 			<div class="title ">Account №${account.id}</div>
-			<div class="sub-sub-title">${account.active eq true ? 'active' : 'blocked'} ${account.balance}$</div>
+			<div class="sub-sub-title ${account.active eq true ? 'green' : 'red'}">${account.active eq true ? 'active' : 'blocked'} ${account.balance}$</div>
 		</div>
 		<form method="post">
 			<div class="account__buttons">

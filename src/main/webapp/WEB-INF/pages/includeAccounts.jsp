@@ -10,7 +10,7 @@
 		}/mainServlet?command=account_page_get&account_id=${account.id}">
 			<div class="profile__account-text">№${account.id}</div>
 			<div class="profile__account-text">${account.balance}$</div>
-			<div class="profile__account-text">${account.active eq true ? 'active' : 'blocked'}</div>
+			<div class="profile__account-text  ${account.active eq true ? 'green' : 'red'}">${account.active eq true ? 'active' : 'blocked'}</div>
 			<input type="hidden" name="account_id" value="${account.id}">
 			<button class="button"
 							formaction="${pageContext.servletContext.contextPath}/mainServlet?command=delete_account_post">
