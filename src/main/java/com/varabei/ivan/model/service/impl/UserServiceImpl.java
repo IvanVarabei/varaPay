@@ -1,9 +1,9 @@
 package com.varabei.ivan.model.service.impl;
 
-import com.varabei.ivan.model.exception.DaoException;
 import com.varabei.ivan.model.dao.DaoFactory;
 import com.varabei.ivan.model.dao.UserDao;
 import com.varabei.ivan.model.entity.User;
+import com.varabei.ivan.model.exception.DaoException;
 import com.varabei.ivan.model.exception.ServiceException;
 import com.varabei.ivan.model.service.UserService;
 import com.varabei.ivan.util.CustomSecurity;
@@ -12,17 +12,16 @@ import java.util.List;
 import java.util.Optional;
 
 public class UserServiceImpl implements UserService {
-    private static final UserDao userDao =  DaoFactory.getInstance().getUserDao();
+    private static UserDao userDao = DaoFactory.getInstance().getUserDao();
     private static final int SALT_LENGTH = 64;
 
     @Override
-    public void signUp(User user) throws ServiceException {
+    public void signUp(User user, String password, String secretWord) throws ServiceException {
         try {
             String salt = CustomSecurity.generateRandom(SALT_LENGTH);
-            String hashedPassword = CustomSecurity.generateHash(user.getPassword() + salt);
-            user.setPassword(hashedPassword);
-            user.setSalt(salt);
-            userDao.create(user);
+            password = CustomSecurity.generateHash(password + salt);
+            secretWord = CustomSecurity.generateHash(secretWord);
+            userDao.create(user, password, salt, secretWord);
         } catch (DaoException e) {
             throw new ServiceException(e);
         }
@@ -31,13 +30,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<User> signIn(String login, String password) throws ServiceException {
         try {
-            Optional<User> user = userDao.findByLogin(login);
-            if(user.isPresent()) {
-                String hashedPassword = user.get().getPassword();
-                String salt = user.get().getSalt();
-                if(hashedPassword.equals(CustomSecurity.generateHash(password + salt))){
-                    return user;
-                }
+            Optional<String> hashedPassword = userDao.findPasswordByLogin(login);
+            Optional<String> salt = userDao.findSaltByLogin(login);
+            if (hashedPassword.isPresent() && salt.isPresent() &&
+                    hashedPassword.get().equals(CustomSecurity.generateHash(password + salt.get()))) {
+                return userDao.findByLogin(login);
             }
             return Optional.empty();
         } catch (DaoException e) {
@@ -57,26 +54,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updatePassword(Long id, String newPassword) throws ServiceException {
+    public boolean isAuthenticSecretWord(String login, String secretWord) throws ServiceException {
         try {
-            String salt = CustomSecurity.generateRandom(SALT_LENGTH);
-            String hashedPassword = CustomSecurity.generateHash(newPassword + salt);
-            userDao.updatePassword(id, hashedPassword, salt);
-        } catch (DaoException e) {
-            throw new ServiceException(e);
-        }
-    }
-
-    @Override
-    public boolean checkPresenceByIdPassword(Long id, String password) throws ServiceException {
-        try {
-            Optional<User> user = userDao.findById(id);
-            if(user.isPresent()) {
-                String hashedPassword = user.get().getPassword();
-                String salt = user.get().getSalt();
-                return hashedPassword.equals(CustomSecurity.generateHash(password + salt));
-            }
-            return false;
+            secretWord = CustomSecurity.generateHash(secretWord);
+            return userDao.isAuthenticSecretWord(login, secretWord);
         } catch (DaoException e) {
             throw new ServiceException(e);
         }

@@ -4,6 +4,7 @@ import com.varabei.ivan.model.dao.GenericDao;
 import com.varabei.ivan.model.dao.UserDao;
 import com.varabei.ivan.model.dao.builder.impl.UserBuilder;
 import com.varabei.ivan.model.entity.User;
+import com.varabei.ivan.model.entity.name.UserField;
 import com.varabei.ivan.model.exception.DaoException;
 
 import java.util.List;
@@ -18,8 +19,13 @@ public class UserDaoImpl extends GenericDao<User> implements UserDao {
             " email, birth from users join roles on users.role_id = roles.role_id and login = ?";
     private static final String FIND_USER_BY_EMAIL = "select role_name, user_id, login, password, salt, firstname, lastname," +
             " email, birth from users join roles on users.role_id = roles.role_id and email = ?";
-    private static final String CREATE_USER = "insert into users(login, password, salt, firstname, lastname, email, birth)" +
-            "values (?, ?, ?, ?, ?, ?, ?)";
+    private static final String FIND_PASSWORD_BY_ID = "select password from users where user_id = ?";
+    private static final String FIND_PASSWORD_BY_LOGIN = "select password from users where login = ?";
+    private static final String FIND_SALT_BY_ID = "select salt from users where user_id = ?";
+    private static final String FIND_SALT_BY_LOGIN = "select salt from users where login = ?";
+
+    private static final String CREATE_USER = "insert into users(login, password, salt, firstname, lastname, email, birth, secret_word)" +
+            "values (?, ?, ?, ?, ?, ?, ?, ?)";
     private static final String FIND_USER_BY_LOGIN_PASSWORD = "select role_name, user_id, login, password, salt, firstname," +
             " lastname, email, birth from users join roles on users.role_id = roles.role_id and login = ? and password = ?";
     private static final String UPDATE_PASSWORD_BY_EMAIL = "update users\n" +
@@ -27,6 +33,8 @@ public class UserDaoImpl extends GenericDao<User> implements UserDao {
     private static final String UPDATE_PASSWORD_BY_ID = "update users\n" +
             "set password = ?, salt = ? where user_id = ?";
     private static final String IF_PRESENT_BY_ID_AND_PASSWORD = "select exists(select 1 from users where user_id = ? and password = ?)";
+    private static final String IF_PRESENT_BY_LOGIN_AND_SECRET_WORD = "select exists(select 1 from users where " +
+            "login = ? and secret_word = ?)";
     private static final String RESULT_SET_COLUMN_LABEL_EXISTS = "exists";
 
     public UserDaoImpl() {
@@ -34,9 +42,9 @@ public class UserDaoImpl extends GenericDao<User> implements UserDao {
     }
 
     @Override
-    public void create(User user) throws DaoException {
-        executeUpdate(CREATE_USER, user.getLogin(), user.getPassword(), user.getSalt(), user.getFirstName(),
-                user.getLastName(), user.getEmail(), user.getBirth());
+    public void create(User user, String hashedPassword, String salt, String secretWord) throws DaoException {
+        executeUpdate(CREATE_USER, user.getLogin(), hashedPassword, salt, user.getFirstName(),
+                user.getLastName(), user.getEmail(), user.getBirth(), secretWord);
     }
 
     @Override
@@ -55,13 +63,28 @@ public class UserDaoImpl extends GenericDao<User> implements UserDao {
     }
 
     @Override
-    public List<User> findAll() throws DaoException {
-        return executeQuery(FIND_ALL_USERS);
+    public Optional<String> findPasswordById(Long id) throws DaoException {
+        return findString(FIND_PASSWORD_BY_ID, UserField.PASSWORD, id);
     }
 
     @Override
-    public Optional<User> findByLoginPassword(String login, String password) throws DaoException {
-        return executeForSingleResult(FIND_USER_BY_LOGIN_PASSWORD, login, password);
+    public Optional<String> findPasswordByLogin(String login) throws DaoException {
+        return findString(FIND_PASSWORD_BY_LOGIN, UserField.PASSWORD, login);
+    }
+
+    @Override
+    public Optional<String> findSaltById(Long id) throws DaoException {
+        return findString(FIND_SALT_BY_ID, UserField.SALT, id);
+    }
+
+    @Override
+    public Optional<String> findSaltByLogin(String login) throws DaoException {
+        return findString(FIND_SALT_BY_LOGIN, UserField.SALT, login);
+    }
+
+    @Override
+    public List<User> findAll() throws DaoException {
+        return executeQuery(FIND_ALL_USERS);
     }
 
     @Override
@@ -77,5 +100,10 @@ public class UserDaoImpl extends GenericDao<User> implements UserDao {
     @Override
     public boolean checkPresenceByIdPassword(Long id, String password) throws DaoException {
         return findBoolean(IF_PRESENT_BY_ID_AND_PASSWORD, RESULT_SET_COLUMN_LABEL_EXISTS, id, password);
+    }
+
+    @Override
+    public boolean isAuthenticSecretWord(String login, String secretWord) throws DaoException {
+        return findBoolean(IF_PRESENT_BY_LOGIN_AND_SECRET_WORD, RESULT_SET_COLUMN_LABEL_EXISTS, login, secretWord);
     }
 }

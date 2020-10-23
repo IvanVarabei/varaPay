@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 
 public class Bid extends Identifiable {
     private Account account;
-    private String state;
+    private BidState state;
     private BigDecimal amount;
     private String clientMessage;
     private String adminComment;
@@ -20,11 +20,11 @@ public class Bid extends Identifiable {
         this.account = account;
     }
 
-    public String getState() {
+    public BidState getState() {
         return state;
     }
 
-    public void setState(String state) {
+    public void setState(BidState state) {
         this.state = state;
     }
 

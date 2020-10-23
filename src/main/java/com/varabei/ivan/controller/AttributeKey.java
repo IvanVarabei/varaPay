@@ -15,6 +15,7 @@ public class AttributeKey {
     public static final String AMOUNT_OF_PAGES = "amountOfPages";
     public static final String CURRENT_PAGE = "currentPage";
     public static final String AMOUNT_IN_CHOSEN_CURRENCY = "amountInChosenCurrency";
+    public static final String LOCALE = "locale";
 
     private AttributeKey() {
     }

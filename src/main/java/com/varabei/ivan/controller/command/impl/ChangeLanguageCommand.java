@@ -1,5 +1,7 @@
 package com.varabei.ivan.controller.command.impl;
 
+import com.varabei.ivan.controller.AttributeKey;
+import com.varabei.ivan.controller.RequestParam;
 import com.varabei.ivan.controller.command.ActionCommand;
 
 import javax.servlet.ServletException;
@@ -8,28 +10,36 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Locale;
+import java.util.Map;
 
 public class ChangeLanguageCommand implements ActionCommand {
-    private static final String LOCALE_PARAMETER = "locale";
-    private static final String LOCALE_ATTRIBUTE = "locale";
-    private static final String REFERER = "referer";
+    private static final String REDIRECT_TO_PREVIOUS_PAGE = "%s/mainServlet?%s";
 
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        String localeParameter = req.getParameter(LOCALE_PARAMETER);
+        String localeParameter = req.getParameter(RequestParam.LOCALE);
         Locale.Builder builder = new Locale.Builder();
         builder.setLanguageTag(localeParameter);
         Locale locale = builder.build();
         HttpSession session = req.getSession();
-        session.setAttribute(LOCALE_ATTRIBUTE, locale);
-        String page = getCurrentPage(req);
-        resp.sendRedirect(req.getContextPath() + page);
-    }
+        session.setAttribute(AttributeKey.LOCALE, locale);
 
-    public static String getCurrentPage(HttpServletRequest request) {
-        String header = request.getHeader(REFERER);
-        String serverUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() +
-                request.getContextPath();
-        return header.replace(serverUrl, "");
+        StringBuilder sb = new StringBuilder();
+        Map<String, String[]> paramMap = req.getParameterMap();
+        for (Map.Entry<String, String[]> pair : paramMap.entrySet()) {
+            if (!pair.getKey().equals("locale")) {
+                String[] values = pair.getValue();
+                for (String value : values) {
+                    if (!value.equals("change_language")) {
+                        sb.append(pair.getKey());
+                        sb.append("=");
+                        sb.append(value);
+                        sb.append("&");
+                    }
+                }
+            }
+        }
+        String previousQueryString = sb.toString();
+        resp.sendRedirect(String.format(REDIRECT_TO_PREVIOUS_PAGE, req.getContextPath(), previousQueryString));
     }
 }

@@ -1,9 +1,9 @@
 package com.varabei.ivan.model.dao;
 
 import com.varabei.ivan.model.dao.builder.IdentifiableBuilder;
-import com.varabei.ivan.model.pool.ConnectionPool;
 import com.varabei.ivan.model.entity.Identifiable;
 import com.varabei.ivan.model.exception.DaoException;
+import com.varabei.ivan.model.pool.ConnectionPool;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -21,20 +21,11 @@ public class GenericDao<T extends Identifiable> {
         this.builder = builder;
     }
 
-    protected void closeResource(AutoCloseable resource, DaoException daoException) throws DaoException {
+    protected void closeResource(AutoCloseable resource) {
         try {
-            if (resource != null) {
-                resource.close();
-            }
+            resource.close();
         } catch (Exception closeException) {
-            if (daoException != null) {
-                daoException.addSuppressed(closeException);
-            } else {
-                log.error("could`t close a resource", closeException);
-            }
-        }
-        if (daoException != null) {
-            throw daoException;
+            log.error("could`t close a resource", closeException);
         }
     }
 
@@ -49,14 +40,13 @@ public class GenericDao<T extends Identifiable> {
         connection.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
     }
 
-    protected void cancelTransaction(Connection connection, DaoException daoException) throws DaoException {
+    protected void cancelTransaction(Connection connection) {
         try {
             connection.rollback();
             connection.setAutoCommit(true);
         } catch (SQLException e) {
-            daoException.addSuppressed(e);
+            log.error("could`t rollback", e);
         }
-        throw daoException;
     }
 
     protected void setParameters(PreparedStatement statement, Object... parameters) throws SQLException {
@@ -72,15 +62,14 @@ public class GenericDao<T extends Identifiable> {
 
     protected void executeUpdate(String query, Connection connection, Object... parameters) throws DaoException {
         PreparedStatement preparedStatement = null;
-        DaoException daoException = null;
         try {
             preparedStatement = connection.prepareStatement(query);
             setParameters(preparedStatement, parameters);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            daoException = new DaoException("can not get access to db", e);
+            throw new DaoException("can not get access to db", e);
         } finally {
-            closeResource(preparedStatement, daoException);
+            closeResource(preparedStatement);
         }
     }
 
@@ -96,7 +85,6 @@ public class GenericDao<T extends Identifiable> {
     protected List<T> executeQuery(String query, Connection connection, Object... parameters) throws DaoException {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
-        DaoException daoException = null;
         List<T> entities = new ArrayList<>();
         try {
             preparedStatement = connection.prepareStatement(query);
@@ -107,12 +95,12 @@ public class GenericDao<T extends Identifiable> {
                 entities.add(entity);
             }
         } catch (SQLException e) {
-            daoException = new DaoException("can not get access to db", e);
+            throw new DaoException("can not get access to db", e);
         } finally {
             try {
-                closeResource(resultSet, daoException);
+                closeResource(resultSet);
             } finally {
-                closeResource(preparedStatement, daoException);
+                closeResource(preparedStatement);
             }
         }
         return entities;
@@ -154,6 +142,16 @@ public class GenericDao<T extends Identifiable> {
         return foundValue.map(String::valueOf);
     }
 
+    protected Optional<String> findString(String query, String columnLabel, Object... params)
+            throws DaoException {
+        Connection connection = pool.getConnection();
+        try {
+            return findString(query, connection, columnLabel, params);
+        } finally {
+            pool.releaseConnection(connection);
+        }
+    }
+
     protected boolean findBoolean(String query, String columnLabel, Object... params)
             throws DaoException {
         Connection connection = pool.getConnection();
@@ -180,7 +178,6 @@ public class GenericDao<T extends Identifiable> {
             throws DaoException {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
-        DaoException daoException = null;
         Optional<Object> accountId = Optional.empty();
         try {
             preparedStatement = connection.prepareStatement(query);
@@ -190,12 +187,12 @@ public class GenericDao<T extends Identifiable> {
                 accountId = Optional.of(resultSet.getObject(columnLabel));
             }
         } catch (SQLException e) {
-            daoException = new DaoException("can not get access to db", e);
+            throw new DaoException("can not get access to db", e);
         } finally {
             try {
-                closeResource(resultSet, daoException);
+                closeResource(resultSet);
             } finally {
-                closeResource(preparedStatement, daoException);
+                closeResource(preparedStatement);
             }
         }
         return accountId;

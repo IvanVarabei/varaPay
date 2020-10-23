@@ -12,7 +12,9 @@ public interface AccountDao {
 
     Optional<Account> findById(Long accountId) throws DaoException;
 
-    List<Account> findByUserId(Long userId) throws DaoException;
+//    List<Account> findByUserId(Long userId) throws DaoException;
+
+    List<Account> findByUserLogin(String login) throws DaoException;
 
     List<Account> findDisabled() throws DaoException;
 

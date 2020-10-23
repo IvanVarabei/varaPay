@@ -20,6 +20,12 @@ public class AccountDaoImpl extends GenericDao<Account> implements AccountDao {
                     "    join users on accounts.user_id = users.user_id\n" +
                     "    and accounts.user_id = ? and is_abandoned = false\n" +
                     "    join roles on users.role_id = roles.role_id";
+    private static final String FIND_ACCOUNTS_BY_LOGIN =
+            "select account_id, balance, is_active, users.user_id, users.login, password, salt,users.email,\n" +
+                    "       users.firstname, users.lastname, users.birth, roles.role_name from accounts\n" +
+                    "    join users on accounts.user_id = users.user_id\n" +
+                    "    and login = ? and is_abandoned = false\n" +
+                    "    join roles on users.role_id = roles.role_id";
     private static final String FIND_ACCOUNT_BY_ID =
             "select account_id, balance, is_active, users.user_id, users.login, password, salt,users.email,\n" +
                     "       users.firstname, users.lastname, users.birth, roles.role_name from accounts\n" +
@@ -53,9 +59,14 @@ public class AccountDaoImpl extends GenericDao<Account> implements AccountDao {
     }
 
     @Override
-    public List<Account> findByUserId(Long userId) throws DaoException {
-        return executeQuery(FIND_ACCOUNTS_BY_USER_ID, userId);
+    public List<Account> findByUserLogin(String login) throws DaoException {
+        return executeQuery(FIND_ACCOUNTS_BY_LOGIN, login);
     }
+
+//    @Override
+//    public List<Account> findByUserId(Long userId) throws DaoException {
+//        return executeQuery(FIND_ACCOUNTS_BY_USER_ID, userId);
+//    }
 
     @Override
     public List<Account> findDisabled() throws DaoException {

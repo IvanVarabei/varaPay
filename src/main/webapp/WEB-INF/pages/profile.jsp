@@ -20,7 +20,7 @@
 		</div>
 		<div class="sub-title">Accounts</div>
 		<div class="profile__accounts">
-			<jsp:include page="/mainServlet?command=include_accounts&user_id=${user.id}"/>
+			<jsp:include page="/mainServlet?command=include_accounts&login=${user.login}"/>
 			<form method="post" action="${pageContext.servletContext.contextPath}/mainServlet?command=create_account_post">
 				<input type="hidden" name="user_id" value="${user.id}"/>
 			<button class="button">add new account</button>

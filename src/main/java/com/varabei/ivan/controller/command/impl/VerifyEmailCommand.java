@@ -5,6 +5,7 @@ import com.varabei.ivan.controller.AttributeKey;
 import com.varabei.ivan.controller.RequestParam;
 import com.varabei.ivan.controller.command.ActionCommand;
 import com.varabei.ivan.model.entity.User;
+import com.varabei.ivan.model.entity.name.UserField;
 import com.varabei.ivan.model.exception.ServiceException;
 import com.varabei.ivan.model.service.ServiceFactory;
 import com.varabei.ivan.model.service.UserService;
@@ -19,7 +20,7 @@ import java.io.IOException;
 
 public class VerifyEmailCommand implements ActionCommand {
     private static final Logger log = LogManager.getLogger(VerifyEmailCommand.class);
-    private static final UserService userService = ServiceFactory.getInstance().getUserService();
+    private static UserService userService = ServiceFactory.getInstance().getUserService();
     private static final String JSP_VERIFY_EMAIL = "/WEB-INF/pages/verifyEmail.jsp";
 
     @Override
@@ -34,7 +35,9 @@ public class VerifyEmailCommand implements ActionCommand {
                     req.setAttribute(AttributeKey.ERROR, String.format(ErrorInfo.LOGIN_TAKEN, login));
                     req.getRequestDispatcher(JSP_VERIFY_EMAIL).forward(req, resp);
                 } else {
-                    userService.signUp(user);
+                    String s =  session.getAttribute(UserField.SECRET_WORD).toString();
+                    userService.signUp(user, session.getAttribute(UserField.PASSWORD).toString()
+                            , session.getAttribute(UserField.SECRET_WORD).toString());
                     resp.sendRedirect(req.getContextPath());
                 }
             } catch (ServiceException e) {

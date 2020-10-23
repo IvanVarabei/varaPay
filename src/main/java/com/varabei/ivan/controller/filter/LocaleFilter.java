@@ -1,5 +1,7 @@
 package com.varabei.ivan.controller.filter;
 
+import com.varabei.ivan.controller.AttributeKey;
+
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -8,8 +10,6 @@ import java.io.IOException;
 import java.util.Locale;
 
 public class LocaleFilter implements Filter {
-    private static final String LOCALE_ATTRIBUTE = "locale";
-
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
     }
@@ -20,9 +20,9 @@ public class LocaleFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse resp = (HttpServletResponse) response;
         HttpSession session = req.getSession();
-        if (session.getAttribute(LOCALE_ATTRIBUTE) == null) {
+        if (session.getAttribute(AttributeKey.LOCALE) == null) {
             Locale locale = req.getLocale();
-            session.setAttribute(LOCALE_ATTRIBUTE, locale);
+            session.setAttribute(AttributeKey.LOCALE, locale);
         }
         filterChain.doFilter(req, resp);
     }

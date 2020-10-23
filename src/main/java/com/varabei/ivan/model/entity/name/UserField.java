@@ -10,6 +10,7 @@ public class UserField {
     public static final String LAST_NAME = "lastName";
     public static final String EMAIL = "email";
     public static final String BIRTH = "birth";
+    public static final String SECRET_WORD = "secret_word";
 
     private UserField() {
     }

@@ -8,7 +8,7 @@
 	<div class="title">Your VARAPAY® Account!</div>
 	<div class="welcome__counter-grid">
 		<div class="welcome__counter welcome__counter_glowing">${requestScope.userAmount}</div><div class="welcome__counter title">sutisfied participants</div>
-		<div class="welcome__counter welcome__counter_glowing">${requestScope.paymentAmount}</div><div class="welcome__counter title">payments`ve been sent</div>
+<%--		<div class="welcome__counter welcome__counter_glowing">${requestScope.paymentAmount}</div><div class="welcome__counter title">payments`ve been sent</div>--%>
 	</div>
 <%--	<section class="welcome__products products">--%>
 <%--		<div class="products__items">--%>

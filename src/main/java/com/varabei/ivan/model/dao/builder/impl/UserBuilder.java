@@ -16,8 +16,6 @@ public class UserBuilder implements IdentifiableBuilder<User> {
         user.setId(userId);
         user.setRoleName(resultSet.getString(UserField.ROLE_NAME));
         user.setLogin(resultSet.getString(UserField.LOGIN));
-        user.setPassword(resultSet.getString(UserField.PASSWORD));
-        user.setSalt(resultSet.getString(UserField.SALT));
         user.setFirstName(resultSet.getString(UserField.FIRST_NAME));
         user.setLastName(resultSet.getString(UserField.LAST_NAME));
         user.setEmail(resultSet.getString(UserField.EMAIL));

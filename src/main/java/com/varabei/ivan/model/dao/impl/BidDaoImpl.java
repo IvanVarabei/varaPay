@@ -86,7 +86,7 @@ public class BidDaoImpl extends GenericDao<Bid> implements BidDao {
             endTransaction(connection);
         } catch (SQLException e) {
             DaoException daoException = new DaoException("can not get access to db", e);
-            cancelTransaction(connection, daoException);
+            cancelTransaction(connection);
         } finally {
             pool.releaseConnection(connection);
         }
@@ -106,7 +106,7 @@ public class BidDaoImpl extends GenericDao<Bid> implements BidDao {
             endTransaction(connection);
         } catch (SQLException | DaoException e) {
             DaoException daoException = e instanceof DaoException ? (DaoException) e : new DaoException(e);
-            cancelTransaction(connection, daoException);
+            cancelTransaction(connection);
         } finally {
             pool.releaseConnection(connection);
         }
@@ -127,7 +127,7 @@ public class BidDaoImpl extends GenericDao<Bid> implements BidDao {
             endTransaction(connection);
         } catch (SQLException e) {
             DaoException daoException = new DaoException("can not get access to db", e);
-            cancelTransaction(connection, daoException);
+            cancelTransaction(connection);
         } finally {
             pool.releaseConnection(connection);
         }
@@ -144,7 +144,7 @@ public class BidDaoImpl extends GenericDao<Bid> implements BidDao {
             endTransaction(connection);
         } catch (SQLException e) {
             DaoException daoException = new DaoException("can not get access to db", e);
-            cancelTransaction(connection, daoException);
+            cancelTransaction(connection);
         } finally {
             pool.releaseConnection(connection);
         }

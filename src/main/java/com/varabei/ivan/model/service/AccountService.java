@@ -12,11 +12,13 @@ public interface AccountService {
 
     Optional<Account> findById(Long accountId) throws ServiceException;
 
-    List<Account> findByUserId(Long userId) throws ServiceException;
+//    List<Account> findByUserId(Long userId) throws ServiceException;
 
     List<Account> findDisabled() throws ServiceException;
 
     void changeActive(Long accountId) throws ServiceException;
 
     void delete(Long accountId)throws ServiceException;
+
+    List<Account> findByUserLogin(String login) throws ServiceException;
 }

@@ -30,15 +30,15 @@ public class AccountServiceImpl implements AccountService {
             throw new ServiceException(daoException);
         }
     }
-
-    @Override
-    public List<Account> findByUserId(Long userId) throws ServiceException {
-        try {
-            return accountDao.findByUserId(userId);
-        } catch (DaoException daoException) {
-            throw new ServiceException(daoException);
-        }
-    }
+//
+//    @Override
+//    public List<Account> findByUserId(Long userId) throws ServiceException {
+//        try {
+//            return accountDao.findByUserId(userId);
+//        } catch (DaoException daoException) {
+//            throw new ServiceException(daoException);
+//        }
+//    }
 
     @Override
     public List<Account> findDisabled() throws ServiceException {
@@ -67,6 +67,15 @@ public class AccountServiceImpl implements AccountService {
             } else {
                 throw new ServiceException("You can`t delete not nil balance account");
             }
+        } catch (DaoException daoException) {
+            throw new ServiceException(daoException);
+        }
+    }
+
+    @Override
+    public List<Account> findByUserLogin(String login) throws ServiceException {
+        try {
+            return accountDao.findByUserLogin(login);
         } catch (DaoException daoException) {
             throw new ServiceException(daoException);
         }

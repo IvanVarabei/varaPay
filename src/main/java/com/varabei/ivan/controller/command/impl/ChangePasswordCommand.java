@@ -4,6 +4,7 @@ import com.varabei.ivan.common.ErrorInfo;
 import com.varabei.ivan.controller.AttributeKey;
 import com.varabei.ivan.controller.RequestParam;
 import com.varabei.ivan.controller.command.ActionCommand;
+import com.varabei.ivan.model.entity.User;
 import com.varabei.ivan.model.entity.name.UserField;
 import com.varabei.ivan.model.exception.ServiceException;
 import com.varabei.ivan.model.service.ServiceFactory;
@@ -31,15 +32,16 @@ public class ChangePasswordCommand implements ActionCommand {
         String oldPassword = req.getParameter(RequestParam.OLD_PASSWORD);
         String password = req.getParameter(UserField.PASSWORD);
         String repeatPassword = req.getParameter(RequestParam.REPEAT_PASSWORD);
-        Long userId = Long.parseLong(req.getSession().getAttribute(UserField.ID).toString());
+        String login = req.getSession().getAttribute(UserField.LOGIN).toString();
         Map<String, String> errors = new HashMap<>();
         try {
             checkPasswords(password, repeatPassword, errors);
-            if (!userService.checkPresenceByIdPassword(userId, oldPassword)) {
+            if (userService.signIn(login, oldPassword).isEmpty()) {
                 errors.put(RequestParam.OLD_PASSWORD, ErrorInfo.WRONG_OLD_PASSWORD);
             }
             if (errors.isEmpty()) {
-                userService.updatePassword(userId, password);
+                User user = userService.findByLogin(login).get();
+                userService.updatePassword(user.getEmail(), password);
                 resp.sendRedirect(String.format(REDIRECT_AFTER_CHANGING_PASSWORD, req.getContextPath()));
             } else {
                 req.setAttribute(AttributeKey.ERRORS, errors);

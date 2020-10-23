@@ -19,6 +19,7 @@
 					<div class="run-account__item">${account.id}</div>
 					<form class="run-account-form" method="post"
 								action="${pageContext.servletContext.contextPath}/mainServlet?command=unblock_account_post">
+						<input class="input" name="secret_word">
 						<input type="hidden" name="account_id" value="${account.id}">
 						<button class="button">enable</button>
 					</form>

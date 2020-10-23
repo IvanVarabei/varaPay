@@ -68,7 +68,7 @@ public class PaymentDaoImpl extends GenericDao<Card> implements PaymentDao {
             endTransaction(connection);
         } catch (SQLException | DaoException e) {
             DaoException daoException = e instanceof DaoException ? (DaoException) e : new DaoException(e);
-            cancelTransaction(connection, daoException);
+            cancelTransaction(connection);
         } finally {
             pool.releaseConnection(connection);
         }
@@ -93,7 +93,6 @@ public class PaymentDaoImpl extends GenericDao<Card> implements PaymentDao {
         Connection connection = pool.getConnection();
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
-        DaoException daoException = null;
         List<Payment> payments = new ArrayList<>();
         try {
             preparedStatement = connection.prepareStatement(query);
@@ -103,15 +102,13 @@ public class PaymentDaoImpl extends GenericDao<Card> implements PaymentDao {
                 payments.add(instantiatePayment(resultSet, connection));
             }
         } catch (SQLException e) {
-            daoException = new DaoException("can not get access to db", e);
-        } catch (DaoException e) {
-            daoException = e;
+            throw new DaoException("can not get access to db", e);
         } finally {
             try {
-                closeResource(resultSet, daoException);
+                closeResource(resultSet);
             } finally {
                 try {
-                    closeResource(preparedStatement, daoException);
+                    closeResource(preparedStatement);
                 } finally {
                     pool.releaseConnection(connection);
                 }

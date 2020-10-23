@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UserService {
-    void signUp(User user) throws ServiceException;
+    void signUp(User user, String password, String secretWord) throws ServiceException;
 
     List<User> findAll() throws ServiceException;
 
@@ -21,7 +21,5 @@ public interface UserService {
 
     void updatePassword(String email, String newPassword) throws ServiceException;
 
-    void updatePassword(Long id, String newPassword) throws ServiceException;
-
-    boolean checkPresenceByIdPassword(Long id, String password) throws ServiceException;
+    boolean isAuthenticSecretWord(String login, String secretWord) throws ServiceException;
 }

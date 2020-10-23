@@ -23,7 +23,8 @@ public class IncludeAccountsCommand implements ActionCommand {
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         try {
-            req.setAttribute(AttributeKey.ACCOUNTS, accountService.findByUserId(Long.parseLong(req.getParameter(UserField.ID))));
+//            req.setAttribute(AttributeKey.ACCOUNTS, accountService.findByUserId(Long.parseLong(req.getParameter(UserField.ID))));
+            req.setAttribute(AttributeKey.ACCOUNTS, accountService.findByUserLogin(req.getParameter(UserField.LOGIN)));
             req.getRequestDispatcher(JSP_INCLUDE_ACCOUNTS).include(req, resp);
         } catch (ServiceException e) {
             log.error(e);

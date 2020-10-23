@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UserDao{
-    void create(User user) throws DaoException;
+    void create(User user, String hashedPassword, String salt, String secretWord) throws DaoException;
 
     List<User> findAll() throws DaoException;
 
@@ -18,11 +18,19 @@ public interface UserDao{
 
     Optional<User> findByEmail(String email) throws DaoException;
 
-    Optional<User> findByLoginPassword(String login, String password) throws DaoException;
+    Optional<String> findPasswordById(Long id) throws DaoException;
+
+    Optional<String> findPasswordByLogin(String login) throws DaoException;
+
+    Optional<String> findSaltById(Long id) throws DaoException;
+
+    Optional<String> findSaltByLogin(String login) throws DaoException;
 
     void updatePassword(String email, String newPassword, String newSalt) throws DaoException;
 
     void updatePassword(Long id, String newPassword, String newSalt) throws DaoException;
 
     boolean checkPresenceByIdPassword(Long id, String password) throws DaoException;
+
+    boolean isAuthenticSecretWord(String login, String secretWord) throws DaoException;
 }

@@ -2,6 +2,7 @@ package com.varabei.ivan.controller.command.impl;
 
 import com.varabei.ivan.common.ErrorInfo;
 import com.varabei.ivan.controller.AttributeKey;
+import com.varabei.ivan.controller.JspPath;
 import com.varabei.ivan.controller.RequestParam;
 import com.varabei.ivan.controller.command.ActionCommand;
 import com.varabei.ivan.model.entity.User;
@@ -25,10 +26,8 @@ import java.util.regex.Pattern;
 
 public class SignupCommand implements ActionCommand {
     private static final Logger log = LogManager.getLogger(SignupCommand.class);
-    private static final UserService userService = ServiceFactory.getInstance().getUserService();
-    private static final MailService mailService = ServiceFactory.getInstance().getMailService();
-    private static final String FORWARD_SIGNUP_GET = "/WEB-INF/pages/signup.jsp";
-    private static final String FORWARD_VERIFY_EMAIL_PAGE_GET = "/WEB-INF/pages/verifyEmail.jsp";
+    private static UserService userService = ServiceFactory.getInstance().getUserService();
+    private static MailService mailService = ServiceFactory.getInstance().getMailService();
     private static final String MAIL_SUBJECT_EMAIL_VERIFICATION = "Email verification";
     private static final String MAIL_CONTENT = "Hi! Your verification code is : %s. " +
             "Enter code into the form.";
@@ -48,6 +47,7 @@ public class SignupCommand implements ActionCommand {
         String lastName = req.getParameter(UserField.LAST_NAME);
         String email = req.getParameter(UserField.EMAIL);
         String birth = req.getParameter(UserField.BIRTH);
+        String secretWord = req.getParameter(UserField.SECRET_WORD);
         Map<String, String> errors = new HashMap<>();
         try {
             checkLogin(login, errors);
@@ -60,11 +60,13 @@ public class SignupCommand implements ActionCommand {
                 mailService.sendEmail(email, MAIL_SUBJECT_EMAIL_VERIFICATION, String.format(MAIL_CONTENT, tempCode));
                 req.getSession().setAttribute(RequestParam.TEMP_CODE, tempCode);
                 req.getSession().setAttribute(AttributeKey.USER,
-                        new User(login, password, firstName, lastName, email, LocalDate.parse(birth)));
-                req.getRequestDispatcher(FORWARD_VERIFY_EMAIL_PAGE_GET).forward(req, resp);
+                        new User(login, firstName, lastName, email, LocalDate.parse(birth)));
+                req.getSession().setAttribute(UserField.PASSWORD, password);
+                req.getSession().setAttribute(UserField.SECRET_WORD, secretWord);
+                req.getRequestDispatcher(JspPath.VERIFY_EMAIL).forward(req, resp);
             } else {
                 req.setAttribute(AttributeKey.ERRORS, errors);
-                req.getRequestDispatcher(FORWARD_SIGNUP_GET).forward(req, resp);
+                req.getRequestDispatcher(JspPath.SIGNUP).forward(req, resp);
             }
         } catch (ServiceException e) {
             log.error(e);
@@ -101,10 +103,10 @@ public class SignupCommand implements ActionCommand {
     private void checkLogin(String potentialLogin, Map<String, String> errors) throws ServiceException {
         if (LOGIN_PATTERN.matcher(potentialLogin).find()) {
             if (userService.findByLogin(potentialLogin).isPresent()) {
-                errors.put(UserField.LOGIN, ErrorInfo.ALREADY_EXISTS);
+                errors.put(UserField.LOGIN, "already_exists");
             }
         } else {
-            errors.put(UserField.LOGIN, ErrorInfo.WRONG_LOGIN);
+            errors.put(UserField.LOGIN, "login_error");
         }
     }
 }

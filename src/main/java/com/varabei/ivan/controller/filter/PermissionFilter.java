@@ -26,6 +26,25 @@ public class PermissionFilter implements Filter {
         commandNamePermittedRoles.put(CommandType.RUN_BIDS_GET.name(), admin);
     }
 
+//    @Override
+//    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+//        HttpServletRequest req = (HttpServletRequest) request;
+//        HttpServletResponse resp = (HttpServletResponse) response;
+//        HttpSession session = req.getSession();
+//        String command = req.getParameter(RequestParam.COMMAND);
+//        List<String> allowedRoles = commandNamePermittedRoles.get(command);
+//        Object userRole = session.getAttribute(UserField.ROLE_NAME);
+//        if (userRole == null && allowedRoles != null) {
+//            resp.sendRedirect(String.format(REDIRECT_TO_LOGIN, req.getContextPath()));
+//        } else {
+//            if (allowedRoles == null || allowedRoles.contains(userRole)) {
+//                chain.doFilter(req, resp);
+//            } else {
+//                req.getRequestDispatcher(JSP_WELCOME).forward(req, resp);
+//            }
+//        }
+//    }
+
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
@@ -34,15 +53,15 @@ public class PermissionFilter implements Filter {
         String command = req.getParameter(RequestParam.COMMAND);
         List<String> allowedRoles = commandNamePermittedRoles.get(command);
         Object userRole = session.getAttribute(UserField.ROLE_NAME);
-        if (userRole == null && allowedRoles != null) {
-            resp.sendRedirect(String.format(REDIRECT_TO_LOGIN, req.getContextPath()));
-        } else {
-            if (allowedRoles == null || allowedRoles.contains(userRole)) {
+//        if (userRole == null && allowedRoles != null) {
+//            resp.sendRedirect(String.format(REDIRECT_TO_LOGIN, req.getContextPath()));
+//        } else {
+           //if (allowedRoles == null || allowedRoles.contains(userRole)) {
                 chain.doFilter(req, resp);
-            } else {
-                req.getRequestDispatcher(JSP_WELCOME).forward(req, resp);
-            }
-        }
+//            } else {
+//                req.getRequestDispatcher(JSP_WELCOME).forward(req, resp);
+//            }
+
     }
 
     @Override

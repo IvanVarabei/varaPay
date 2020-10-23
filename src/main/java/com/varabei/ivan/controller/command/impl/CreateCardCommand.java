@@ -21,8 +21,8 @@ import java.io.IOException;
 
 public class CreateCardCommand implements ActionCommand {
     private static final Logger log = LogManager.getLogger(CreateCardCommand.class);
-    private static final UserService userService = ServiceFactory.getInstance().getUserService();
-    private static final MailService mailService = ServiceFactory.getInstance().getMailService();
+    private static UserService userService = ServiceFactory.getInstance().getUserService();
+    private static MailService mailService = ServiceFactory.getInstance().getMailService();
     private static final String JSP_VERIFY_CREATE_CARD = "/WEB-INF/pages/verifyCreateCard.jsp";
     private static final String MAIL_SUBJECT = "Create new card";
     private static final String MAIL_BODY = "Confirm create card action. Your code is %s.";
@@ -32,9 +32,9 @@ public class CreateCardCommand implements ActionCommand {
     public void execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         Long accountId = Long.parseLong(req.getParameter(AccountField.ID));
         try {
-            Long userId = Long.parseLong(req.getSession().getAttribute(UserField.ID).toString());
+            String login = req.getSession().getAttribute(UserField.LOGIN).toString();
             String tempCode = CustomSecurity.generateRandom(TEMP_CODE_LENGTH);
-            User user = userService.findById(userId).get();
+            User user = userService.findByLogin(login).get();
             mailService.sendEmail(user.getEmail(), MAIL_SUBJECT, String.format(MAIL_BODY, tempCode));
             req.getSession().setAttribute(RequestParam.TEMP_CODE, tempCode);
             req.getSession().setAttribute(AccountField.ID, accountId);

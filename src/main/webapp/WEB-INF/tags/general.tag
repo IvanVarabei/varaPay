@@ -21,17 +21,20 @@
 				<li>
 					<a href="${pageContext.request.contextPath}" class="header__link">Welcome page</a>
 				</li>
-				<c:if test="${not empty sessionScope.user_id}">
+				<c:if test="${not empty sessionScope.login}">
 					<li>
-						<a href="${pageContext.request.contextPath}/mainServlet?command=profile_get" class="header__link">Profile</a>
+						<a href="${pageContext.request.contextPath}/mainServlet?command=profile_get"
+							 class="header__link">Profile</a>
 					</li>
 				</c:if>
 				<c:if test="${sessionScope.role_name eq 'админ'}">
 					<li>
-						<a href="${pageContext.request.contextPath}/mainServlet?command=run_accounts_get" class="header__link">Run accounts</a>
+						<a href="${pageContext.request.contextPath}/mainServlet?command=run_accounts_get" class="header__link">Run
+							accounts</a>
 					</li>
 					<li>
-						<a href="${pageContext.request.contextPath}/mainServlet?command=run_bids_get" class="header__link">Run bids</a>
+						<a href="${pageContext.request.contextPath}/mainServlet?command=run_bids_get" class="header__link">Run
+							bids</a>
 					</li>
 				</c:if>
 				<c:if test="${empty sessionScope.user_id}">
@@ -43,36 +46,27 @@
 						<a href="${pageContext.request.contextPath}/mainServlet?command=login_get" class="header__link">Login</a>
 					</li>
 				</c:if>
-				<c:if test="${not empty sessionScope.user_id}">
+				<c:if test="${not empty sessionScope.login}">
 					<li>
 						<a href="${pageContext.request.contextPath}/mainServlet?command=logout" class="header__link">Logout</a>
 					</li>
 				</c:if>
 				<li>
-<%--					<a href="" class="header__link">EN / RU</a>--%>
-	<select name="locale" form="change_language" onchange="this.form.submit()">
+					<form action="${pageContext.request.contextPath}/mainServlet" method="post">
+						<select name="locale" onchange="this.form.submit()">
 				<li>
-					<option value="en-US"
-									<c:if test="${sessionScope.locale.language eq 'en'}">
-										selected="selected"
-									</c:if>
-					>EN</option>
-					<option value="ru-RU"
-									<c:if test="${sessionScope.locale.language eq 'ru'}">
-										selected="selected"
-									</c:if>
-					>RU</option>
-					<option value="be-BY"
-									<c:if test="${sessionScope.locale.language eq 'be'}">
-										selected="selected"
-									</c:if>
-					>BE</option>
+					<option value="en-US" ${sessionScope.locale.language eq 'en' ? 'selected' : ''}>EN</option>
+					<option value="ru-RU" ${sessionScope.locale.language eq 'ru' ? 'selected' : ''}>RU</option>
 				</li>
 				</select>
-				</li>
-				<form id="change_language" action="${pageContext.request.contextPath}/mainServlet?">
-					<input type="hidden" name="command" value="change_language">
+				<c:set var="maeth" value="<%= request.getMethod() %>"/>
+				<input type="hidden" name="previousMethod" value="${maeth}">
+				<input type="hidden" name="command" value="change_language">
+				<c:forEach var="currentParam" items="${param}">
+					<input type="hidden" name="${currentParam.key}" value="${currentParam.value}">
+				</c:forEach>
 				</form>
+				</li>
 			</ul>
 			<div class="header__burger">
 				<span></span>
@@ -84,7 +78,7 @@
 			<nav class="sidebar__menu">
 				<ul>
 					<li>
-						<a href="" class="sidebar__link">Menu punkt</a>
+						<a href="" class="sidebar__link"></a>
 					</li>
 					<li>
 						<a href="" class="sidebar__link">Menu punkt</a>

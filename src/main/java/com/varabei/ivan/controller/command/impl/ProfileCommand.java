@@ -24,9 +24,9 @@ public class ProfileCommand implements ActionCommand {
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         HttpSession session = req.getSession();
-        Long userId = (Long) session.getAttribute(UserField.ID);
+        String login = session.getAttribute(UserField.LOGIN).toString();
         try {
-            req.setAttribute(AttributeKey.USER, userService.findById(userId).orElse(null));
+            req.setAttribute(AttributeKey.USER, userService.findByLogin(login).orElse(null));
             req.getRequestDispatcher(JSP_PROFILE).forward(req, resp);
         } catch (ServiceException e) {
             log.error(e);
