@@ -35,7 +35,7 @@ public class LoginCommand implements ActionCommand {
         try {
             Optional<User> user = userService.signIn(login, password);
             if (user.isPresent()) {
-                session.setAttribute(UserField.ROLE_NAME, user.get().getRoleName());
+                session.setAttribute(UserField.ROLE_NAME, user.get().getRole().name().toLowerCase());
                 session.setAttribute(UserField.LOGIN, user.get().getLogin());
             } else {
                 req.setAttribute(AttributeKey.ERROR, ErrorInfo.WRONG_LOGIN_OR_PASSWORD);

@@ -4,7 +4,6 @@
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="f" uri="http://example.com/functions" %>
 
-
 <jsp:useBean id="cards" type="java.util.List" scope="request"/>
 <c:forEach var="card" items="${cards}">
 	<a href="${pageContext.request.contextPath}/mainServlet?command=card_page_get&card_id=${card.id}"

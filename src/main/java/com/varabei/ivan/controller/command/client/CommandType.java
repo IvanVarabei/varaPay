@@ -40,7 +40,8 @@ public enum CommandType {
     UNBLOCK_ACCOUNT_POST(new UnblockAccountCommand()),
 
     INCLUDE_ACCOUNTS(new IncludeAccountsCommand()),
-    INCLUDE_CARDS(new IncludeCardsCommand());
+    INCLUDE_CARDS(new IncludeCardsCommand()),
+    INCLUDE_CURRENCIES(new IncludeCurrenciesCommand());
     private final ActionCommand command;
 
     CommandType(ActionCommand command) {

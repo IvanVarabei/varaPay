@@ -3,7 +3,7 @@ package com.varabei.ivan.model.entity;
 import java.time.LocalDate;
 
 public class User extends Identifiable {
-    private String roleName;
+    private Role role;
     private String login;
     private String firstName;
     private String lastName;
@@ -21,12 +21,12 @@ public class User extends Identifiable {
         this.birth = birth;
     }
 
-    public String getRoleName() {
-        return roleName;
+    public Role getRole() {
+        return role;
     }
 
-    public void setRoleName(String roleName) {
-        this.roleName = roleName;
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     public String getLogin() {
@@ -81,7 +81,7 @@ public class User extends Identifiable {
             return false;
         }
         User user = (User) o;
-        if (roleName != null ? !roleName.equals(user.roleName) : user.roleName != null){
+        if (role != null ? !role.equals(user.role) : user.role != null){
             return false;
         }
         if (login != null ? !login.equals(user.login) : user.login != null){
@@ -102,7 +102,7 @@ public class User extends Identifiable {
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + (roleName != null ? roleName.hashCode() : 0);
+        result = 31 * result + (role != null ? role.hashCode() : 0);
         result = 31 * result + (login != null ? login.hashCode() : 0);
         result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
         result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
@@ -114,7 +114,7 @@ public class User extends Identifiable {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("User{");
-        sb.append("roleName='").append(roleName).append('\'');
+        sb.append("role='").append(role).append('\'');
         sb.append(", login='").append(login).append('\'');
         sb.append(", firstName='").append(firstName).append('\'');
         sb.append(", lastName='").append(lastName).append('\'');

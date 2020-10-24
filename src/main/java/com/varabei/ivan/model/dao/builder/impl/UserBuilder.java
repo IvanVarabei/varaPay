@@ -1,6 +1,7 @@
 package com.varabei.ivan.model.dao.builder.impl;
 
 import com.varabei.ivan.model.dao.builder.IdentifiableBuilder;
+import com.varabei.ivan.model.entity.Role;
 import com.varabei.ivan.model.entity.User;
 import com.varabei.ivan.model.entity.name.UserField;
 
@@ -14,7 +15,7 @@ public class UserBuilder implements IdentifiableBuilder<User> {
         User user = new User();
         Long userId = resultSet.getLong(UserField.ID);
         user.setId(userId);
-        user.setRoleName(resultSet.getString(UserField.ROLE_NAME));
+        user.setRole(Role.valueOf(resultSet.getString(UserField.ROLE_NAME).toUpperCase()));
         user.setLogin(resultSet.getString(UserField.LOGIN));
         user.setFirstName(resultSet.getString(UserField.FIRST_NAME));
         user.setLastName(resultSet.getString(UserField.LAST_NAME));

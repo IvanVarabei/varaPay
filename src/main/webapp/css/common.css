@@ -187,6 +187,29 @@
 }
 
 .sidebar_menu {}
+.sidebar__title{
+	margin: 0 0 20px 0;
+}
+.currency{
+	display: grid;
+	align-items: center;
+	grid-template-columns: 0.8fr 1.5fr 1fr 2fr;
+}
+.currency__image{
+
+}
+.currency__image img{
+	max-width: 80%;
+}
+.currency__name{
+	text-transform: lowercase;
+}
+.currency__name:first-letter { text-transform: uppercase; }
+.currency__concise{
+
+}
+.currency__cost{
+}
 .sidebar__link{
 	color: #fff;
 }

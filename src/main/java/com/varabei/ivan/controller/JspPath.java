@@ -11,6 +11,7 @@ public class JspPath {
     public static final String VERIFY_CREATE_CARD = "/WEB-INF/pages/verifyCreateCard.jsp";
     public static final String INCLUDE_ACCOUNTS = "/WEB-INF/pages/includeAccounts.jsp";
     public static final String INCLUDE_CARDS = "/WEB-INF/pages/includeCards.jsp";
+    public static final String INCLUDE_CURRENCIES = "/WEB-INF/pages/includeCurrencies.jsp";
     public static final String LOGIN = "/WEB-INF/pages/login.jsp";
     public static final String PROFILE = "/WEB-INF/pages/profile.jsp";
     public static final String RECOVER_PASSWORD = "/WEB-INF/pages/recoverPassword.jsp";

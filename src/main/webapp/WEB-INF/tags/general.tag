@@ -34,7 +34,7 @@
 									 class="header__link">Profile</a>
 							</li>
 						</c:if>
-						<c:if test="${sessionScope.role_name eq 'админ'}">
+						<c:if test="${sessionScope.role_name eq 'admin'}">
 							<li>
 								<a href="${pageContext.request.contextPath}/mainServlet?command=run_accounts_get" class="header__link">Run
 									accounts</a>
@@ -82,19 +82,11 @@
 	<main class="main">
 		<aside class="sidebar">
 			<nav class="sidebar__menu">
+				<div class="sub-title sidebar__title">
+					Currency rates
+				</div>
 				<ul>
-					<li>
-						<a href="" class="sidebar__link"></a>
-					</li>
-					<li>
-						<a href="" class="sidebar__link">Menu punkt</a>
-					</li>
-					<li>
-						<a href="" class="sidebar__link">Menu punkt</a>
-					</li>
-					<li>
-						<a href="" class="sidebar__link">Menu punkt</a>
-					</li>
+					<jsp:include page="/mainServlet?command=include_currencies"/>
 				</ul>
 			</nav>
 		</aside>
