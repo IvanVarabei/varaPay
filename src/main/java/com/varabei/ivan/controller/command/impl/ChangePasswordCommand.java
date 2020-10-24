@@ -1,9 +1,9 @@
 package com.varabei.ivan.controller.command.impl;
 
 import com.varabei.ivan.common.ErrorInfo;
-import com.varabei.ivan.controller.AttributeKey;
-import com.varabei.ivan.controller.RequestParam;
+import com.varabei.ivan.controller.*;
 import com.varabei.ivan.controller.command.ActionCommand;
+import com.varabei.ivan.controller.command.RedirectPath;
 import com.varabei.ivan.model.entity.User;
 import com.varabei.ivan.model.entity.name.UserField;
 import com.varabei.ivan.model.exception.ServiceException;
@@ -21,14 +21,13 @@ import java.util.Map;
 
 public class ChangePasswordCommand implements ActionCommand {
     private static final Logger log = LogManager.getLogger(ChangePasswordCommand.class);
-    private static final UserService userService = ServiceFactory.getInstance().getUserService();
-    private static final String JSP_CHANGE_PASSWORD = "/WEB-INF/pages/changePassword.jsp";
-    private static final String REDIRECT_AFTER_CHANGING_PASSWORD = "%s/mainServlet?command=profile_get";
+    private static UserService userService = ServiceFactory.getInstance().getUserService();
     private static final int MIN_PASSWORD_LENGTH = 3;
     private static final int MAX_PASSWORD_LENGTH = 20;
 
     @Override
-    public void execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    public Router execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        Router router = new Router();
         String oldPassword = req.getParameter(RequestParam.OLD_PASSWORD);
         String password = req.getParameter(UserField.PASSWORD);
         String repeatPassword = req.getParameter(RequestParam.REPEAT_PASSWORD);
@@ -42,15 +41,16 @@ public class ChangePasswordCommand implements ActionCommand {
             if (errors.isEmpty()) {
                 User user = userService.findByLogin(login).get();
                 userService.updatePassword(user.getEmail(), password);
-                resp.sendRedirect(String.format(REDIRECT_AFTER_CHANGING_PASSWORD, req.getContextPath()));
+                router.setRedirect(String.format(RedirectPath.CHANGING_PASSWORD, req.getContextPath()));
             } else {
                 req.setAttribute(AttributeKey.ERRORS, errors);
-                req.getRequestDispatcher(JSP_CHANGE_PASSWORD).forward(req, resp);
+                router.setForward(JspPath.CHANGE_PASSWORD);
             }
         } catch (ServiceException e) {
             log.error(e);
-            resp.sendError(ErrorInfo.SERVER_ERROR_CODE);
+            router.setForward(JspPath.ERROR_500);
         }
+        return router;
     }
 
     private void checkPasswords(String password, String repeatPassword, Map<String, String> errors) {

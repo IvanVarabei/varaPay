@@ -1,8 +1,10 @@
 package com.varabei.ivan.controller.command.impl;
 
-import com.varabei.ivan.common.ErrorInfo;
-import com.varabei.ivan.controller.AttributeKey;
+import com.varabei.ivan.controller.*;
 import com.varabei.ivan.controller.command.ActionCommand;
+import com.varabei.ivan.model.entity.Bid;
+import com.varabei.ivan.model.entity.Card;
+import com.varabei.ivan.model.entity.Payment;
 import com.varabei.ivan.model.exception.ServiceException;
 import com.varabei.ivan.model.service.BidService;
 import com.varabei.ivan.model.service.ServiceFactory;
@@ -13,20 +15,31 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 public class RunBidsCommand implements ActionCommand {
     private static final Logger log = LogManager.getLogger(RunBidsCommand.class);
-    private static final BidService bidService = ServiceFactory.getInstance().getToUpBidService();
-    private static final String JSP_RUN_BIDS = "/WEB-INF/pages/runBids.jsp";
+    private static BidService bidService = ServiceFactory.getInstance().getToUpBidService();
 
     @Override
-    public void execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    public Router execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        Router router = new Router(JspPath.RUN_BIDS);
         try {
-            req.setAttribute(AttributeKey.BIDS, bidService.findInProgressBids());
-            req.getRequestDispatcher(JSP_RUN_BIDS).forward(req, resp);
+            int page = 1;
+            String pageString = req.getParameter(RequestParam.PAGE);
+            if (pageString != null && Integer.parseInt(pageString) != 0) {
+                page = Integer.parseInt(req.getParameter(RequestParam.PAGE));
+            }
+            List<Bid> bids =
+                    bidService.findInProgressBids(WebPageConfig.RECORDS_PER_PAGE, page);
+            int amountOfPages = bidService.findAmountOfPages(WebPageConfig.RECORDS_PER_PAGE);
+            req.setAttribute(AttributeKey.AMOUNT_OF_PAGES, amountOfPages);
+            req.setAttribute(AttributeKey.CURRENT_PAGE, page);
+            req.setAttribute(AttributeKey.BIDS, bids);
         } catch (ServiceException e) {
             log.error(e);
-            resp.sendError(ErrorInfo.SERVER_ERROR_CODE);
+            router.setForward(JspPath.ERROR_500);
         }
+        return router;
     }
 }

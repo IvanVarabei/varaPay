@@ -2,7 +2,11 @@ package com.varabei.ivan.controller.command.impl;
 
 import com.varabei.ivan.common.ErrorInfo;
 import com.varabei.ivan.controller.AttributeKey;
+import com.varabei.ivan.controller.JspPath;
+import com.varabei.ivan.controller.Router;
+import com.varabei.ivan.controller.RouterType;
 import com.varabei.ivan.controller.command.ActionCommand;
+import com.varabei.ivan.controller.command.RedirectPath;
 import com.varabei.ivan.model.entity.User;
 import com.varabei.ivan.model.entity.name.UserField;
 import com.varabei.ivan.model.exception.ServiceException;
@@ -20,12 +24,11 @@ import java.util.Optional;
 
 public class LoginCommand implements ActionCommand {
     private static final Logger log = LogManager.getLogger(LoginCommand.class);
-    private static final UserService userService = ServiceFactory.getInstance().getUserService();
-    private static final String REDIRECT_AFTER_LOGIN = "%s/mainServlet?command=profile_get";
-    private static final String JSP_LOGIN = "/WEB-INF/pages/login.jsp";
+    private static UserService userService = ServiceFactory.getInstance().getUserService();
 
     @Override
-    public void execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    public Router execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        Router router = new Router(String.format(RedirectPath.PROFILE, req.getContextPath()), RouterType.REDIRECT);
         String login = req.getParameter(UserField.LOGIN);
         String password = req.getParameter(UserField.PASSWORD);
         HttpSession session = req.getSession();
@@ -34,15 +37,14 @@ public class LoginCommand implements ActionCommand {
             if (user.isPresent()) {
                 session.setAttribute(UserField.ROLE_NAME, user.get().getRoleName());
                 session.setAttribute(UserField.LOGIN, user.get().getLogin());
-//                session.setAttribute(UserField.ID, user.get().getId());
-                resp.sendRedirect(String.format(REDIRECT_AFTER_LOGIN, req.getContextPath()));
             } else {
                 req.setAttribute(AttributeKey.ERROR, ErrorInfo.WRONG_LOGIN_OR_PASSWORD);
-                req.getRequestDispatcher(JSP_LOGIN).forward(req, resp);
+                router.setForward(JspPath.LOGIN);
             }
         } catch (ServiceException e) {
             log.error(e);
-            resp.sendError(ErrorInfo.SERVER_ERROR_CODE);
+            router.setForward(JspPath.ERROR_500);
         }
+        return router;
     }
 }

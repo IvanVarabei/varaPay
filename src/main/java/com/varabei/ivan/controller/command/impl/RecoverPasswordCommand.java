@@ -2,7 +2,11 @@ package com.varabei.ivan.controller.command.impl;
 
 import com.varabei.ivan.common.ErrorInfo;
 import com.varabei.ivan.controller.AttributeKey;
+import com.varabei.ivan.controller.JspPath;
+import com.varabei.ivan.controller.Router;
+import com.varabei.ivan.controller.RouterType;
 import com.varabei.ivan.controller.command.ActionCommand;
+import com.varabei.ivan.controller.command.RedirectPath;
 import com.varabei.ivan.model.entity.name.UserField;
 import com.varabei.ivan.model.exception.ServiceException;
 import com.varabei.ivan.model.service.MailService;
@@ -19,31 +23,30 @@ import java.io.IOException;
 
 public class RecoverPasswordCommand implements ActionCommand {
     private static final Logger log = LogManager.getLogger(RecoverPasswordCommand.class);
-    private static final MailService mailService = ServiceFactory.getInstance().getMailService();
-    private static final UserService userService = ServiceFactory.getInstance().getUserService();
+    private static MailService mailService = ServiceFactory.getInstance().getMailService();
+    private static UserService userService = ServiceFactory.getInstance().getUserService();
     private static final String MAIL_SUBJECT_NEW_PASSWORD = "Your new password";
     private static final String MAIL_CONTENT = "Hi! Your new password is : %s. " +
             "You can change password in your profile.";
-    private static final String REDIRECT_TO_LOGIN = "%s/mainServlet?command=login_get";
-    private static final String JSP_RECOVER_PASSWORD = "/WEB-INF/pages/recoverPassword.jsp";
     private static final int DEFAULT_PASSWORD_LENGTH = 20;
 
     @Override
-    public void execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    public Router execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        Router router = new Router(String.format(RedirectPath.LOGIN, req.getContextPath()), RouterType.REDIRECT);
         String email = req.getParameter(UserField.EMAIL);
         String newPassword = CustomSecurity.generateRandom(DEFAULT_PASSWORD_LENGTH);
         try {
             if (userService.findByEmail(email).isPresent()) {
                 mailService.sendEmail(email, MAIL_SUBJECT_NEW_PASSWORD, String.format(MAIL_CONTENT, newPassword));
                 userService.updatePassword(email, newPassword);
-                resp.sendRedirect(String.format(REDIRECT_TO_LOGIN, req.getContextPath()));
             } else {
                 req.setAttribute(AttributeKey.ERROR, ErrorInfo.EMAIL_DOES_NOT_EXISTS);
-                req.getRequestDispatcher(JSP_RECOVER_PASSWORD).forward(req, resp);
+                router.setForward(JspPath.RECOVER_PASSWORD);
             }
         } catch (ServiceException e) {
             log.error(e);
-            resp.sendError(ErrorInfo.SERVER_ERROR_CODE);
+            router.setForward(JspPath.ERROR_500);
         }
+        return router;
     }
 }

@@ -1,5 +1,7 @@
 package com.varabei.ivan.controller.command.impl;
 
+import com.varabei.ivan.controller.Router;
+import com.varabei.ivan.controller.RouterType;
 import com.varabei.ivan.controller.command.ActionCommand;
 
 import javax.servlet.http.HttpServletRequest;
@@ -8,8 +10,8 @@ import java.io.IOException;
 
 public class LogoutCommand implements ActionCommand {
     @Override
-    public void execute(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    public Router execute(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         req.getSession().invalidate();
-        resp.sendRedirect(req.getContextPath());
+        return new Router(req.getContextPath(), RouterType.REDIRECT);
     }
 }

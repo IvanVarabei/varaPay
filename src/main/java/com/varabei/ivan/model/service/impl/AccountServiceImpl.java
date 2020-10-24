@@ -9,9 +9,11 @@ import com.varabei.ivan.model.exception.ServiceException;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 public class AccountServiceImpl implements AccountService {
     private static AccountDao accountDao = DaoFactory.getInstance().getAccountDao();
+    static final Pattern DIGIT = Pattern.compile("\\d+");
 
     @Override
     public void create(Long userId) throws ServiceException {
@@ -30,20 +32,15 @@ public class AccountServiceImpl implements AccountService {
             throw new ServiceException(daoException);
         }
     }
-//
-//    @Override
-//    public List<Account> findByUserId(Long userId) throws ServiceException {
-//        try {
-//            return accountDao.findByUserId(userId);
-//        } catch (DaoException daoException) {
-//            throw new ServiceException(daoException);
-//        }
-//    }
 
     @Override
-    public List<Account> findDisabled() throws ServiceException {
+    public List<Account> findDisabledByLoginOrAccountId(String query) throws ServiceException {
         try {
-            return accountDao.findDisabled();
+            if(DIGIT.matcher(query).find()){
+                return accountDao.findDisabledByAccountId(Long.parseLong(query));
+            }else {
+                return accountDao.findDisabledByLogin(query);
+            }
         } catch (DaoException daoException) {
             throw new ServiceException(daoException);
         }

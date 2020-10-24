@@ -1,9 +1,9 @@
 package com.varabei.ivan.model.service.impl;
 
-import com.varabei.ivan.model.exception.DaoException;
-import com.varabei.ivan.model.dao.DaoFactory;
 import com.varabei.ivan.model.dao.BidDao;
+import com.varabei.ivan.model.dao.DaoFactory;
 import com.varabei.ivan.model.entity.Bid;
+import com.varabei.ivan.model.exception.DaoException;
 import com.varabei.ivan.model.exception.ServiceException;
 import com.varabei.ivan.model.service.BidService;
 
@@ -14,18 +14,18 @@ public class BidServiceImpl implements BidService {
     private static final BidDao bidDao = DaoFactory.getInstance().getTopUpBidDao();
 
     @Override
-    public List<Bid> findInProgressBids() throws ServiceException {
+    public List<Bid> findInProgressBids(int limit, int pageIndex) throws ServiceException {
         try {
-            return bidDao.findInProgressBids();
+            return bidDao.findInProgressBids(limit, (pageIndex - 1) * limit);
         } catch (DaoException daoException) {
             throw new ServiceException(daoException);
         }
     }
 
     @Override
-    public List<Bid> findByAccountId(Long accountId) throws ServiceException {
+    public List<Bid> findByAccountId(Long accountId,  int limit, int pageIndex) throws ServiceException {
         try {
-            return bidDao.findByAccountId(accountId);
+            return bidDao.findByAccountId(accountId, limit, (pageIndex - 1) * limit);
         } catch (DaoException daoException) {
             throw new ServiceException(daoException);
         }
@@ -80,6 +80,26 @@ public class BidServiceImpl implements BidService {
     public void rejectWithdrawBid(Long withdrawBidId, String adminComment) throws ServiceException {
         try {
             bidDao.rejectWithdrawBid(withdrawBidId, adminComment);
+        } catch (DaoException daoException) {
+            throw new ServiceException(daoException);
+        }
+    }
+
+    @Override
+    public int findAmountOfPages(int limit) throws ServiceException {
+        try {
+            Long numberOfRecords = bidDao.findAmountOfInProgressBids();
+            return (int) Math.ceil(numberOfRecords * 1d / limit);
+        } catch (DaoException daoException) {
+            throw new ServiceException(daoException);
+        }
+    }
+
+    @Override
+    public int findAmountOfPagesByAccountId(Long accountId, int limit) throws ServiceException {
+        try {
+            Long numberOfRecords = bidDao.findAmountOfBidsByAccountId(accountId);
+            return (int) Math.ceil(numberOfRecords * 1d / limit);
         } catch (DaoException daoException) {
             throw new ServiceException(daoException);
         }

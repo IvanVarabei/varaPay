@@ -7,6 +7,7 @@
     left: 0;
     opacity: 0;
     visibility: hidden;
+    z-index: 5;
 }
 /*.popup:target{*/
 /*    opacity: 1;*/

@@ -1,5 +1,6 @@
 package com.varabei.ivan.controller.command.impl;
 
+import com.varabei.ivan.controller.Router;
 import com.varabei.ivan.controller.command.ActionCommand;
 
 import javax.servlet.ServletException;
@@ -9,7 +10,7 @@ import java.io.IOException;
 
 public class RejectWithdrawBidCommand implements ActionCommand {
     @Override
-    public void execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-
+    public Router execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        return null;
     }
 }

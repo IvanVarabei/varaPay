@@ -1,7 +1,10 @@
 package com.varabei.ivan.controller.command.impl;
 
-import com.varabei.ivan.common.ErrorInfo;
+import com.varabei.ivan.controller.JspPath;
+import com.varabei.ivan.controller.Router;
+import com.varabei.ivan.controller.RouterType;
 import com.varabei.ivan.controller.command.ActionCommand;
+import com.varabei.ivan.controller.command.RedirectPath;
 import com.varabei.ivan.model.entity.name.CardField;
 import com.varabei.ivan.model.exception.ServiceException;
 import com.varabei.ivan.model.service.CardService;
@@ -16,18 +19,18 @@ import java.io.IOException;
 
 public class DeleteCardCommand implements ActionCommand {
     private static final Logger log = LogManager.getLogger(DeleteCardCommand.class);
-    private static final CardService cardService = ServiceFactory.getInstance().getCardService();
-    private static final String REDIRECT_TO_PROFILE = "%s/mainServlet?command=profile_get";
+    private static CardService cardService = ServiceFactory.getInstance().getCardService();
 
     @Override
-    public void execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    public Router execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        Router router = new Router(String.format(RedirectPath.PROFILE, req.getContextPath()), RouterType.REDIRECT);
         Long cardId = Long.parseLong(req.getParameter(CardField.ID));
         try {
             cardService.delete(cardId);
-            resp.sendRedirect(String.format(REDIRECT_TO_PROFILE, req.getContextPath()));
         } catch (ServiceException e) {
             log.error(e);
-            resp.sendError(ErrorInfo.SERVER_ERROR_CODE);
+            router.setForward(JspPath.ERROR_500);
         }
+        return router;
     }
 }

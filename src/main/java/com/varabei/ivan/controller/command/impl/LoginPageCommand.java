@@ -1,5 +1,7 @@
 package com.varabei.ivan.controller.command.impl;
 
+import com.varabei.ivan.controller.JspPath;
+import com.varabei.ivan.controller.Router;
 import com.varabei.ivan.controller.command.ActionCommand;
 
 import javax.servlet.ServletException;
@@ -8,10 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class LoginPageCommand implements ActionCommand {
-    private static final String JSP_LOGIN = "/WEB-INF/pages/login.jsp";
-
     @Override
-    public void execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        req.getRequestDispatcher(JSP_LOGIN).forward(req, resp);
+    public Router execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        return new Router(JspPath.LOGIN);
     }
 }

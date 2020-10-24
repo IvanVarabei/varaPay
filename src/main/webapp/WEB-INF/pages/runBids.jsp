@@ -27,17 +27,25 @@
 						<input type="hidden" name="bid_id" value="${bid.id}">
 						<textarea name="admin_comment"></textarea>
 						<button class="button"
-										formaction="${pageContext.servletContext.contextPath}/mainServlet?command=reject_top_up_bid_post">
+										formaction="${pageContext.servletContext.contextPath}/mainServlet?command=reject_top_up_bid_post&page=
+										${requestScope.currentPage eq requestScope.amountOfPages ?
+										 (bids.size() > 1 ? requestScope.currentPage : requestScope.currentPage-1)
+										 : requestScope.currentPage}">
 							reject
 						</button>
 						<button class="button"
-										formaction="${pageContext.servletContext.contextPath}/mainServlet?command=approve_top_up_bid_post">
+										formaction="${pageContext.servletContext.contextPath}/mainServlet?command=approve_top_up_bid_post&page=
+										${requestScope.currentPage eq requestScope.amountOfPages ?
+										 (bids.size() > 1 ? requestScope.currentPage : requestScope.currentPage-1)
+										 : requestScope.currentPage}">
 							approve
 						</button>
 					</form>
 					<div class="run-bids__edge run-bids__item"></div>
 				</div>
 			</c:forEach>
+			<tags:pagination amountOfPages="${requestScope.amountOfPages}" currentPage="${requestScope.currentPage}" url="
+			${pageContext.servletContext.contextPath}/mainServlet?command=run_bids_get"/>
 		</c:if>
 		<c:if test="${empty requestScope.bids}">
 			<div class="sub-title">there are no in progress bids</div>

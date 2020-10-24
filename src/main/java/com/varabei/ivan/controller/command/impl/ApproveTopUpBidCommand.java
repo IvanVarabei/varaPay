@@ -1,7 +1,11 @@
 package com.varabei.ivan.controller.command.impl;
 
-import com.varabei.ivan.common.ErrorInfo;
+import com.varabei.ivan.controller.JspPath;
+import com.varabei.ivan.controller.RequestParam;
+import com.varabei.ivan.controller.Router;
+import com.varabei.ivan.controller.RouterType;
 import com.varabei.ivan.controller.command.ActionCommand;
+import com.varabei.ivan.controller.command.RedirectPath;
 import com.varabei.ivan.model.entity.name.BidField;
 import com.varabei.ivan.model.exception.ServiceException;
 import com.varabei.ivan.model.service.BidService;
@@ -16,17 +20,18 @@ import java.io.IOException;
 
 public class ApproveTopUpBidCommand implements ActionCommand {
     private static final Logger log = LogManager.getLogger(ApproveTopUpBidCommand.class);
-    private static final BidService bidService = ServiceFactory.getInstance().getToUpBidService();
-    private static final String REDIRECT_AFTER_APPROVING = "%s/mainServlet?command=RUN_BIDS_GET";
+    private static BidService bidService = ServiceFactory.getInstance().getToUpBidService();
 
     @Override
-    public void execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    public Router execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        Router router = new Router(String.format(RedirectPath.RUN_BIDS, req.getContextPath(),
+                req.getParameter(RequestParam.PAGE)), RouterType.REDIRECT);
         try {
             bidService.approveTopUpBid(Long.parseLong(req.getParameter(BidField.ID)));
-            resp.sendRedirect(String.format(REDIRECT_AFTER_APPROVING, req.getContextPath()));
         } catch (ServiceException e) {
             log.error(e);
-            resp.sendError(ErrorInfo.SERVER_ERROR_CODE);
+            router.setForward(JspPath.ERROR_500);
         }
+        return router;
     }
 }

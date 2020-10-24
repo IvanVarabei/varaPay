@@ -14,66 +14,6 @@
 </head>
 <body>
 <div class="wrapper">
-<%--	<header class="header">--%>
-<%--		<a href="" class="header__logo"></a>--%>
-<%--		<nav class="header__menu">--%>
-<%--			<ul class="header__list">--%>
-<%--				<li>--%>
-<%--					<a href="${pageContext.request.contextPath}" class="header__link">Welcome page</a>--%>
-<%--				</li>--%>
-<%--				<c:if test="${not empty sessionScope.login}">--%>
-<%--					<li>--%>
-<%--						<a href="${pageContext.request.contextPath}/mainServlet?command=profile_get"--%>
-<%--							 class="header__link">Profile</a>--%>
-<%--					</li>--%>
-<%--				</c:if>--%>
-<%--				<c:if test="${sessionScope.role_name eq 'админ'}">--%>
-<%--					<li>--%>
-<%--						<a href="${pageContext.request.contextPath}/mainServlet?command=run_accounts_get" class="header__link">Run--%>
-<%--							accounts</a>--%>
-<%--					</li>--%>
-<%--					<li>--%>
-<%--						<a href="${pageContext.request.contextPath}/mainServlet?command=run_bids_get" class="header__link">Run--%>
-<%--							bids</a>--%>
-<%--					</li>--%>
-<%--				</c:if>--%>
-<%--				<c:if test="${empty sessionScope.user_id}">--%>
-<%--					<li>--%>
-<%--						<a href="${pageContext.request.contextPath}/mainServlet?command=signup_get" class="header__link">Create--%>
-<%--							profile</a>--%>
-<%--					</li>--%>
-<%--					<li>--%>
-<%--						<a href="${pageContext.request.contextPath}/mainServlet?command=login_get" class="header__link">Login</a>--%>
-<%--					</li>--%>
-<%--				</c:if>--%>
-<%--				<c:if test="${not empty sessionScope.login}">--%>
-<%--					<li>--%>
-<%--						<a href="${pageContext.request.contextPath}/mainServlet?command=logout" class="header__link">Logout</a>--%>
-<%--					</li>--%>
-<%--				</c:if>--%>
-<%--				<li>--%>
-<%--					<form action="${pageContext.request.contextPath}/mainServlet" method="post">--%>
-<%--						<select name="locale" onchange="this.form.submit()">--%>
-<%--				<li>--%>
-<%--					<option value="en-US" ${sessionScope.locale.language eq 'en' ? 'selected' : ''}>EN</option>--%>
-<%--					<option value="ru-RU" ${sessionScope.locale.language eq 'ru' ? 'selected' : ''}>RU</option>--%>
-<%--				</li>--%>
-<%--				</select>--%>
-<%--				<c:set var="maeth" value="<%= request.getMethod() %>"/>--%>
-<%--				<input type="hidden" name="previousMethod" value="${maeth}">--%>
-<%--				<input type="hidden" name="command" value="change_language">--%>
-<%--				<c:forEach var="currentParam" items="${param}">--%>
-<%--					<input type="hidden" name="${currentParam.key}" value="${currentParam.value}">--%>
-<%--				</c:forEach>--%>
-<%--				</form>--%>
-<%--				</li>--%>
-<%--			</ul>--%>
-<%--			<div class="header__burger">--%>
-<%--				<span></span>--%>
-<%--			</div>--%>
-<%--		</nav>--%>
-<%--	</header>--%>
-
 	<header class="header">
 		<div class="container">
 			<div class="header__body">

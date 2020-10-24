@@ -38,7 +38,7 @@ public class PaymentServiceImpl implements PaymentService {
     public int findAmountOfPagesByCardId(Long cardId, int limit) throws ServiceException {
         try {
             Long numberOfRecords = paymentDao.findNumberOfRecordsByCardId(cardId);
-            return (int) Math.ceil(numberOfRecords * 1d / WebPageConfig.RECORDS_PER_PAGE);
+            return (int) Math.ceil(numberOfRecords * 1d / limit);
         } catch (DaoException e) {
             throw new ServiceException(e);
         }

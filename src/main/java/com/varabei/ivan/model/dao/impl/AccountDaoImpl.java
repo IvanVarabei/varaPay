@@ -32,15 +32,39 @@ public class AccountDaoImpl extends GenericDao<Account> implements AccountDao {
                     "    join users on accounts.user_id = users.user_id\n" +
                     "    and accounts.account_id = ? and is_abandoned = false\n" +
                     "    join roles on users.role_id = roles.role_id";
-    private static final String FIND_DISABLED_ACCOUNTS =
-            "select account_id, balance, is_active, users.user_id, users.login, password, salt,users.email,\n" +
+    private static final String FIND_DISABLED_BY_ACCOUNT_ID =
+            "select account_id,\n" +
+                    "       balance,\n" +
+                    "       is_active,\n" +
+                    "       users.user_id,\n" +
+                    "       users.login,\n" +
+                    "       password,\n" +
+                    "       salt,\n" +
+                    "       users.email,\n" +
                     "       users.firstname,\n" +
                     "       users.lastname,\n" +
                     "       users.birth,\n" +
                     "       roles.role_name\n" +
                     "from accounts\n" +
                     "         join users on accounts.user_id = users.user_id\n" +
-                    "    and not is_active and is_abandoned = false\n" +
+                    "    and not is_active and is_abandoned = false and account_id = ?\n" +
+                    "         join roles on users.role_id = roles.role_id";
+    private static final String FIND_DISABLED_BY_LOGIN =
+            "select account_id,\n" +
+                    "       balance,\n" +
+                    "       is_active,\n" +
+                    "       users.user_id,\n" +
+                    "       users.login,\n" +
+                    "       password,\n" +
+                    "       salt,\n" +
+                    "       users.email,\n" +
+                    "       users.firstname,\n" +
+                    "       users.lastname,\n" +
+                    "       users.birth,\n" +
+                    "       roles.role_name\n" +
+                    "from accounts\n" +
+                    "         join users on accounts.user_id = users.user_id\n" +
+                    "    and not is_active and not is_abandoned and login = ?\n" +
                     "         join roles on users.role_id = roles.role_id";
     private static final String FIND_ACCOUNT_BALANCE_BY_ID = "select balance from accounts where account_id = ?";
 
@@ -63,14 +87,14 @@ public class AccountDaoImpl extends GenericDao<Account> implements AccountDao {
         return executeQuery(FIND_ACCOUNTS_BY_LOGIN, login);
     }
 
-//    @Override
-//    public List<Account> findByUserId(Long userId) throws DaoException {
-//        return executeQuery(FIND_ACCOUNTS_BY_USER_ID, userId);
-//    }
+    @Override
+    public List<Account> findDisabledByLogin(String login) throws DaoException {
+        return executeQuery(FIND_DISABLED_BY_LOGIN, login);
+    }
 
     @Override
-    public List<Account> findDisabled() throws DaoException {
-        return executeQuery(FIND_DISABLED_ACCOUNTS);
+    public List<Account> findDisabledByAccountId(Long accountId) throws DaoException {
+        return executeQuery(FIND_DISABLED_BY_ACCOUNT_ID, accountId);
     }
 
     @Override

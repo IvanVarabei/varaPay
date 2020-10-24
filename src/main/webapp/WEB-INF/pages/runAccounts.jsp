@@ -6,6 +6,12 @@
 <tags:general pageTitle="Accounts">
 	<div class="run-accounts">
 		<div class="title run-accounts__title">run accounts</div>
+		<form class="form" action="${pageContext.servletContext.contextPath}/mainServlet">
+			<c:if test="${not empty requestScope.error}"><p class="form__error">${fail_message}</p></c:if>
+			<input type="hidden" name="command" value="run_accounts_get">
+			<p class="form__input-label">Account id or login</p><input class="input form__input" name="query" value="${param.query}">
+			<button class="button form_button">find blocked</button>
+		</form>
 		<c:if test="${not empty requestScope.accounts}">
 			<jsp:useBean id="accounts" type="java.util.List" scope="request"/>
 			<div class="run-accounts__list">

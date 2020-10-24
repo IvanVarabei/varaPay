@@ -2,7 +2,9 @@ package com.varabei.ivan.controller.command.impl;
 
 import com.varabei.ivan.common.ErrorInfo;
 import com.varabei.ivan.controller.AttributeKey;
+import com.varabei.ivan.controller.JspPath;
 import com.varabei.ivan.controller.RequestParam;
+import com.varabei.ivan.controller.Router;
 import com.varabei.ivan.controller.command.ActionCommand;
 import com.varabei.ivan.model.entity.User;
 import com.varabei.ivan.model.entity.name.UserField;
@@ -21,10 +23,10 @@ import java.io.IOException;
 public class VerifyEmailCommand implements ActionCommand {
     private static final Logger log = LogManager.getLogger(VerifyEmailCommand.class);
     private static UserService userService = ServiceFactory.getInstance().getUserService();
-    private static final String JSP_VERIFY_EMAIL = "/WEB-INF/pages/verifyEmail.jsp";
 
     @Override
-    public void execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    public Router execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        Router router = new Router(JspPath.VERIFY_EMAIL);
         HttpSession session = req.getSession();
         String tempCode = req.getParameter(RequestParam.TEMP_CODE);
         if (tempCode.equals(session.getAttribute(RequestParam.TEMP_CODE).toString())) {
@@ -33,20 +35,19 @@ public class VerifyEmailCommand implements ActionCommand {
                 String login = user.getLogin();
                 if (userService.findByLogin(login).isPresent()) {
                     req.setAttribute(AttributeKey.ERROR, String.format(ErrorInfo.LOGIN_TAKEN, login));
-                    req.getRequestDispatcher(JSP_VERIFY_EMAIL).forward(req, resp);
                 } else {
-                    String s =  session.getAttribute(UserField.SECRET_WORD).toString();
                     userService.signUp(user, session.getAttribute(UserField.PASSWORD).toString()
                             , session.getAttribute(UserField.SECRET_WORD).toString());
-                    resp.sendRedirect(req.getContextPath());
+                    router.setForward(req.getContextPath());
                 }
             } catch (ServiceException e) {
                 log.error(e);
-                resp.sendError(ErrorInfo.SERVER_ERROR_CODE);
+                router.setForward(JspPath.ERROR_500);
             }
         } else {
             req.setAttribute(AttributeKey.ERROR, ErrorInfo.WRONG_TEMP_CODE);
-            req.getRequestDispatcher(JSP_VERIFY_EMAIL).forward(req, resp);
+            router.setForward(JspPath.ERROR_500);
         }
+        return router;
     }
 }

@@ -44,5 +44,7 @@
 			<div class="operation__edge operation__part"></div>
 		</div>
 		</c:forEach>
+			<tags:pagination amountOfPages="${requestScope.amountOfPages}" currentPage="${requestScope.currentPage}" url="
+			${pageContext.servletContext.contextPath}/mainServlet?command=account_page_get&account_id=${account.id}"/>
 		</c:if>
 </tags:general>

@@ -1,7 +1,10 @@
 package com.varabei.ivan.controller.command.impl;
 
-import com.varabei.ivan.common.ErrorInfo;
+import com.varabei.ivan.controller.JspPath;
+import com.varabei.ivan.controller.Router;
+import com.varabei.ivan.controller.RouterType;
 import com.varabei.ivan.controller.command.ActionCommand;
+import com.varabei.ivan.controller.command.RedirectPath;
 import com.varabei.ivan.model.entity.name.UserField;
 import com.varabei.ivan.model.exception.ServiceException;
 import com.varabei.ivan.model.service.AccountService;
@@ -16,18 +19,18 @@ import java.io.IOException;
 
 public class CreateAccountCommand implements ActionCommand {
     private static final Logger log = LogManager.getLogger(CreateAccountCommand.class);
-    private static final AccountService accountService = ServiceFactory.getInstance().getAccountService();
-    private static final String REDIRECT_TO_PROFILE = "%s/mainServlet?command=profile_get";
+    private static AccountService accountService = ServiceFactory.getInstance().getAccountService();
 
     @Override
-    public void execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    public Router execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        Router router = new Router(String.format(RedirectPath.PROFILE, req.getContextPath()), RouterType.REDIRECT);
         Long userId = Long.parseLong(req.getParameter(UserField.ID));
         try {
             accountService.create(userId);
-            resp.sendRedirect(String.format(REDIRECT_TO_PROFILE, req.getContextPath()));
         } catch (ServiceException e) {
             log.error(e);
-            resp.sendError(ErrorInfo.SERVER_ERROR_CODE);
+            router.setForward(JspPath.ERROR_500);
         }
+        return router;
     }
 }

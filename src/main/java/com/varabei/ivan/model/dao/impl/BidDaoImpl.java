@@ -31,7 +31,7 @@ public class BidDaoImpl extends GenericDao<Bid> implements BidDao {
             "    join accounts on bids.account_id = accounts.account_id\n" +
             "        and bids.bid_state_id = 1\n" +
             "    join users on accounts.user_id = users.user_id\n" +
-            "    join roles on users.role_id = roles.role_id";
+            "    join roles on users.role_id = roles.role_id order by placing_date_time desc limit ? offset ?";
     private static final String FIND_BY_ACCOUNT_ID =
             "select bid_id, bid_states.state,bids.amount, is_top_up, bids.client_message, bids.admin_comment,\n" +
                     "       placing_date_time, accounts.account_id, accounts.account_id\n" +
@@ -40,7 +40,7 @@ public class BidDaoImpl extends GenericDao<Bid> implements BidDao {
                     "       join bid_states on bids.bid_state_id = bid_states.bid_state_id\n" +
                     "    join accounts on bids.account_id = ? and  bids.account_id = accounts.account_id\n" +
                     "    join users on accounts.user_id = users.user_id\n" +
-                    "    join roles on users.role_id = roles.role_id";
+                    "    join roles on users.role_id = roles.role_id limit ? offset ?";
     private static final String FIND_BID_BY_ID = "select accounts.account_id, accounts.balance, accounts.is_active," +
             " bids.bid_id, bids.amount, bids.placing_date_time " +
             "from bids join accounts on bids.account_id = accounts.account_id and bid_id = ?";
@@ -56,19 +56,22 @@ public class BidDaoImpl extends GenericDao<Bid> implements BidDao {
     private static final String RECOVER_ACCOUNT_BALANCE_CONSIDERING_WITHDRAW_BID_ID =
             "update accounts set balance = balance + (select amount from bids where bid_id = ?) \n" +
                     "where account_id = (select account_id from bids where bid_id = ?)";
+    private static final String FIND_NUMBER_OF_RECORDS = "select count(*) from bids where bid_state_id = 1";
+    private static final String FIND_NUMBER_OF_RECORDS_BY_ACCOUNT_ID =
+            "select count(*) from bids where account_id = ?";
 
     public BidDaoImpl() {
         super(new BidBoulder());
     }
 
     @Override
-    public List<Bid> findInProgressBids() throws DaoException {
-        return executeQuery(FIND_IN_PROGRESS_BIDS);
+    public List<Bid> findInProgressBids(int limit, int offset) throws DaoException {
+        return executeQuery(FIND_IN_PROGRESS_BIDS, limit, offset);
     }
 
     @Override
-    public List<Bid> findByAccountId(Long accountId) throws DaoException {
-        return executeQuery(FIND_BY_ACCOUNT_ID, accountId);
+    public List<Bid> findByAccountId(Long accountId, int limit, int offset) throws DaoException {
+        return executeQuery(FIND_BY_ACCOUNT_ID, accountId ,limit, offset);
     }
 
     @Override
@@ -85,8 +88,8 @@ public class BidDaoImpl extends GenericDao<Bid> implements BidDao {
             executeUpdate(ADD_ACCOUNT_BALANCE, connection, -amount, accountId);
             endTransaction(connection);
         } catch (SQLException e) {
-            DaoException daoException = new DaoException("can not get access to db", e);
             cancelTransaction(connection);
+            throw  new DaoException("can not get access to db", e);
         } finally {
             pool.releaseConnection(connection);
         }
@@ -148,5 +151,15 @@ public class BidDaoImpl extends GenericDao<Bid> implements BidDao {
         } finally {
             pool.releaseConnection(connection);
         }
+    }
+
+    @Override
+    public Long findAmountOfInProgressBids() throws DaoException {
+        return findLong(FIND_NUMBER_OF_RECORDS, "count").orElseThrow(DaoException::new);
+    }
+
+    @Override
+    public Long findAmountOfBidsByAccountId(Long accountId) throws DaoException {
+        return findLong(FIND_NUMBER_OF_RECORDS_BY_ACCOUNT_ID, "count", accountId).orElseThrow(DaoException::new);
     }
 }

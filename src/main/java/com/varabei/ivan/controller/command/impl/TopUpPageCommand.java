@@ -1,8 +1,9 @@
 package com.varabei.ivan.controller.command.impl;
 
-import com.varabei.ivan.common.ErrorInfo;
 import com.varabei.ivan.controller.AttributeKey;
+import com.varabei.ivan.controller.JspPath;
 import com.varabei.ivan.controller.RequestParam;
+import com.varabei.ivan.controller.Router;
 import com.varabei.ivan.controller.command.ActionCommand;
 import com.varabei.ivan.model.entity.Currency;
 import com.varabei.ivan.model.entity.name.AccountField;
@@ -20,10 +21,10 @@ import java.math.BigDecimal;
 
 public class TopUpPageCommand implements ActionCommand {
     private static final Logger log = LogManager.getLogger(TopUpPageCommand.class);
-    private static final String JSP_TOP_UP = "/WEB-INF/pages/topUp.jsp";
 
     @Override
-    public void execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    public Router execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        Router router = new Router(JspPath.TOP_UP);
         Long accountId = Long.parseLong(req.getParameter(AccountField.ID));
         BigDecimal amount = new BigDecimal(req.getParameter(BidField.AMOUNT));
         String currency = req.getParameter(RequestParam.CURRENCY);
@@ -33,10 +34,10 @@ public class TopUpPageCommand implements ActionCommand {
             req.setAttribute(AttributeKey.AMOUNT_IN_CHOSEN_CURRENCY, amountInChosenCurrency);
             req.setAttribute(BidField.ACCOUNT_ID, accountId);
             req.setAttribute(BidField.AMOUNT, amount);
-            req.getRequestDispatcher(JSP_TOP_UP).forward(req, resp);
         } catch (ServiceException e) {
             log.error(e);
-            resp.sendError(ErrorInfo.SERVER_ERROR_CODE);
+            router.setForward(JspPath.ERROR_500);
         }
+        return router;
     }
 }

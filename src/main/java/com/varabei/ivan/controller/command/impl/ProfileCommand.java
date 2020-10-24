@@ -1,7 +1,8 @@
 package com.varabei.ivan.controller.command.impl;
 
-import com.varabei.ivan.common.ErrorInfo;
 import com.varabei.ivan.controller.AttributeKey;
+import com.varabei.ivan.controller.JspPath;
+import com.varabei.ivan.controller.Router;
 import com.varabei.ivan.controller.command.ActionCommand;
 import com.varabei.ivan.model.entity.name.UserField;
 import com.varabei.ivan.model.exception.ServiceException;
@@ -18,19 +19,19 @@ import java.io.IOException;
 
 public class ProfileCommand implements ActionCommand {
     private static final Logger log = LogManager.getLogger(ProfileCommand.class);
-    private static final UserService userService = ServiceFactory.getInstance().getUserService();
-    private static final String JSP_PROFILE = "/WEB-INF/pages/profile.jsp";
+    private static UserService userService = ServiceFactory.getInstance().getUserService();
 
     @Override
-    public void execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    public Router execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        Router router = new Router(JspPath.PROFILE);
         HttpSession session = req.getSession();
         String login = session.getAttribute(UserField.LOGIN).toString();
         try {
             req.setAttribute(AttributeKey.USER, userService.findByLogin(login).orElse(null));
-            req.getRequestDispatcher(JSP_PROFILE).forward(req, resp);
         } catch (ServiceException e) {
             log.error(e);
-            resp.sendError(ErrorInfo.SERVER_ERROR_CODE);
+            router.setForward(JspPath.ERROR_500);
         }
+        return router;
     }
 }

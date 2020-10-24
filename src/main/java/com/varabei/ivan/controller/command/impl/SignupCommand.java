@@ -1,10 +1,9 @@
 package com.varabei.ivan.controller.command.impl;
 
 import com.varabei.ivan.common.ErrorInfo;
-import com.varabei.ivan.controller.AttributeKey;
-import com.varabei.ivan.controller.JspPath;
-import com.varabei.ivan.controller.RequestParam;
+import com.varabei.ivan.controller.*;
 import com.varabei.ivan.controller.command.ActionCommand;
+import com.varabei.ivan.controller.command.RedirectPath;
 import com.varabei.ivan.model.entity.User;
 import com.varabei.ivan.model.entity.name.UserField;
 import com.varabei.ivan.model.exception.ServiceException;
@@ -39,7 +38,8 @@ public class SignupCommand implements ActionCommand {
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
 
     @Override
-    public void execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    public Router execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        Router router = new Router(JspPath.VERIFY_EMAIL);
         String login = req.getParameter(UserField.LOGIN);
         String password = req.getParameter(UserField.PASSWORD);
         String repeatPassword = req.getParameter(RequestParam.REPEAT_PASSWORD);
@@ -63,15 +63,15 @@ public class SignupCommand implements ActionCommand {
                         new User(login, firstName, lastName, email, LocalDate.parse(birth)));
                 req.getSession().setAttribute(UserField.PASSWORD, password);
                 req.getSession().setAttribute(UserField.SECRET_WORD, secretWord);
-                req.getRequestDispatcher(JspPath.VERIFY_EMAIL).forward(req, resp);
             } else {
                 req.setAttribute(AttributeKey.ERRORS, errors);
-                req.getRequestDispatcher(JspPath.SIGNUP).forward(req, resp);
+                router.setForward(JspPath.SIGNUP);
             }
         } catch (ServiceException e) {
             log.error(e);
-            resp.sendError(ErrorInfo.SERVER_ERROR_CODE);
+            router.setForward(JspPath.ERROR_500);
         }
+        return router;
     }
 
     private void checkPasswords(String password, String repeatPassword, Map<String, String> errors) {

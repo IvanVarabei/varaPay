@@ -2,6 +2,7 @@ package com.varabei.ivan.controller.command.impl;
 
 import com.varabei.ivan.controller.AttributeKey;
 import com.varabei.ivan.controller.RequestParam;
+import com.varabei.ivan.controller.Router;
 import com.varabei.ivan.controller.command.ActionCommand;
 
 import javax.servlet.ServletException;
@@ -16,7 +17,8 @@ public class ChangeLanguageCommand implements ActionCommand {
     private static final String REDIRECT_TO_PREVIOUS_PAGE = "%s/mainServlet?%s";
 
     @Override
-    public void execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    public Router execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        Router router = new Router();
         String localeParameter = req.getParameter(RequestParam.LOCALE);
         Locale.Builder builder = new Locale.Builder();
         builder.setLanguageTag(localeParameter);
@@ -40,6 +42,7 @@ public class ChangeLanguageCommand implements ActionCommand {
             }
         }
         String previousQueryString = sb.toString();
-        resp.sendRedirect(String.format(REDIRECT_TO_PREVIOUS_PAGE, req.getContextPath(), previousQueryString));
+        router.setRedirect(String.format(REDIRECT_TO_PREVIOUS_PAGE, req.getContextPath(), previousQueryString));
+        return router;
     }
 }

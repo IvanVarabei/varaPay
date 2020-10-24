@@ -56,17 +56,4 @@
     <security-role>
         <role-name>client</role-name>
     </security-role>
-
-<!--    <login-config>-->
-<!--        <auth-method>BASIC</auth-method>-->
-<!--    </login-config>-->
-<!--    <security-constraint>-->
-<!--        <web-resource-collection>-->
-<!--            <web-resource-name>WRCollection</web-resource-name>-->
-<!--            <url-pattern>/mainServlet</url-pattern>-->
-<!--        </web-resource-collection>-->
-<!--        <auth-constraint>-->
-<!--            <role-name>client</role-name>-->
-<!--        </auth-constraint>-->
-<!--    </security-constraint>-->
 </web-app>

@@ -7,9 +7,9 @@ import com.varabei.ivan.model.exception.ServiceException;
 import java.util.List;
 
 public interface BidDao {
-    List<Bid> findInProgressBids() throws DaoException;
+    List<Bid> findInProgressBids(int recordsPerPage, int page) throws DaoException;
 
-    List<Bid> findByAccountId(Long accountId) throws DaoException;
+    List<Bid> findByAccountId(Long accountId, int limit, int offset) throws DaoException;
 
     void placeTopUpBid(Long accountId, Long amount, String message) throws DaoException;
 
@@ -22,4 +22,8 @@ public interface BidDao {
     void rejectTopUpBid(Long topUpBidId, String adminComment) throws DaoException;
 
     void rejectWithdrawBid(Long withdrawBidId, String adminComment) throws DaoException;
+
+    Long findAmountOfInProgressBids() throws DaoException;
+
+    Long findAmountOfBidsByAccountId(Long accountId) throws DaoException;
 }

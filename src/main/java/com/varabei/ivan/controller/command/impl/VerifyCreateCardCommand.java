@@ -3,6 +3,7 @@ package com.varabei.ivan.controller.command.impl;
 import com.varabei.ivan.common.ErrorInfo;
 import com.varabei.ivan.controller.AttributeKey;
 import com.varabei.ivan.controller.RequestParam;
+import com.varabei.ivan.controller.Router;
 import com.varabei.ivan.controller.command.ActionCommand;
 import com.varabei.ivan.model.entity.name.AccountField;
 import com.varabei.ivan.model.exception.ServiceException;
@@ -19,26 +20,28 @@ import java.io.IOException;
 
 public class VerifyCreateCardCommand implements ActionCommand {
     private static final Logger log = LogManager.getLogger(VerifyCreateCardCommand.class);
-    private static final CardService cardService = ServiceFactory.getInstance().getCardService();
+    private static CardService cardService = ServiceFactory.getInstance().getCardService();
     private static final String REDIRECT_TO_PROFILE = "%s/mainServlet?command=profile_get&cvc=%s";
     private static final String JSP_VERIFY_CREATE_CARD = "/WEB-INF/pages/verifyCreateCard.jsp";
 
     @Override
-    public void execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    public Router execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        Router router = new Router();
         HttpSession session = req.getSession();
         String tempCode = req.getParameter(RequestParam.TEMP_CODE);
         Long accountId = Long.parseLong(session.getAttribute(AccountField.ID).toString());
         if (tempCode.equals(session.getAttribute(RequestParam.TEMP_CODE).toString())) {
             try {
                 String cvc = cardService.createCardAndReturnCvc(accountId);
-                resp.sendRedirect(String.format(REDIRECT_TO_PROFILE, req.getContextPath(), cvc));
+                router.setRedirect(String.format(REDIRECT_TO_PROFILE, req.getContextPath(), cvc));
             } catch (ServiceException e) {
                 log.error(e);
                 resp.sendError(ErrorInfo.SERVER_ERROR_CODE);
             }
         } else {
             req.setAttribute(AttributeKey.ERROR, ErrorInfo.WRONG_TEMP_CODE);
-            req.getRequestDispatcher(JSP_VERIFY_CREATE_CARD).forward(req, resp);
+            router.setForward(JSP_VERIFY_CREATE_CARD);
         }
+        return router;
     }
 }

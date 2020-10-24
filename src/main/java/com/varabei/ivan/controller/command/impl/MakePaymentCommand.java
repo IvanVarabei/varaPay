@@ -1,11 +1,10 @@
 package com.varabei.ivan.controller.command.impl;
 
 import com.varabei.ivan.common.ErrorInfo;
-import com.varabei.ivan.controller.AttributeKey;
-import com.varabei.ivan.controller.RequestParam;
+import com.varabei.ivan.controller.*;
 import com.varabei.ivan.controller.command.ActionCommand;
+import com.varabei.ivan.controller.command.RedirectPath;
 import com.varabei.ivan.model.entity.Card;
-import com.varabei.ivan.model.entity.name.AccountField;
 import com.varabei.ivan.model.entity.name.CardField;
 import com.varabei.ivan.model.entity.name.PaymentField;
 import com.varabei.ivan.model.exception.ServiceException;
@@ -27,12 +26,12 @@ import java.util.Optional;
 
 public class MakePaymentCommand implements ActionCommand {
     private static final Logger log = LogManager.getLogger(MakePaymentCommand.class);
-    private static final String REDIRECT_SUCCESS_PAGE = "%s/mainServlet?command=success_get";
-    private static final PaymentService paymentService = ServiceFactory.getInstance().getPaymentService();
-    private static final CardService cardService = ServiceFactory.getInstance().getCardService();
+    private static PaymentService paymentService = ServiceFactory.getInstance().getPaymentService();
+    private static CardService cardService = ServiceFactory.getInstance().getCardService();
 
     @Override
-    public void execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    public Router execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        Router router = new Router(String.format(RedirectPath.SUCCESS_PAGE, req.getContextPath()), RouterType.REDIRECT);
         Long sourceCardId = Long.parseLong(req.getParameter(CardField.ID));
         String sourceCardCvc = req.getParameter(CardField.CVC);
         String destinationCardNumber = req.getParameter(RequestParam.DESTINATION_CARD_NUMBER);
@@ -42,33 +41,33 @@ public class MakePaymentCommand implements ActionCommand {
         try {
             Card sourceCard = cardService.findById(sourceCardId).get();
             Optional<Card> destinationCard = cardService.findByCardNumber(destinationCardNumber);
-            if(destinationCard.isPresent()){
-                if(!destinationCard.get().getAccount().isActive()){
+            if (destinationCard.isPresent()) {
+                if (!destinationCard.get().getAccount().isActive()) {
                     errors.put("destinationIsActive", ErrorInfo.DESTINATION_ACCOUNT_BLOCKED);
                 }
-            }else {
+            } else {
                 errors.put(CardField.NUMBER, ErrorInfo.WRONG_CARD_NUMBER);
             }
-            if(!sourceCard.getCvc().equals(sourceCardCvc)){
+            if (!sourceCard.getCvc().equals(sourceCardCvc)) {
                 errors.put(CardField.CVC, ErrorInfo.WRONG_CVC);
             }
-            if(sourceCard.getAccount().getBalance().compareTo(amount) < 0){
+            if (sourceCard.getAccount().getBalance().compareTo(amount) < 0) {
                 errors.put(PaymentField.AMOUNT, ErrorInfo.NOT_ENOUGH_BALANCE);
             }
-            if(!sourceCard.getAccount().isActive()){
+            if (!sourceCard.getAccount().isActive()) {
                 errors.put("sourceIsActive", ErrorInfo.SOURCE_ACCOUNT_BLOCKED);
             }
-            if(errors.isEmpty()) {
+            if (errors.isEmpty()) {
                 paymentService.makePayment(sourceCardId, sourceCardCvc,
                         destinationCardNumber, destinationCardValidThru, amount);
-                resp.sendRedirect(String.format(REDIRECT_SUCCESS_PAGE, req.getContextPath()));
-            }else{
+            } else {
                 req.setAttribute(AttributeKey.ERRORS, errors);
-                req.getRequestDispatcher("").forward(req, resp);
+                router.setForward("");
             }
         } catch (ServiceException e) {
             log.error(e);
-            resp.sendError(ErrorInfo.SERVER_ERROR_CODE);
+            router.setForward(JspPath.ERROR_500);
         }
+        return router;
     }
 }

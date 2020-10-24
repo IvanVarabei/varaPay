@@ -1,7 +1,9 @@
 package com.varabei.ivan.controller.command.impl;
 
-import com.varabei.ivan.common.ErrorInfo;
 import com.varabei.ivan.controller.AttributeKey;
+import com.varabei.ivan.controller.JspPath;
+import com.varabei.ivan.controller.Router;
+import com.varabei.ivan.controller.RouterType;
 import com.varabei.ivan.controller.command.ActionCommand;
 import com.varabei.ivan.model.entity.name.UserField;
 import com.varabei.ivan.model.exception.ServiceException;
@@ -17,18 +19,17 @@ import java.io.IOException;
 
 public class IncludeAccountsCommand implements ActionCommand {
     private static final Logger log = LogManager.getLogger(IncludeAccountsCommand.class);
-    private static final AccountService accountService = ServiceFactory.getInstance().getAccountService();
-    private static final String JSP_INCLUDE_ACCOUNTS = "/WEB-INF/pages/includeAccounts.jsp";
+    private static AccountService accountService = ServiceFactory.getInstance().getAccountService();
 
     @Override
-    public void execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    public Router execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        Router router = new Router(JspPath.INCLUDE_ACCOUNTS, RouterType.INCLUDE);
         try {
-//            req.setAttribute(AttributeKey.ACCOUNTS, accountService.findByUserId(Long.parseLong(req.getParameter(UserField.ID))));
             req.setAttribute(AttributeKey.ACCOUNTS, accountService.findByUserLogin(req.getParameter(UserField.LOGIN)));
-            req.getRequestDispatcher(JSP_INCLUDE_ACCOUNTS).include(req, resp);
         } catch (ServiceException e) {
             log.error(e);
-            resp.sendError(ErrorInfo.SERVER_ERROR_CODE);
+            router.setForward(JspPath.ERROR_500);
         }
+        return router;
     }
 }

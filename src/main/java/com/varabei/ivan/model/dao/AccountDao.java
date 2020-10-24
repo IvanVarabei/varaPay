@@ -12,13 +12,13 @@ public interface AccountDao {
 
     Optional<Account> findById(Long accountId) throws DaoException;
 
-//    List<Account> findByUserId(Long userId) throws DaoException;
-
     List<Account> findByUserLogin(String login) throws DaoException;
 
-    List<Account> findDisabled() throws DaoException;
-
     void changeActive(Long accountId) throws DaoException;
+
+    List<Account> findDisabledByLogin(String login) throws DaoException;
+
+    List<Account> findDisabledByAccountId(Long accountId) throws DaoException;
 
     void delete(Long accountId)throws DaoException;
 
