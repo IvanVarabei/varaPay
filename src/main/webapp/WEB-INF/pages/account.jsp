@@ -25,26 +25,28 @@
 				<button class="button" ${account.active eq true ? '' : 'disabled'}>withdraw</button>
 			</div>
 		</form>
-			<jsp:useBean id="bids" type="java.util.List" scope="request"/>
+		<jsp:useBean id="bids" type="java.util.List" scope="request"/>
 		<c:if test="${not empty bids}">
-		<div class="sub-title account__sub-title">operation history</div>
-		<div class="operation-header">
-			<div class="operation-header__info operation__part">Operation info</div>
-			<div class="operation-header__client-message operation__part">Your message</div>
-			<div class="operation-header__admin-comment operation__part">Admin comment</div>
-		</div>
-		<c:forEach var="bid" items="${bids}">
-		<div class="operation">
-			<div class="operation__id operation__part">№${bid.id}</div>
-			<div class="operation__state operation__part">${bid.state}</div>
-			<div class="operation__type operation__part">${bid.topUp eq true ? 'top up' : 'withdraw'} ${bid.amount}$</div>
-			<div class="operation__client-message operation__part">${bid.clientMessage}</div>
-			<div class="operation__admin-comment operation__part">${bid.adminComment}</div>
-			<div class="operation__date operation__part"><javatime:format value="${bid.placingDateTime}" style="MS"/></div>
-			<div class="operation__edge operation__part"></div>
-		</div>
-		</c:forEach>
-			<tags:pagination amountOfPages="${requestScope.amountOfPages}" currentPage="${requestScope.currentPage}" url="
-			${pageContext.servletContext.contextPath}/mainServlet?command=account_page_get&account_id=${account.id}"/>
+			<div class="sub-title account__sub-title">operation history</div>
+			<div class="operation-header">
+				<div class="operation-header__info operation__part">Operation info</div>
+				<div class="operation-header__client-message operation__part">Your message</div>
+				<div class="operation-header__admin-comment operation__part">Admin comment</div>
+			</div>
+			<c:forEach var="bid" items="${bids}">
+				<div class="operation">
+					<div class="operation__id operation__part">№${bid.id}</div>
+					<div class="operation__state operation__part">${bid.state}</div>
+					<div class="operation__type operation__part">${bid.topUp eq true ? 'top up' : 'withdraw'} ${bid.amount}$</div>
+					<div class="operation__client-message operation__part">${bid.clientMessage}</div>
+					<div class="operation__admin-comment operation__part">${bid.adminComment}</div>
+					<div class="operation__date operation__part"><javatime:format value="${bid.placingDateTime}"
+																																				style="MS"/></div>
+					<div class="operation__edge operation__part"></div>
+				</div>
+			</c:forEach>
 		</c:if>
+	</div>
+	<tags:pagination amountOfPages="${requestScope.amountOfPages}" currentPage="${requestScope.currentPage}" url="
+			${pageContext.servletContext.contextPath}/mainServlet?command=account_page_get&account_id=${account.id}"/>
 </tags:general>

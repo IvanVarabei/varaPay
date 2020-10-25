@@ -1,5 +1,8 @@
-.run-bids {}
-.run-bids__title{
+.run-bids {
+    flex: 1 0 auto;
+}
+
+.run-bids__title {
     margin: 0 0 30px 0;
 }
 .run-bids__header{

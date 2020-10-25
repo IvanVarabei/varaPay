@@ -18,8 +18,9 @@
 		<div class="container">
 			<div class="header__body">
 				<a href="" class="header__logo">
-					<img src="img/01.jpg">
+					<img src="img/logo.jpg">
 				</a>
+				<div class="header__title">VaraPay</div>
 				<div class="header__burger">
 					<span></span>
 				</div>
@@ -46,8 +47,7 @@
 						</c:if>
 						<c:if test="${empty sessionScope.user_id}">
 							<li>
-								<a href="${pageContext.request.contextPath}/mainServlet?command=signup_get" class="header__link">Create
-									profile</a>
+								<a href="${pageContext.request.contextPath}/mainServlet?command=signup_get" class="header__link">Signup</a>
 							</li>
 							<li>
 								<a href="${pageContext.request.contextPath}/mainServlet?command=login_get" class="header__link">Login</a>

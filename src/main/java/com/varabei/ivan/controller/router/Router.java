@@ -1,4 +1,4 @@
-package com.varabei.ivan.controller;
+package com.varabei.ivan.controller.router;
 
 public class Router {
     private String page;

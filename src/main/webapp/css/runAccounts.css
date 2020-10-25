@@ -6,6 +6,9 @@
     display: grid;
     grid-template-columns: repeat(4, auto);
 }
+.run-accounts__search-form{
+    margin: 0 0 30px 0;
+}
 .run-account-form{
     display: grid;
     grid-template: 1fr / 1fr;

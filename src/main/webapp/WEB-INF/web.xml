@@ -29,18 +29,18 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
-    <filter>
-        <filter-name>PermissionFilter</filter-name>
-        <filter-class>com.varabei.ivan.controller.filter.PermissionFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>PermissionFilter</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
+<!--    <filter>-->
+<!--        <filter-name>PermissionFilter</filter-name>-->
+<!--        <filter-class>com.varabei.ivan.controller.filter.PermissionFilter</filter-class>-->
+<!--    </filter>-->
+<!--    <filter-mapping>-->
+<!--        <filter-name>PermissionFilter</filter-name>-->
+<!--        <url-pattern>/*</url-pattern>-->
+<!--    </filter-mapping>-->
 
     <servlet>
         <servlet-name>Servlet</servlet-name>
-        <servlet-class>com.varabei.ivan.controller.invoker.RequestProcessor</servlet-class>
+        <servlet-class>com.varabei.ivan.controller.servlet.RequestProcessor</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Servlet</servlet-name>

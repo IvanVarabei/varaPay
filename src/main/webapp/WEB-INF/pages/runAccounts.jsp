@@ -6,7 +6,7 @@
 <tags:general pageTitle="Accounts">
 	<div class="run-accounts">
 		<div class="title run-accounts__title">run accounts</div>
-		<form class="form" action="${pageContext.servletContext.contextPath}/mainServlet">
+		<form class="form run-accounts__search-form" action="${pageContext.servletContext.contextPath}/mainServlet">
 			<c:if test="${not empty requestScope.error}"><p class="form__error">${fail_message}</p></c:if>
 			<input type="hidden" name="command" value="run_accounts_get">
 			<p class="form__input-label">Account id or login</p><input class="input form__input" name="query" value="${param.query}">
@@ -32,7 +32,7 @@
 				</c:forEach>
 			</div>
 		</c:if>
-		<c:if test="${empty requestScope.accounts}">
+		<c:if test="${empty requestScope.accounts and param.query != null}">
 			<div class="sub-title">There are no disabled accounts</div>
 		</c:if>
 	</div>

@@ -1,15 +1,10 @@
 package com.varabei.ivan.util;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class FormatExpressionLanguage {
     private FormatExpressionLanguage() {
-    }
-
-    public static void main(String... sdf) {
-        System.err.println(new BigDecimal("0.32").longValue());
     }
 
     public static String formatLocalDate(LocalDate localDate, String pattern) {

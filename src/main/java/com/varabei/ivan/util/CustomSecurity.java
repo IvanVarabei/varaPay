@@ -17,10 +17,6 @@ public class CustomSecurity {
     private CustomSecurity() {
     }
 
-    public static void main(String... sda) {
-        System.err.println(generateRandom(64));
-    }
-
     public static String generateRandom(int length) {
         StringBuilder sb = new StringBuilder(length);
         for (int i = 0; i < length; i++) {

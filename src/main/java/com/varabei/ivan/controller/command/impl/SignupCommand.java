@@ -1,9 +1,11 @@
 package com.varabei.ivan.controller.command.impl;
 
 import com.varabei.ivan.common.ErrorInfo;
-import com.varabei.ivan.controller.*;
+import com.varabei.ivan.controller.AttributeKey;
+import com.varabei.ivan.controller.JspPath;
+import com.varabei.ivan.controller.RequestParam;
 import com.varabei.ivan.controller.command.ActionCommand;
-import com.varabei.ivan.controller.command.RedirectPath;
+import com.varabei.ivan.controller.router.Router;
 import com.varabei.ivan.model.entity.User;
 import com.varabei.ivan.model.entity.name.UserField;
 import com.varabei.ivan.model.exception.ServiceException;

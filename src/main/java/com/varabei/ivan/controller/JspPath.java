@@ -20,6 +20,7 @@ public class JspPath {
     public static final String SUCCESS_PAGE = "/WEB-INF/pages/success.jsp";
     public static final String INPUT_TOP_UP_AMOUNT = "/WEB-INF/pages/inputTopUpAmount.jsp";
     public static final String TOP_UP = "/WEB-INF/pages/topUp.jsp";
+    public static final String ACCESS_DENIED = "/WEB-INF/pages/accessDenied.jsp";
 
     private JspPath() {
     }

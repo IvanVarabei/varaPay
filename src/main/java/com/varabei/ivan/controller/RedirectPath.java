@@ -1,4 +1,4 @@
-package com.varabei.ivan.controller.command;
+package com.varabei.ivan.controller;
 
 public class RedirectPath {
     public static final String RUN_BIDS = "%s/mainServlet?command=RUN_BIDS_GET&&page=%s";

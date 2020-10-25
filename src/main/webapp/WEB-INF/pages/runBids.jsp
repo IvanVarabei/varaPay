@@ -44,11 +44,12 @@
 					<div class="run-bids__edge run-bids__item"></div>
 				</div>
 			</c:forEach>
-			<tags:pagination amountOfPages="${requestScope.amountOfPages}" currentPage="${requestScope.currentPage}" url="
-			${pageContext.servletContext.contextPath}/mainServlet?command=run_bids_get"/>
+
 		</c:if>
 		<c:if test="${empty requestScope.bids}">
 			<div class="sub-title">there are no in progress bids</div>
 		</c:if>
 	</div>
+	<tags:pagination amountOfPages="${requestScope.amountOfPages}" currentPage="${requestScope.currentPage}" url="
+			${pageContext.servletContext.contextPath}/mainServlet?command=run_bids_get"/>
 </tags:general>

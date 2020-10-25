@@ -1,5 +1,5 @@
 .account{
-
+    flex: 1 0 auto;
 }
 .account__title{
     margin: 0 0 30px 0;

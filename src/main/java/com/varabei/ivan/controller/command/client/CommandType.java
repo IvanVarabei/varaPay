@@ -6,13 +6,14 @@ import com.varabei.ivan.controller.command.impl.*;
 public enum CommandType {
     SIGNUP_GET(new SignupPageCommand()),
     SIGNUP_POST(new SignupCommand()),
+    VERIFY_EMAIL_POST(new VerifyEmailCommand()),
     LOGIN_GET(new LoginPageCommand()),
     LOGIN_POST(new LoginCommand()),
     LOGOUT(new LogoutCommand()),
+    SUCCESS_GET(new SuccessPageCommand()),
     PROFILE_GET(new ProfileCommand()),
     CARD_PAGE_GET(new CardPageCommand()),
     MAKE_PAYMENT_POST(new MakePaymentCommand()),
-    SUCCESS_GET(new SuccessPageCommand()),
     BLOCK_ACCOUNT_POST(new BlockAccountCommand()),
     PLACE_TOP_UP_BID_POST(new PlaceTopUpBidCommand()),
     PLACE_WITHDRAW_BID_POST(new PlaceWithdrawBidCommand()),
@@ -24,7 +25,6 @@ public enum CommandType {
     ACCOUNT_PAGE_GET(new AccountPageCommand()),
     TOP_UP_AMOUNT_PAGE_GET(new TopUpAmountPageCommand()),
     TOP_UP_PAGE_GET(new TopUpPageCommand()),
-    VERIFY_EMAIL_POST(new VerifyEmailCommand()),
     RECOVER_PASSWORD_GET(new RecoverPasswordPageCommand()),
     RECOVER_PASSWORD_POST(new RecoverPasswordCommand()),
     CHANGE_PASSWORD_GET(new ChangePasswordPageCommand()),
@@ -42,6 +42,7 @@ public enum CommandType {
     INCLUDE_ACCOUNTS(new IncludeAccountsCommand()),
     INCLUDE_CARDS(new IncludeCardsCommand()),
     INCLUDE_CURRENCIES(new IncludeCurrenciesCommand());
+
     private final ActionCommand command;
 
     CommandType(ActionCommand command) {
