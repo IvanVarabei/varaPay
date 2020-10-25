@@ -10,6 +10,7 @@ public class RequestParam {
     public static final String DESTINATION_CARD_NUMBER = "destinationCardNumber";
     public static final String DESTINATION_CARD_VALID_THRU = "destinationCardValidThru";
     public static final String LOCALE = "locale";
+    public static final String QUERY = "query";
 
     private RequestParam() {
     }

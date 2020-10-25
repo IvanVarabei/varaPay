@@ -2,6 +2,7 @@ package com.varabei.ivan.common;
 
 public class ErrorInfo {
     public static final String WRONG_NAME = ">=3 and <=20 letter";
+    public static final String WRONG_SECRET_WORD = "wrong secret word";
     public static final String WRONG_LENGTH = ">=3 and <=20";
     public static final String ALREADY_EXISTS = "such a value already exists";
     public static final String DIFFERENT_PASSWORDS = "passwords are different";
@@ -18,6 +19,8 @@ public class ErrorInfo {
     public static final String NOT_ENOUGH_BALANCE = "not enough balance";
     public static final String SOURCE_ACCOUNT_BLOCKED = "source account is blocked";
     public static final String DESTINATION_ACCOUNT_BLOCKED = "destination account is blocked";
+    public static final String NOT_NUMBER = "not a number";
+    public static final String CAN_NOT_BE_EMPTY = "can`t be empty";
     public static final int SERVER_ERROR_CODE = 500;
 
     private ErrorInfo() {

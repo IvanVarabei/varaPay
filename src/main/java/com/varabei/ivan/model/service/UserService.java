@@ -21,5 +21,5 @@ public interface UserService {
 
     void updatePassword(String email, String newPassword) throws ServiceException;
 
-    boolean isAuthenticSecretWord(String login, String secretWord) throws ServiceException;
+    boolean isAuthenticSecretWord(Long accountId, String secretWord) throws ServiceException;
 }

@@ -7,7 +7,6 @@
 	<div class="run-accounts">
 		<div class="title run-accounts__title">run accounts</div>
 		<form class="form run-accounts__search-form" action="${pageContext.servletContext.contextPath}/mainServlet">
-			<c:if test="${not empty requestScope.error}"><p class="form__error">${fail_message}</p></c:if>
 			<input type="hidden" name="command" value="run_accounts_get">
 			<p class="form__input-label">Account id or login</p><input class="input form__input" name="query" value="${param.query}">
 			<button class="button form_button">find blocked</button>
@@ -24,8 +23,9 @@
 					<div class="run-account__item">${account.user.email}</div>
 					<div class="run-account__item">${account.id}</div>
 					<form class="run-account-form" method="post"
-								action="${pageContext.servletContext.contextPath}/mainServlet?command=unblock_account_post">
+								action="${pageContext.servletContext.contextPath}/mainServlet?command=unblock_account_post&query=${param.query}">
 						<input class="input" name="secret_word">
+						<c:if test="${not empty requestScope.error and account.id eq param.account_id}"><p class="form__error">${requestScope.error}</p></c:if>
 						<input type="hidden" name="account_id" value="${account.id}">
 						<button class="button">enable</button>
 					</form>

@@ -26,15 +26,13 @@ public class UserDaoImpl extends GenericDao<User> implements UserDao {
 
     private static final String CREATE_USER = "insert into users(login, password, salt, firstname, lastname, email, birth, secret_word)" +
             "values (?, ?, ?, ?, ?, ?, ?, ?)";
-    private static final String FIND_USER_BY_LOGIN_PASSWORD = "select role_name, user_id, login, password, salt, firstname," +
-            " lastname, email, birth from users join roles on users.role_id = roles.role_id and login = ? and password = ?";
     private static final String UPDATE_PASSWORD_BY_EMAIL = "update users\n" +
             "set password = ?, salt = ? where email = ?";
     private static final String UPDATE_PASSWORD_BY_ID = "update users\n" +
             "set password = ?, salt = ? where user_id = ?";
     private static final String IF_PRESENT_BY_ID_AND_PASSWORD = "select exists(select 1 from users where user_id = ? and password = ?)";
-    private static final String IF_PRESENT_BY_LOGIN_AND_SECRET_WORD = "select exists(select 1 from users where " +
-            "login = ? and secret_word = ?)";
+    private static final String IF_PRESENT_BY_ACCOUNT_ID_AND_SECRET_WORD = "select exists(select 1 from users " +
+            "join accounts on account_id = ? and secret_word = ?)";
     private static final String RESULT_SET_COLUMN_LABEL_EXISTS = "exists";
 
     public UserDaoImpl() {
@@ -103,7 +101,8 @@ public class UserDaoImpl extends GenericDao<User> implements UserDao {
     }
 
     @Override
-    public boolean isAuthenticSecretWord(String login, String secretWord) throws DaoException {
-        return findBoolean(IF_PRESENT_BY_LOGIN_AND_SECRET_WORD, RESULT_SET_COLUMN_LABEL_EXISTS, login, secretWord);
+    public boolean isAuthenticSecretWord(Long accountId, String secretWord) throws DaoException {
+        return findBoolean(IF_PRESENT_BY_ACCOUNT_ID_AND_SECRET_WORD,
+                RESULT_SET_COLUMN_LABEL_EXISTS, accountId, secretWord);
     }
 }

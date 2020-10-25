@@ -54,10 +54,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean isAuthenticSecretWord(String login, String secretWord) throws ServiceException {
+    public boolean isAuthenticSecretWord(Long accountId, String secretWord) throws ServiceException {
         try {
             secretWord = CustomSecurity.generateHash(secretWord);
-            return userDao.isAuthenticSecretWord(login, secretWord);
+            return userDao.isAuthenticSecretWord(accountId, secretWord);
         } catch (DaoException e) {
             throw new ServiceException(e);
         }

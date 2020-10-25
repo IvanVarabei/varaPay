@@ -17,10 +17,12 @@
 	<header class="header">
 		<div class="container">
 			<div class="header__body">
-				<a href="" class="header__logo">
-					<img src="img/logo.jpg">
-				</a>
-				<div class="header__title">VaraPay</div>
+				<div class="header__logo-title">
+					<a href="" class="header__logo">
+						<img src="img/logo.jpg">
+					</a>
+					<p class="header__title">VaraPay</p>
+				</div>
 				<div class="header__burger">
 					<span></span>
 				</div>
@@ -45,12 +47,14 @@
 									bids</a>
 							</li>
 						</c:if>
-						<c:if test="${empty sessionScope.user_id}">
+						<c:if test="${empty sessionScope.login}">
 							<li>
-								<a href="${pageContext.request.contextPath}/mainServlet?command=signup_get" class="header__link">Signup</a>
+								<a href="${pageContext.request.contextPath}/mainServlet?command=signup_get"
+									 class="header__link">Signup</a>
 							</li>
 							<li>
-								<a href="${pageContext.request.contextPath}/mainServlet?command=login_get" class="header__link">Login</a>
+								<a href="${pageContext.request.contextPath}/mainServlet?command=login_get"
+									 class="header__link">Login</a>
 							</li>
 						</c:if>
 						<c:if test="${not empty sessionScope.login}">

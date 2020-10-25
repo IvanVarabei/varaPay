@@ -2,7 +2,6 @@ package com.varabei.ivan.model.dao;
 
 import com.varabei.ivan.model.entity.User;
 import com.varabei.ivan.model.exception.DaoException;
-import com.varabei.ivan.model.exception.ServiceException;
 
 import java.util.List;
 import java.util.Optional;
@@ -32,5 +31,5 @@ public interface UserDao{
 
     boolean checkPresenceByIdPassword(Long id, String password) throws DaoException;
 
-    boolean isAuthenticSecretWord(String login, String secretWord) throws DaoException;
+    boolean isAuthenticSecretWord(Long accountId, String secretWord) throws DaoException;
 }
