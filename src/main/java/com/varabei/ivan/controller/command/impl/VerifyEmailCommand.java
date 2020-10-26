@@ -1,6 +1,6 @@
 package com.varabei.ivan.controller.command.impl;
 
-import com.varabei.ivan.common.ErrorInfo;
+import com.varabei.ivan.common.Error;
 import com.varabei.ivan.controller.AttributeKey;
 import com.varabei.ivan.controller.JspPath;
 import com.varabei.ivan.controller.RequestParam;
@@ -34,7 +34,7 @@ public class VerifyEmailCommand implements ActionCommand {
                 User user = (User) session.getAttribute(AttributeKey.USER);
                 String login = user.getLogin();
                 if (userService.findByLogin(login).isPresent()) {
-                    req.setAttribute(AttributeKey.ERROR, String.format(ErrorInfo.LOGIN_TAKEN, login));
+                    req.setAttribute(AttributeKey.ERROR, String.format(Error.LOGIN_TAKEN.name().toLowerCase(), login));
                 } else {
                     userService.signUp(user, session.getAttribute(UserField.PASSWORD).toString()
                             , session.getAttribute(UserField.SECRET_WORD).toString());
@@ -45,7 +45,7 @@ public class VerifyEmailCommand implements ActionCommand {
                 router.setForward(JspPath.ERROR_500);
             }
         } else {
-            req.setAttribute(AttributeKey.ERROR, ErrorInfo.WRONG_TEMP_CODE);
+            req.setAttribute(AttributeKey.ERROR, Error.TEMP_CODE);
             router.setForward(JspPath.ERROR_500);
         }
         return router;

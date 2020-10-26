@@ -14,12 +14,6 @@ public class AccountDaoImpl extends GenericDao<Account> implements AccountDao {
     private static final String CHANGE_ACTIVE_BY_ID = "update accounts set is_active = not is_active where account_id= ?";
     private static final String CREATE_ACCOUNT = "insert into accounts (user_id) values (?)";
     private static final String ABANDON_ACCOUNT = "update accounts set is_abandoned = true where account_id= ?";
-    private static final String FIND_ACCOUNTS_BY_USER_ID =
-            "select account_id, balance, is_active, users.user_id, users.login, password, salt,users.email,\n" +
-                    "       users.firstname, users.lastname, users.birth, roles.role_name from accounts\n" +
-                    "    join users on accounts.user_id = users.user_id\n" +
-                    "    and accounts.user_id = ? and is_abandoned = false\n" +
-                    "    join roles on users.role_id = roles.role_id";
     private static final String FIND_ACCOUNTS_BY_LOGIN =
             "select account_id, balance, is_active, users.user_id, users.login, password, salt,users.email,\n" +
                     "       users.firstname, users.lastname, users.birth, roles.role_name from accounts\n" +

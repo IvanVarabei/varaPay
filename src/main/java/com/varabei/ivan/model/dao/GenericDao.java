@@ -130,20 +130,13 @@ public class GenericDao<T extends Identifiable> {
         }
     }
 
-    protected Optional<Long> findLong(String query, Connection connection, String columnLabel, Object... params)
-            throws DaoException {
-        Optional<Object> foundValue = findObject(query, connection, columnLabel, params);
-        return foundValue.map(o -> Long.parseLong(String.valueOf(o)));
-    }
-
     protected Optional<String> findString(String query, Connection connection, String columnLabel, Object... params)
             throws DaoException {
         Optional<Object> foundValue = findObject(query, connection, columnLabel, params);
         return foundValue.map(String::valueOf);
     }
 
-    protected Optional<String> findString(String query, String columnLabel, Object... params)
-            throws DaoException {
+    protected Optional<String> findString(String query, String columnLabel, Object... params) throws DaoException {
         Connection connection = pool.getConnection();
         try {
             return findString(query, connection, columnLabel, params);
@@ -152,23 +145,26 @@ public class GenericDao<T extends Identifiable> {
         }
     }
 
-    protected boolean findBoolean(String query, String columnLabel, Object... params)
+    protected Optional<Long> findLong(String query, Connection connection, String columnLabel, Object... params)
             throws DaoException {
+        Optional<Object> foundValue = findObject(query, connection, columnLabel, params);
+        return foundValue.map(o -> Long.parseLong(String.valueOf(o)));
+    }
+
+    protected Optional<Long> findLong(String query, String columnLabel, Object... params) throws DaoException {
         Connection connection = pool.getConnection();
         try {
             Optional<Object> foundValue = findObject(query, connection, columnLabel, params);
-            return (boolean) foundValue.get();
+            return foundValue.map(o -> Long.parseLong(String.valueOf(o)));
         } finally {
             pool.releaseConnection(connection);
         }
     }
 
-    protected Optional<Long> findLong(String query, String columnLabel, Object... params)
-            throws DaoException {
+    protected boolean findBoolean(String query, String columnLabel, Object... params) throws DaoException {
         Connection connection = pool.getConnection();
         try {
-            Optional<Object> foundValue = findObject(query, connection, columnLabel, params);
-            return foundValue.map(o -> Long.parseLong(String.valueOf(o)));
+            return (boolean) findObject(query, connection, columnLabel, params).orElseThrow(DaoException::new);
         } finally {
             pool.releaseConnection(connection);
         }

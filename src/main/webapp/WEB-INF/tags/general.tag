@@ -11,6 +11,19 @@
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/css/nullStile.css">
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/css/common.css">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<fmt:setLocale value="${sessionScope.locale}"/>
+	<fmt:bundle basename="content" prefix="header.">
+		<fmt:message key="welcome" var="welcome"/>
+		<fmt:message key="signup" var="signup"/>
+		<fmt:message key="login" var="login"/>
+		<fmt:message key="logout" var="logout"/>
+		<fmt:message key="profile" var="profile"/>
+		<fmt:message key="run_bids" var="run_bids"/>
+		<fmt:message key="run_accounts" var="run_accounts"/>
+	</fmt:bundle>
+	<fmt:bundle basename="content" prefix="sidebar.">
+		<fmt:message key="currency_rates" var="currency_rates"/>
+	</fmt:bundle>
 </head>
 <body>
 <div class="wrapper">
@@ -29,37 +42,40 @@
 				<nav class="header__menu">
 					<ul class="header__list">
 						<li>
-							<a href="${pageContext.request.contextPath}" class="header__link">Welcome page</a>
+							<p class="header__link">+375 29 7324595</p>
 						</li>
+						<c:if test="${empty sessionScope.login}">
+						<li>
+							<a href="${pageContext.request.contextPath}" class="header__link">${welcome}</a>
+						</li>
+						</c:if>
 						<c:if test="${not empty sessionScope.login}">
 							<li>
 								<a href="${pageContext.request.contextPath}/mainServlet?command=profile_get"
-									 class="header__link">Profile</a>
+									 class="header__link">${profile}</a>
 							</li>
 						</c:if>
 						<c:if test="${sessionScope.role_name eq 'admin'}">
 							<li>
-								<a href="${pageContext.request.contextPath}/mainServlet?command=run_accounts_get" class="header__link">Run
-									accounts</a>
+								<a href="${pageContext.request.contextPath}/mainServlet?command=run_accounts_get" class="header__link">${run_accounts}</a>
 							</li>
 							<li>
-								<a href="${pageContext.request.contextPath}/mainServlet?command=run_bids_get" class="header__link">Run
-									bids</a>
+								<a href="${pageContext.request.contextPath}/mainServlet?command=run_bids_get" class="header__link">${run_bids}</a>
 							</li>
 						</c:if>
 						<c:if test="${empty sessionScope.login}">
 							<li>
 								<a href="${pageContext.request.contextPath}/mainServlet?command=signup_get"
-									 class="header__link">Signup</a>
+									 class="header__link">${signup}</a>
 							</li>
 							<li>
 								<a href="${pageContext.request.contextPath}/mainServlet?command=login_get"
-									 class="header__link">Login</a>
+									 class="header__link">${login}</a>
 							</li>
 						</c:if>
 						<c:if test="${not empty sessionScope.login}">
 							<li>
-								<a href="${pageContext.request.contextPath}/mainServlet?command=logout" class="header__link">Logout</a>
+								<a href="${pageContext.request.contextPath}/mainServlet?command=logout" class="header__link">${logout}</a>
 							</li>
 						</c:if>
 						<li>
@@ -87,7 +103,7 @@
 		<aside class="sidebar">
 			<nav class="sidebar__menu">
 				<div class="sub-title sidebar__title">
-					Currency rates
+					${currency_rates}
 				</div>
 				<ul>
 					<jsp:include page="/mainServlet?command=include_currencies"/>
@@ -99,8 +115,8 @@
 		</section>
 	</main>
 	<footer class="footer">
-		<div class="footer__copy">Copy 2020</div>
-		<div class="footer__text">Lorem ipsum dolor sit amet.</div>
+		<div class="footer__copy">© 2020 Ivan Varabei</div>
+		<div class="footer__text">varabei.ivan@gmail.com</div>
 	</footer>
 </div>
 <script src="js/script.js"></script>

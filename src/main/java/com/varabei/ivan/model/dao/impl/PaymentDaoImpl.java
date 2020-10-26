@@ -67,8 +67,8 @@ public class PaymentDaoImpl extends GenericDao<Card> implements PaymentDao {
             executeUpdate(SET_PAYMENT, connection, sourceCardId, destinationCardId, amount);
             endTransaction(connection);
         } catch (SQLException | DaoException e) {
-            DaoException daoException = e instanceof DaoException ? (DaoException) e : new DaoException(e);
             cancelTransaction(connection);
+            throw e instanceof DaoException ? (DaoException) e : new DaoException(e);
         } finally {
             pool.releaseConnection(connection);
         }

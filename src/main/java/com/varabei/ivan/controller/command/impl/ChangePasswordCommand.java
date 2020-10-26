@@ -1,6 +1,6 @@
 package com.varabei.ivan.controller.command.impl;
 
-import com.varabei.ivan.common.ErrorInfo;
+import com.varabei.ivan.common.Error;
 import com.varabei.ivan.controller.AttributeKey;
 import com.varabei.ivan.controller.JspPath;
 import com.varabei.ivan.controller.RequestParam;
@@ -39,7 +39,7 @@ public class ChangePasswordCommand implements ActionCommand {
         try {
             checkPasswords(password, repeatPassword, errors);
             if (userService.signIn(login, oldPassword).isEmpty()) {
-                errors.put(RequestParam.OLD_PASSWORD, ErrorInfo.WRONG_OLD_PASSWORD);
+                errors.put(RequestParam.OLD_PASSWORD, Error.OLD_PASSWORD.name().toLowerCase());
             }
             if (errors.isEmpty()) {
                 User user = userService.findByLogin(login).get();
@@ -59,10 +59,10 @@ public class ChangePasswordCommand implements ActionCommand {
     private void checkPasswords(String password, String repeatPassword, Map<String, String> errors) {
         if (password.equals(repeatPassword)) {
             if (password.length() < MIN_PASSWORD_LENGTH || password.length() > MAX_PASSWORD_LENGTH) {
-                errors.put(UserField.PASSWORD, ErrorInfo.WRONG_LENGTH);
+                errors.put(UserField.PASSWORD, Error.LENGTH.name().toLowerCase());
             }
         } else {
-            errors.put(RequestParam.REPEAT_PASSWORD, ErrorInfo.DIFFERENT_PASSWORDS);
+            errors.put(RequestParam.REPEAT_PASSWORD, Error.DIFFERENT_PASSWORDS.name().toLowerCase());
         }
     }
 }

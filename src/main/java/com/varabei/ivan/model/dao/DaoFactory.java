@@ -41,5 +41,4 @@ public final class DaoFactory {
     public static DaoFactory getInstance() {
         return instance;
     }
-
 }

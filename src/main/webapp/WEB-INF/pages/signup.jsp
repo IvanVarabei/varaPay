@@ -18,40 +18,53 @@
 		<fmt:message key="email" var="email"/>
 		<fmt:message key="birth" var="birth"/>
 		<fmt:message key="button" var="button"/>
-
-		<fmt:message key="error.login_error" var="login_error"/>
-		<fmt:message key="error.already_exists" var="already_exists"/>
 	</fmt:bundle>
-
+	<fmt:bundle basename="content" prefix="error.">
+		<c:if test="${not empty errors.login}">
+			<fmt:message key="${errors.login}" var="login_error"/>
+		</c:if>
+		<c:if test="${not empty errors.password}">
+			<fmt:message key="${errors.password}" var="password_error"/>
+		</c:if>
+		<c:if test="${not empty errors.repeatPassword}">
+			<fmt:message key="${errors.repeatPassword}" var="repeat_password_error"/>
+		</c:if>
+		<c:if test="${not empty errors.firstName}">
+			<fmt:message key="${errors.firstName}" var="firstname_error"/>
+		</c:if>
+		<c:if test="${not empty errors.lastName}">
+			<fmt:message key="${errors.lastName}" var="lastname_error"/>
+		</c:if>
+		<c:if test="${not empty errors.email}">
+			<fmt:message key="${errors.email}" var="email_error"/>
+		</c:if>
+	</fmt:bundle>
 
 	<div class="authorization">
 		<div class="authorization__title title">${title}</div>
 		<form class="form" method="post" action="${pageContext.servletContext.contextPath}/mainServlet">
 			<input type="hidden" name="command" value="signup_post">
 			<p class="form__input-label">${log_in}</p><input class="input form__input" name="login" value="${param.login}">
-			<c:if test="${not empty errors.login}">
-				<p class="form__error">${
-				errors.login eq 'login_error' ? login_error :
-				errors.login eq 'already_exists' ? already_exists : ''}</p>
-			</c:if>
+			<p class="form__error">${login_error}</p>
 			<p class="form__input-label">${password}</p><input class="input form__input" name="password" type="password">
-			<p class="form__error">${errors.password}</p>
+			<p class="form__error">${password_error}</p>
 			<p class="form__input-label">${repeat_password}</p><input class="input form__input" name="repeatPassword"
 																																type="password">
-			<p class="form__error">${errors.repeatPassword}</p>
+			<p class="form__error">${repeat_password_error}</p>
 			<p class="form__input-label">${firstname}</p><input class="input form__input" name="firstName"
 																													value="${param.firstName}">
-			<p class="form__error">${errors.firstName}</p>
+			<p class="form__error">${firstname_error}</p>
 			<p class="form__input-label">${lastname}</p><input class="input form__input" name="lastName"
 																												 value="${param.lastName}">
-			<p class="form__error">${errors.lastName}</p>
+			<p class="form__error">${lastname_error}</p>
 			<p class="form__input-label">${email}</p><input class="input form__input" name="email" value="${param.email}">
-			<p class="form__error">${errors.email}</p>
+			<p class="form__error">${email_error}</p>
 			<p class="form__input-label">${birth}</p><input class="input form__input" name="birth"
 																											value="${not empty param.birth ? param.birth : '2000-01-01'}"
 																											type="date" min="1920-01-01" max="2010-01-01">
 			<p class="form__error">${errors.birth}</p>
-			<p class="form__input-label">Secret</p><input class="input form__input" name="secret_word" value="${param.secret_word}">
+			<p class="form__input-label">Secret</p><input class="input form__input" name="secret_word"
+																										value="${param.secret_word}">
 			<p class="form__error">${errors.email}</p>
 			<button class="button form_button">${button}</button>
 		</form>

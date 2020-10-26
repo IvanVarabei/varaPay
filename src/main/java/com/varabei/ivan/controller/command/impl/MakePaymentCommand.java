@@ -1,6 +1,6 @@
 package com.varabei.ivan.controller.command.impl;
 
-import com.varabei.ivan.common.ErrorInfo;
+import com.varabei.ivan.common.Error;
 import com.varabei.ivan.controller.AttributeKey;
 import com.varabei.ivan.controller.JspPath;
 import com.varabei.ivan.controller.RequestParam;
@@ -47,19 +47,19 @@ public class MakePaymentCommand implements ActionCommand {
             Optional<Card> destinationCard = cardService.findByCardNumber(destinationCardNumber);
             if (destinationCard.isPresent()) {
                 if (!destinationCard.get().getAccount().isActive()) {
-                    errors.put("destinationIsActive", ErrorInfo.DESTINATION_ACCOUNT_BLOCKED);
+                    errors.put("destinationIsActive", Error.DESTINATION_ACCOUNT_BLOCKED.name().toLowerCase());
                 }
             } else {
-                errors.put(CardField.NUMBER, ErrorInfo.WRONG_CARD_NUMBER);
+                errors.put(CardField.NUMBER, Error.CARD_NUMBER.name().toLowerCase());
             }
             if (!sourceCard.getCvc().equals(sourceCardCvc)) {
-                errors.put(CardField.CVC, ErrorInfo.WRONG_CVC);
+                errors.put(CardField.CVC, Error.CVC.name().toLowerCase());
             }
             if (sourceCard.getAccount().getBalance().compareTo(amount) < 0) {
-                errors.put(PaymentField.AMOUNT, ErrorInfo.NOT_ENOUGH_BALANCE);
+                errors.put(PaymentField.AMOUNT, Error.NOT_ENOUGH_BALANCE.name().toLowerCase());
             }
             if (!sourceCard.getAccount().isActive()) {
-                errors.put("sourceIsActive", ErrorInfo.SOURCE_ACCOUNT_BLOCKED);
+                errors.put("sourceIsActive", Error.SOURCE_ACCOUNT_BLOCKED.name().toLowerCase());
             }
             if (errors.isEmpty()) {
                 paymentService.makePayment(sourceCardId, sourceCardCvc,

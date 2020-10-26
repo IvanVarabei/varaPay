@@ -1,6 +1,6 @@
 package com.varabei.ivan.controller.command.impl;
 
-import com.varabei.ivan.common.ErrorInfo;
+import com.varabei.ivan.common.Error;
 import com.varabei.ivan.controller.AttributeKey;
 import com.varabei.ivan.controller.JspPath;
 import com.varabei.ivan.controller.RedirectPath;
@@ -40,7 +40,7 @@ public class RecoverPasswordCommand implements ActionCommand {
                 mailService.sendEmail(email, MAIL_SUBJECT_NEW_PASSWORD, String.format(MAIL_CONTENT, newPassword));
                 userService.updatePassword(email, newPassword);
             } else {
-                req.setAttribute(AttributeKey.ERROR, ErrorInfo.EMAIL_DOES_NOT_EXISTS);
+                req.setAttribute(AttributeKey.ERROR, Error.EMAIL_DOES_NOT_EXISTS);
                 router.setForward(JspPath.RECOVER_PASSWORD);
             }
         } catch (ServiceException e) {

@@ -1,6 +1,6 @@
 package com.varabei.ivan.controller.command.impl;
 
-import com.varabei.ivan.common.ErrorInfo;
+import com.varabei.ivan.common.Error;
 import com.varabei.ivan.controller.AttributeKey;
 import com.varabei.ivan.controller.JspPath;
 import com.varabei.ivan.controller.RequestParam;
@@ -79,36 +79,36 @@ public class SignupCommand implements ActionCommand {
     private void checkPasswords(String password, String repeatPassword, Map<String, String> errors) {
         if (password.equals(repeatPassword)) {
             if (password.length() < MIN_PASSWORD_LENGTH || password.length() > MAX_PASSWORD_LENGTH) {
-                errors.put(UserField.PASSWORD, ErrorInfo.WRONG_LENGTH);
+                errors.put(UserField.PASSWORD, Error.LENGTH.name().toLowerCase());
             }
         } else {
-            errors.put(RequestParam.REPEAT_PASSWORD, ErrorInfo.DIFFERENT_PASSWORDS);
+            errors.put(RequestParam.REPEAT_PASSWORD, Error.DIFFERENT_PASSWORDS.name().toLowerCase());
         }
     }
 
     private void checkName(String potentialName, Map<String, String> errors, String errorKey) {
         if (!NAME_PATTERN.matcher(potentialName).find()) {
-            errors.put(errorKey, ErrorInfo.WRONG_NAME);
+            errors.put(errorKey, Error.NAME.name().toLowerCase());
         }
     }
 
     private void checkEmail(String potentialEmail, Map<String, String> errors) throws ServiceException {
         if (EMAIL_PATTERN.matcher(potentialEmail).find()) {
             if (userService.findByEmail(potentialEmail).isPresent()) {
-                errors.put(UserField.EMAIL, ErrorInfo.ALREADY_EXISTS);
+                errors.put(UserField.EMAIL, Error.ALREADY_EXISTS.name().toLowerCase());
             }
         } else {
-            errors.put(UserField.EMAIL, ErrorInfo.WRONG_EMAIL);
+            errors.put(UserField.EMAIL, Error.EMAIL.name().toLowerCase());
         }
     }
 
     private void checkLogin(String potentialLogin, Map<String, String> errors) throws ServiceException {
         if (LOGIN_PATTERN.matcher(potentialLogin).find()) {
             if (userService.findByLogin(potentialLogin).isPresent()) {
-                errors.put(UserField.LOGIN, "already_exists");
+                errors.put(UserField.LOGIN, Error.ALREADY_EXISTS.name().toLowerCase());
             }
         } else {
-            errors.put(UserField.LOGIN, "login_error");
+            errors.put(UserField.LOGIN, Error.LOGIN.name().toLowerCase());
         }
     }
 }

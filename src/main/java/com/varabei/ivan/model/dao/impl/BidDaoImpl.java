@@ -108,8 +108,8 @@ public class BidDaoImpl extends GenericDao<Bid> implements BidDao {
             executeUpdate(SET_STATE_APPROVED, connection, topUpBidId);
             endTransaction(connection);
         } catch (SQLException | DaoException e) {
-            DaoException daoException = e instanceof DaoException ? (DaoException) e : new DaoException(e);
             cancelTransaction(connection);
+            throw e instanceof DaoException ? (DaoException) e : new DaoException(e);
         } finally {
             pool.releaseConnection(connection);
         }
@@ -129,8 +129,8 @@ public class BidDaoImpl extends GenericDao<Bid> implements BidDao {
             executeUpdate(SET_STATE_REJECTED, connection, topUpBidId);
             endTransaction(connection);
         } catch (SQLException e) {
-            DaoException daoException = new DaoException("can not get access to db", e);
             cancelTransaction(connection);
+            throw new DaoException("can not get access to db", e);
         } finally {
             pool.releaseConnection(connection);
         }
@@ -146,8 +146,8 @@ public class BidDaoImpl extends GenericDao<Bid> implements BidDao {
             executeUpdate(SET_STATE_REJECTED, connection, withdrawBidId);
             endTransaction(connection);
         } catch (SQLException e) {
-            DaoException daoException = new DaoException("can not get access to db", e);
             cancelTransaction(connection);
+            throw new DaoException("can not get access to db", e);
         } finally {
             pool.releaseConnection(connection);
         }
@@ -160,6 +160,7 @@ public class BidDaoImpl extends GenericDao<Bid> implements BidDao {
 
     @Override
     public Long findAmountOfBidsByAccountId(Long accountId) throws DaoException {
-        return findLong(FIND_NUMBER_OF_RECORDS_BY_ACCOUNT_ID, "count", accountId).orElseThrow(DaoException::new);
+        return findLong(FIND_NUMBER_OF_RECORDS_BY_ACCOUNT_ID, "count", accountId)
+                .orElseThrow(DaoException::new);
     }
 }

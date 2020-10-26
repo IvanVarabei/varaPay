@@ -53,9 +53,8 @@ public class CardDaoImpl extends GenericDao<Card> implements CardDao {
             endTransaction(connection);
             return cvcOfTheLastCreatedCard;
         } catch (SQLException | DaoException e) {
-            DaoException daoException = e instanceof DaoException ? (DaoException) e : new DaoException(e);
             cancelTransaction(connection);
-            throw daoException;
+            throw e instanceof DaoException ? (DaoException) e : new DaoException(e);
         } finally {
             pool.releaseConnection(connection);
         }
