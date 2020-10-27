@@ -1,6 +1,5 @@
 package com.varabei.ivan.model.service.impl;
 
-import com.varabei.ivan.controller.WebPageConfig;
 import com.varabei.ivan.model.dao.CardDao;
 import com.varabei.ivan.model.dao.DaoFactory;
 import com.varabei.ivan.model.dao.PaymentDao;

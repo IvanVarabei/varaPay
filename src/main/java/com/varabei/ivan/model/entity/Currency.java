@@ -8,28 +8,26 @@ import org.apache.logging.log4j.Logger;
 import java.math.BigDecimal;
 
 public enum Currency {
-    BITCOIN(CurrencyConciseName.BTC.name(), "img/btc.png"),
-    ETHEREUM(CurrencyConciseName.ETH.name(), "img/eth.png"),
-    DASH(CurrencyConciseName.DASH.name(), "img/dash.png");
-
-    private enum CurrencyConciseName {
-        BTC, ETH, DASH
-    }
+    BITCOIN("BTC", "img/btc.png", "btcWalletAddress"),
+    ETHEREUM("ETH", "img/eth.png", "ethWalletAddress"),
+    DASH("DASH", "img/dash.png", "dashWalletAddress");
 
     private static final Logger log = LogManager.getLogger(Currency.class);
     private static final int PAUSE_BETWEEN_COST_UPDATING = 60_000;
-    private final String img;
-    private BigDecimal cost;
     private final String conciseName;
+    private BigDecimal cost;
+    private final String wallet;
+    private final String img;
 
-    Currency(String conciseName, String img) {
+    Currency(String conciseName, String img, String wallet) {
         this.conciseName = conciseName;
         this.img = img;
+        this.wallet = wallet;
         startCostUpdating();
     }
 
-    public String getImg() {
-        return img;
+    public String getConciseName() {
+        return conciseName;
     }
 
     public BigDecimal getCost() {
@@ -40,8 +38,12 @@ public enum Currency {
         this.cost = cost;
     }
 
-    public String getConciseName() {
-        return conciseName;
+    public String getImg() {
+        return img;
+    }
+
+    public String getWallet() {
+        return wallet;
     }
 
     private void startCostUpdating() {

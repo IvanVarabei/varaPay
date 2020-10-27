@@ -1,6 +1,5 @@
 package com.varabei.ivan.controller.command.impl;
 
-import com.varabei.ivan.common.Error;
 import com.varabei.ivan.controller.AttributeKey;
 import com.varabei.ivan.controller.JspPath;
 import com.varabei.ivan.controller.RequestParam;
@@ -8,13 +7,10 @@ import com.varabei.ivan.controller.command.ActionCommand;
 import com.varabei.ivan.controller.router.Router;
 import com.varabei.ivan.model.entity.User;
 import com.varabei.ivan.model.entity.name.UserField;
-import com.varabei.ivan.model.exception.ServiceException;
 import com.varabei.ivan.model.service.MailService;
 import com.varabei.ivan.model.service.ServiceFactory;
-import com.varabei.ivan.model.service.UserService;
 import com.varabei.ivan.util.CustomSecurity;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import com.varabei.ivan.validator.FormValidator;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -23,92 +19,79 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 public class SignupCommand implements ActionCommand {
-    private static final Logger log = LogManager.getLogger(SignupCommand.class);
-    private static UserService userService = ServiceFactory.getInstance().getUserService();
     private static MailService mailService = ServiceFactory.getInstance().getMailService();
     private static final String MAIL_SUBJECT_EMAIL_VERIFICATION = "Email verification";
     private static final String MAIL_CONTENT = "Hi! Your verification code is : %s. " +
             "Enter code into the form.";
-    private static final int MIN_PASSWORD_LENGTH = 3;
-    private static final int MAX_PASSWORD_LENGTH = 20;
     private static final int VERIFICATION_CODE_LENGTH = 4;
-    private static final Pattern LOGIN_PATTERN = Pattern.compile("^\\w{3,20}$");
-    private static final Pattern NAME_PATTERN = Pattern.compile("^[A-Za-z]{3,20}$");//todo rus
-    private static final Pattern EMAIL_PATTERN = Pattern.compile("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
 
     @Override
     public Router execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         Router router = new Router(JspPath.VERIFY_EMAIL);
-        String login = req.getParameter(UserField.LOGIN);
-        String password = req.getParameter(UserField.PASSWORD);
-        String repeatPassword = req.getParameter(RequestParam.REPEAT_PASSWORD);
-        String firstName = req.getParameter(UserField.FIRST_NAME);
-        String lastName = req.getParameter(UserField.LAST_NAME);
-        String email = req.getParameter(UserField.EMAIL);
-        String birth = req.getParameter(UserField.BIRTH);
-        String secretWord = req.getParameter(UserField.SECRET_WORD);
         Map<String, String> errors = new HashMap<>();
-        try {
-            checkLogin(login, errors);
-            checkEmail(email, errors);
-            checkName(firstName, errors, UserField.FIRST_NAME);
-            checkName(lastName, errors, UserField.LAST_NAME);
-            checkPasswords(password, repeatPassword, errors);
-            if (errors.isEmpty()) {
-                String tempCode = CustomSecurity.generateRandom(VERIFICATION_CODE_LENGTH);
-                mailService.sendEmail(email, MAIL_SUBJECT_EMAIL_VERIFICATION, String.format(MAIL_CONTENT, tempCode));
-                req.getSession().setAttribute(RequestParam.TEMP_CODE, tempCode);
-                req.getSession().setAttribute(AttributeKey.USER,
-                        new User(login, firstName, lastName, email, LocalDate.parse(birth)));
-                req.getSession().setAttribute(UserField.PASSWORD, password);
-                req.getSession().setAttribute(UserField.SECRET_WORD, secretWord);
-            } else {
-                req.setAttribute(AttributeKey.ERRORS, errors);
-                router.setForward(JspPath.SIGNUP);
-            }
-        } catch (ServiceException e) {
-            log.error(e);
-            router.setForward(JspPath.ERROR_500);
+        errors.put(UserField.LOGIN, req.getParameter(UserField.LOGIN));
+        errors.put(UserField.PASSWORD, req.getParameter(UserField.PASSWORD));
+        errors.put(RequestParam.REPEAT_PASSWORD, req.getParameter(RequestParam.REPEAT_PASSWORD));
+        errors.put(UserField.FIRST_NAME, req.getParameter(UserField.FIRST_NAME));
+        errors.put(UserField.LAST_NAME, req.getParameter(UserField.LAST_NAME));
+        errors.put(UserField.EMAIL, req.getParameter(UserField.EMAIL));
+        errors.put(UserField.BIRTH, req.getParameter(UserField.BIRTH));
+        errors.put(UserField.SECRET_WORD, req.getParameter(UserField.SECRET_WORD));
+        if (new FormValidator().isValidSignupData(errors)) {
+            String tempCode = CustomSecurity.generateRandom(VERIFICATION_CODE_LENGTH);
+            mailService.sendEmail(errors.get(UserField.EMAIL), MAIL_SUBJECT_EMAIL_VERIFICATION,
+                    String.format(MAIL_CONTENT, tempCode));
+            req.getSession().setAttribute(RequestParam.TEMP_CODE, tempCode);
+            req.getSession().setAttribute(AttributeKey.USER,
+                    new User(errors.get(UserField.LOGIN), errors.get(UserField.FIRST_NAME),
+                            errors.get(UserField.LAST_NAME), errors.get(UserField.EMAIL),
+                            LocalDate.parse(errors.get(UserField.BIRTH))));
+            req.getSession().setAttribute(UserField.PASSWORD, errors.get(UserField.PASSWORD));
+            req.getSession().setAttribute(UserField.SECRET_WORD, errors.get(UserField.SECRET_WORD));
+        } else {
+            req.setAttribute(AttributeKey.ERRORS, errors);
+            router.setForward(JspPath.SIGNUP);
         }
         return router;
     }
 
-    private void checkPasswords(String password, String repeatPassword, Map<String, String> errors) {
-        if (password.equals(repeatPassword)) {
-            if (password.length() < MIN_PASSWORD_LENGTH || password.length() > MAX_PASSWORD_LENGTH) {
-                errors.put(UserField.PASSWORD, Error.LENGTH.name().toLowerCase());
-            }
-        } else {
-            errors.put(RequestParam.REPEAT_PASSWORD, Error.DIFFERENT_PASSWORDS.name().toLowerCase());
-        }
-    }
-
-    private void checkName(String potentialName, Map<String, String> errors, String errorKey) {
-        if (!NAME_PATTERN.matcher(potentialName).find()) {
-            errors.put(errorKey, Error.NAME.name().toLowerCase());
-        }
-    }
-
-    private void checkEmail(String potentialEmail, Map<String, String> errors) throws ServiceException {
-        if (EMAIL_PATTERN.matcher(potentialEmail).find()) {
-            if (userService.findByEmail(potentialEmail).isPresent()) {
-                errors.put(UserField.EMAIL, Error.ALREADY_EXISTS.name().toLowerCase());
-            }
-        } else {
-            errors.put(UserField.EMAIL, Error.EMAIL.name().toLowerCase());
-        }
-    }
-
-    private void checkLogin(String potentialLogin, Map<String, String> errors) throws ServiceException {
-        if (LOGIN_PATTERN.matcher(potentialLogin).find()) {
-            if (userService.findByLogin(potentialLogin).isPresent()) {
-                errors.put(UserField.LOGIN, Error.ALREADY_EXISTS.name().toLowerCase());
-            }
-        } else {
-            errors.put(UserField.LOGIN, Error.LOGIN.name().toLowerCase());
-        }
-    }
+//    @Override
+//    public Router execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+//        Router router = new Router(JspPath.VERIFY_EMAIL);
+//        String login = req.getParameter(UserField.LOGIN);
+//        String password = req.getParameter(UserField.PASSWORD);
+//        String repeatPassword = req.getParameter(RequestParam.REPEAT_PASSWORD);
+//        String firstName = req.getParameter(UserField.FIRST_NAME);
+//        String lastName = req.getParameter(UserField.LAST_NAME);
+//        String email = req.getParameter(UserField.EMAIL);
+//        String birth = req.getParameter(UserField.BIRTH);
+//        String secretWord = req.getParameter(UserField.SECRET_WORD);
+//        Map<String, String> errors = new HashMap<>();
+//        try {
+//            checkLogin(login, errors);
+//            checkEmail(email, errors);
+//            checkName(firstName, errors, UserField.FIRST_NAME);
+//            checkName(lastName, errors, UserField.LAST_NAME);
+//            checkName(secretWord, errors, UserField.SECRET_WORD);
+//            checkPasswords(password, repeatPassword, errors);
+//            if (errors.isEmpty()) {
+//                String tempCode = CustomSecurity.generateRandom(VERIFICATION_CODE_LENGTH);
+//                mailService.sendEmail(email, MAIL_SUBJECT_EMAIL_VERIFICATION, String.format(MAIL_CONTENT, tempCode));
+//                req.getSession().setAttribute(RequestParam.TEMP_CODE, tempCode);
+//                req.getSession().setAttribute(AttributeKey.USER,
+//                        new User(login, firstName, lastName, email, LocalDate.parse(birth)));
+//                req.getSession().setAttribute(UserField.PASSWORD, password);
+//                req.getSession().setAttribute(UserField.SECRET_WORD, secretWord);
+//            } else {
+//                req.setAttribute(AttributeKey.ERRORS, errors);
+//                router.setForward(JspPath.SIGNUP);
+//            }
+//        } catch (ServiceException e) {
+//            log.error(e);
+//            router.setForward(JspPath.ERROR_500);
+//        }
+//        return router;
+//    }
 }

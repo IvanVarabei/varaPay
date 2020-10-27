@@ -20,23 +20,26 @@
 		<fmt:message key="button" var="button"/>
 	</fmt:bundle>
 	<fmt:bundle basename="content" prefix="error.">
-		<c:if test="${not empty errors.login}">
+		<c:if test="${errors.login != param.login}">
 			<fmt:message key="${errors.login}" var="login_error"/>
 		</c:if>
-		<c:if test="${not empty errors.password}">
+		<c:if test="${errors.password != param.password}">
 			<fmt:message key="${errors.password}" var="password_error"/>
 		</c:if>
-		<c:if test="${not empty errors.repeatPassword}">
+		<c:if test="${errors.repeatPassword != param.repeatPassword}">
 			<fmt:message key="${errors.repeatPassword}" var="repeat_password_error"/>
 		</c:if>
-		<c:if test="${not empty errors.firstName}">
+		<c:if test="${errors.firstName != param.firstName}">
 			<fmt:message key="${errors.firstName}" var="firstname_error"/>
 		</c:if>
-		<c:if test="${not empty errors.lastName}">
+		<c:if test="${errors.lastName != param.lastName}">
 			<fmt:message key="${errors.lastName}" var="lastname_error"/>
 		</c:if>
-		<c:if test="${not empty errors.email}">
+		<c:if test="${errors.email != param.email}">
 			<fmt:message key="${errors.email}" var="email_error"/>
+		</c:if>
+		<c:if test="${errors.secret_word != param.secret_word}">
+			<fmt:message key="${errors.secret_word}" var="secret_word_error"/>
 		</c:if>
 	</fmt:bundle>
 
@@ -62,10 +65,9 @@
 			<p class="form__input-label">${birth}</p><input class="input form__input" name="birth"
 																											value="${not empty param.birth ? param.birth : '2000-01-01'}"
 																											type="date" min="1920-01-01" max="2010-01-01">
-			<p class="form__error">${errors.birth}</p>
 			<p class="form__input-label">Secret</p><input class="input form__input" name="secret_word"
 																										value="${param.secret_word}">
-			<p class="form__error">${errors.email}</p>
+			<p class="form__error">${secret_word_error}</p>
 			<button class="button form_button">${button}</button>
 		</form>
 	</div>
