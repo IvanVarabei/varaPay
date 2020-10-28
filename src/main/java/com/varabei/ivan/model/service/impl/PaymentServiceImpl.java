@@ -1,35 +1,75 @@
 package com.varabei.ivan.model.service.impl;
 
+import com.varabei.ivan.common.ErrorInfo;
 import com.varabei.ivan.model.dao.CardDao;
 import com.varabei.ivan.model.dao.DaoFactory;
 import com.varabei.ivan.model.dao.PaymentDao;
+import com.varabei.ivan.model.entity.Card;
 import com.varabei.ivan.model.entity.Payment;
+import com.varabei.ivan.model.entity.name.CardField;
+import com.varabei.ivan.model.entity.name.PaymentField;
 import com.varabei.ivan.model.exception.DaoException;
 import com.varabei.ivan.model.exception.ServiceException;
 import com.varabei.ivan.model.service.PaymentService;
+import com.varabei.ivan.validator.PaymentValidator;
 
 import java.math.BigDecimal;
 import java.time.YearMonth;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 public class PaymentServiceImpl implements PaymentService {
-    private static final PaymentDao paymentDao = DaoFactory.getInstance().getPaymentDao();
-    CardDao cardDao = DaoFactory.getInstance().getCardDao();
-    private static final int AMOUNT_OF_FIGURES_IN_CARD_NUMBER = 16;
-    private static final String REGEX_NOT_DIGIT = "\\D+";
+    private static PaymentValidator paymentValidator = new PaymentValidator();
+    private static PaymentDao paymentDao = DaoFactory.getInstance().getPaymentDao();
+    private static CardDao cardDao = DaoFactory.getInstance().getCardDao();
 
     @Override
-    public void makePayment(Long sourceCardId, String sourceCardCvc, String destinationCardNumber,
-                            YearMonth destinationCardValidThru, BigDecimal amount) throws ServiceException {
-        try {
-            String clearNumber = destinationCardNumber.replaceAll(REGEX_NOT_DIGIT, "");
-            if (clearNumber.length() == AMOUNT_OF_FIGURES_IN_CARD_NUMBER) {
-//                cardDao.ifExists(sourceCardId, sourceCardCvc);
-//                cardDao.ifExists(clearNumber, destinationCardValidThru);
-                paymentDao.makePayment(sourceCardId, clearNumber, amount.movePointRight(2).longValue());
+    public boolean makePayment(Map<String, String> paymentData) throws ServiceException {
+        Map<String, String> initialMap = new HashMap<>(paymentData);
+        if (paymentValidator.isValidPayment(paymentData)) {
+            try {
+                Long sourceCardId = Long.parseLong(paymentData.get(PaymentField.SOURCE_CARD_ID));
+                String destinationCardNumber = paymentData.get(CardField.NUMBER).trim();
+                BigDecimal amount = new BigDecimal(paymentData.get(PaymentField.AMOUNT));
+                checkSourceCard(paymentData, amount);
+                checkDestinationCard(paymentData);
+                if (paymentData.equals(initialMap)) {
+                    paymentDao.makePayment(sourceCardId, destinationCardNumber, amount.movePointRight(2).longValue());
+                    return true;
+                }
+            } catch (DaoException e) {
+                throw new ServiceException(e);
             }
-        } catch (DaoException e) {
-            throw new ServiceException(e);
+        }
+        return false;
+    }
+
+    private void checkSourceCard(Map<String, String> paymentData, BigDecimal amount) throws DaoException {
+        Long sourceCardId = Long.parseLong(paymentData.get(PaymentField.SOURCE_CARD_ID));
+        Card sourceCard = cardDao.findById(sourceCardId).get();
+        if (!sourceCard.getCvc().equals(paymentData.get(CardField.CVC))) {
+            paymentData.put(CardField.CVC, ErrorInfo.CVC.name().toLowerCase());
+        }
+        if (sourceCard.getAccount().getBalance().compareTo(amount) < 0) {
+            paymentData.put(PaymentField.AMOUNT, ErrorInfo.NOT_ENOUGH_BALANCE.name().toLowerCase());
+        }
+        if (!sourceCard.getAccount().isActive()) {
+            paymentData.put(" ", ErrorInfo.SOURCE_ACCOUNT_BLOCKED.name().toLowerCase());
+        }
+    }
+
+    private void checkDestinationCard(Map<String, String> paymentData) throws DaoException {
+        String destinationCardNumber = paymentData.get(CardField.NUMBER).trim();
+        YearMonth validThru = YearMonth.parse(paymentData.get(CardField.VALID_THRU));
+        Optional<Card> destinationCard = cardDao.findByCardNumberAndValidThru(destinationCardNumber, validThru);
+        if (destinationCard.isPresent()) {
+            if (!destinationCard.get().getAccount().isActive()) {
+                paymentData.put("destinationIsActive", ErrorInfo.DESTINATION_ACCOUNT_BLOCKED.name().toLowerCase());
+            }
+        } else {
+            paymentData.put(CardField.NUMBER, ErrorInfo.CARD_DOES_NOT_EXISTS.name().toLowerCase());
         }
     }
 

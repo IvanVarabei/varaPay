@@ -5,6 +5,10 @@
 <%@ taglib prefix="f" uri="http://example.com/functions" %>
 
 <jsp:useBean id="cards" type="java.util.List" scope="request"/>
+<fmt:setLocale value="${sessionScope.locale}"/>
+<fmt:bundle basename="content" prefix="profile.">
+	<fmt:message key="delete" var="delete"/>
+</fmt:bundle>
 <c:forEach var="card" items="${cards}">
 	<a href="${pageContext.request.contextPath}/mainServlet?command=card_page_get&card_id=${card.id}"
 		 class="profile__card">
@@ -13,7 +17,7 @@
 		<p class="profile__card-text"><tags:localDate date="${card.validThru}" pattern="MM/yy"/></p>
 		<form method="post" action="${pageContext.servletContext.contextPath}/mainServlet?command=delete_card_post">
 			<input type="hidden" name="card_id" value="${card.id}">
-			<button class="button">delete</button>
+			<button class="button">${delete}</button>
 		</form>
 	</a>
 </c:forEach>

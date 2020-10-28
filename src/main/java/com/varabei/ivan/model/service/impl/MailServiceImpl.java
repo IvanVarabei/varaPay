@@ -13,8 +13,8 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class MailServiceImpl implements MailService {
-    private static Session session;
     private static final Logger log = LogManager.getLogger(MailServiceImpl.class);
+    private static Session session;
     private static final String MAIL_PROPERTIES_FILE = "mail.properties";
     private static final String MAIL_USER_NAME_KEY = "mail.user.name";
     private static final String MAIL_PASSWORD_KEY = "mail.user.password";

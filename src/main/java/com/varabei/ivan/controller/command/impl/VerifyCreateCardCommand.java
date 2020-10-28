@@ -1,6 +1,6 @@
 package com.varabei.ivan.controller.command.impl;
 
-import com.varabei.ivan.common.Error;
+import com.varabei.ivan.common.ErrorInfo;
 import com.varabei.ivan.controller.AttributeKey;
 import com.varabei.ivan.controller.RequestParam;
 import com.varabei.ivan.controller.command.ActionCommand;
@@ -36,10 +36,10 @@ public class VerifyCreateCardCommand implements ActionCommand {
                 router.setRedirect(String.format(REDIRECT_TO_PROFILE, req.getContextPath(), cvc));
             } catch (ServiceException e) {
                 log.error(e);
-                resp.sendError(Error.SERVER_ERROR_CODE);
+                resp.sendError(ErrorInfo.SERVER_ERROR_CODE);
             }
         } else {
-            req.setAttribute(AttributeKey.ERROR, Error.TEMP_CODE);
+            req.setAttribute(AttributeKey.ERROR, ErrorInfo.TEMP_CODE);
             router.setForward(JSP_VERIFY_CREATE_CARD);
         }
         return router;

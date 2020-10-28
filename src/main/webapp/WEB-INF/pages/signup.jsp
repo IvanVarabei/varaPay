@@ -8,6 +8,7 @@
 		<jsp:useBean id="errors" type="java.util.Map" scope="request"/>
 	</c:if>
 	<fmt:setLocale value="${sessionScope.locale}"/>
+
 	<fmt:bundle basename="content" prefix="signup.">
 		<fmt:message key="title" var="title"/>
 		<fmt:message key="log_in" var="log_in"/>
@@ -19,7 +20,9 @@
 		<fmt:message key="birth" var="birth"/>
 		<fmt:message key="button" var="button"/>
 	</fmt:bundle>
+
 	<fmt:bundle basename="content" prefix="error.">
+		<fmt:message key="login" var="login_error1"/>
 		<c:if test="${errors.login != param.login}">
 			<fmt:message key="${errors.login}" var="login_error"/>
 		</c:if>
@@ -47,8 +50,16 @@
 		<div class="authorization__title title">${title}</div>
 		<form class="form" method="post" action="${pageContext.servletContext.contextPath}/mainServlet">
 			<input type="hidden" name="command" value="signup_post">
-			<p class="form__input-label">${log_in}</p><input class="input form__input" name="login" value="${param.login}">
-			<p class="form__error">${login_error}</p>
+<%--			<p class="form__input-label">${log_in}</p><input class="input form__input" name="login" value="${param.login}">--%>
+<%--			<p class="form__error">${login_error}</p>--%>
+			<p class="form__input-label">${log_in}</p>
+			<input class="input form__input" name="login" required
+						 pattern="^[a-zA-Z0-9_]{3,25}$"
+						 oninvalid="this.setCustomValidity('${login_error1}')"
+						 onchange="this.setCustomValidity('')"
+<%--						 title="<c:if test="${}"></c:if>"--%>
+						 value="${param.login}"/>
+
 			<p class="form__input-label">${password}</p><input class="input form__input" name="password" type="password">
 			<p class="form__error">${password_error}</p>
 			<p class="form__input-label">${repeat_password}</p><input class="input form__input" name="repeatPassword"

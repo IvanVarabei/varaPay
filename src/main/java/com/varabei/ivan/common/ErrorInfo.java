@@ -1,6 +1,6 @@
 package com.varabei.ivan.common;
 
-public enum Error {
+public enum ErrorInfo {
     NAME,
     SECRET_WORD,
     LENGTH,
@@ -19,8 +19,18 @@ public enum Error {
     SOURCE_ACCOUNT_BLOCKED,
     DESTINATION_ACCOUNT_BLOCKED,
     NOT_NUMBER,
-    CAN_NOT_BE_EMPTY;
+    CAN_NOT_BE_EMPTY,
+
+
+    CARD_DOES_NOT_EXISTS,
+    AMOUNT,
+    VALID_THRU;
     public static final int SERVER_ERROR_CODE = 500;
+
+    @Override
+    public String toString(){
+        return this.name().toLowerCase();
+    }
 }
 
 //public class ErrorInfo {

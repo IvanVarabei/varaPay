@@ -86,12 +86,12 @@
 							<option value="ru-RU" ${sessionScope.locale.language eq 'ru' ? 'selected' : ''}>RU</option>
 						</li>
 						</select>
-						<c:set var="maeth" value="<%= request.getMethod() %>"/>
-						<input type="hidden" name="previousMethod" value="${maeth}">
+<%--						<c:set var="maeth" value="<%= request.getMethod() %>"/>--%>
+<%--						<input type="hidden" name="previousMethod" value="${maeth}">--%>
 						<input type="hidden" name="command" value="change_language">
-						<c:forEach var="currentParam" items="${param}">
-							<input type="hidden" name="${currentParam.key}" value="${currentParam.value}">
-						</c:forEach>
+<%--						<c:forEach var="currentParam" items="${param}">--%>
+<%--							<input type="hidden" name="${currentParam.key}" value="${currentParam.value}">--%>
+<%--						</c:forEach>--%>
 						</form>
 						</li>
 					</ul>

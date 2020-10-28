@@ -1,8 +1,9 @@
 package com.varabei.ivan.controller.command.impl;
 
-import com.varabei.ivan.common.Error;
+import com.varabei.ivan.common.ErrorInfo;
 import com.varabei.ivan.controller.AttributeKey;
 import com.varabei.ivan.controller.JspPath;
+import com.varabei.ivan.controller.RedirectPath;
 import com.varabei.ivan.controller.RequestParam;
 import com.varabei.ivan.controller.command.ActionCommand;
 import com.varabei.ivan.controller.router.Router;
@@ -34,18 +35,18 @@ public class VerifyEmailCommand implements ActionCommand {
                 User user = (User) session.getAttribute(AttributeKey.USER);
                 String login = user.getLogin();
                 if (userService.findByLogin(login).isPresent()) {
-                    req.setAttribute(AttributeKey.ERROR, String.format(Error.LOGIN_TAKEN.name().toLowerCase(), login));
+                    req.setAttribute(AttributeKey.ERROR, String.format(ErrorInfo.LOGIN_TAKEN.name().toLowerCase(), login));
                 } else {
                     userService.signUp(user, session.getAttribute(UserField.PASSWORD).toString()
                             , session.getAttribute(UserField.SECRET_WORD).toString());
-                    router.setForward(req.getContextPath());
+                    router.setRedirect(String.format(RedirectPath.SUCCESS_PAGE, req.getContextPath()));
                 }
             } catch (ServiceException e) {
                 log.error(e);
                 router.setForward(JspPath.ERROR_500);
             }
         } else {
-            req.setAttribute(AttributeKey.ERROR, Error.TEMP_CODE);
+            req.setAttribute(AttributeKey.ERROR, ErrorInfo.TEMP_CODE);
             router.setForward(JspPath.ERROR_500);
         }
         return router;

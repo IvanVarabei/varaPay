@@ -4,9 +4,16 @@
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 
 <jsp:useBean id="user" type="com.varabei.ivan.model.entity.User" scope="request"/>
-<tags:general pageTitle="Cabinet">
+<fmt:setLocale value="${sessionScope.locale}"/>
+<fmt:bundle basename="content" prefix="profile.">
+	<fmt:message key="title" var="title"/>
+	<fmt:message key="change_password" var="change_password"/>
+	<fmt:message key="accounts" var="accounts"/>
+	<fmt:message key="add_account" var="add_account"/>
+</fmt:bundle>
+<tags:general pageTitle="${title}">
 	<div class="profile">
-		<div class="title">Your profile</div>
+		<div class="title">${title}</div>
 		<div class="profile__info">
 			<div class="profile__photo">
 				<img src="img/silhouette.svg" alt="">
@@ -16,14 +23,14 @@
 			<div class="profile__text">${user.lastName}</div>
 			<div class="profile__text">${user.email}</div>
 			<div class="profile__text">${user.birth}</div>
-			<div class="profile__text"><a href="${pageContext.servletContext.contextPath}/mainServlet?command=change_password_get"><b>change password</b></a></div>
+			<div class="profile__text"><a href="${pageContext.servletContext.contextPath}/mainServlet?command=change_password_get"><b>${change_password}</b></a></div>
 		</div>
-		<div class="sub-title">Accounts</div>
+		<div class="sub-title">${accounts}</div>
 		<div class="profile__accounts">
 			<jsp:include page="/mainServlet?command=include_accounts&login=${user.login}"/>
 			<form method="post" action="${pageContext.servletContext.contextPath}/mainServlet?command=create_account_post">
 				<input type="hidden" name="user_id" value="${user.id}"/>
-			<button class="button">add new account</button>
+			<button class="button">${add_account}</button>
 			</form>
 		</div>
 		<div id="popup" class="popup ${not empty param.cvc ? 'popup_visible' : ''}">

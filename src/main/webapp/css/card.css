@@ -17,6 +17,10 @@
     grid-row-start: 1;
     grid-column-start: 2;
 }
+.card__sub-title-error{
+    text-transform: lowercase;
+    color: #e84c36;
+}
 .card__img1{
     grid-row-start: 2;
     grid-column-start: 1;

@@ -36,8 +36,7 @@ public class AccountPageCommand implements ActionCommand {
             if (req.getParameter(RequestParam.PAGE) != null) {
                 page = Integer.parseInt(req.getParameter(RequestParam.PAGE));
             }
-            List<Bid> bids =
-                    bidService.findByAccountId(accountId, WebPageConfig.RECORDS_PER_PAGE, page);
+            List<Bid> bids = bidService.findByAccountId(accountId, WebPageConfig.RECORDS_PER_PAGE, page);
             int amountOfPages = bidService.findAmountOfPagesByAccountId(accountId, WebPageConfig.RECORDS_PER_PAGE);
             req.setAttribute(AttributeKey.AMOUNT_OF_PAGES, amountOfPages);
             req.setAttribute(AttributeKey.CURRENT_PAGE, page);

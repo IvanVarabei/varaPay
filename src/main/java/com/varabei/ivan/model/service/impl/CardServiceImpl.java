@@ -32,20 +32,19 @@ public class CardServiceImpl implements CardService {
             throw new ServiceException(daoException);
         }
     }
-
-    @Override
-    public Optional<Card> findByCardNumber(String cardNumber) throws ServiceException {
-        try {
-            String clearNumber = cardNumber.replaceAll(REGEX_NOT_DIGIT, "");
-            if (clearNumber.length() == AMOUNT_OF_FIGURES_IN_CARD_NUMBER) {
-                return cardDao.findByCardNumber(clearNumber);
-            }
-            throw new ServiceException();
-        } catch (DaoException daoException) {
-            throw new ServiceException(daoException);
-        }
-
-    }
+//
+//    @Override
+//    public Optional<Card> findByCardNumber(String cardNumber) throws ServiceException {
+//        try {
+//            String clearNumber = cardNumber.replaceAll(REGEX_NOT_DIGIT, "");
+//            if (clearNumber.length() == AMOUNT_OF_FIGURES_IN_CARD_NUMBER) {
+//                return cardDao.findByCardNumber(clearNumber);
+//            }
+//            throw new ServiceException();
+//        } catch (DaoException daoException) {
+//            throw new ServiceException(daoException);
+//        }
+//    }
 
     @Override
     public List<Card> findByAccountId(Long accountId) throws ServiceException {

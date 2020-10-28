@@ -1,6 +1,6 @@
 package com.varabei.ivan.controller.command.impl;
 
-import com.varabei.ivan.common.Error;
+import com.varabei.ivan.common.ErrorInfo;
 import com.varabei.ivan.controller.AttributeKey;
 import com.varabei.ivan.controller.JspPath;
 import com.varabei.ivan.controller.command.ActionCommand;
@@ -38,7 +38,7 @@ public class LoginCommand implements ActionCommand {
                 session.setAttribute(UserField.ROLE_NAME, user.get().getRole().name().toLowerCase());
                 session.setAttribute(UserField.LOGIN, user.get().getLogin());
             } else {
-                req.setAttribute(AttributeKey.ERROR, Error.LOGIN_OR_PASSWORD);
+                req.setAttribute(AttributeKey.ERROR, ErrorInfo.LOGIN_OR_PASSWORD);
                 router.setForward(JspPath.LOGIN);
             }
         } catch (ServiceException e) {

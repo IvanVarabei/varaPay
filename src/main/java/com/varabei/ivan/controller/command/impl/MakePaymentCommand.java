@@ -1,18 +1,14 @@
 package com.varabei.ivan.controller.command.impl;
 
-import com.varabei.ivan.common.Error;
 import com.varabei.ivan.controller.AttributeKey;
 import com.varabei.ivan.controller.JspPath;
-import com.varabei.ivan.controller.RequestParam;
-import com.varabei.ivan.controller.command.ActionCommand;
 import com.varabei.ivan.controller.RedirectPath;
+import com.varabei.ivan.controller.command.ActionCommand;
 import com.varabei.ivan.controller.router.Router;
 import com.varabei.ivan.controller.router.RouterType;
-import com.varabei.ivan.model.entity.Card;
 import com.varabei.ivan.model.entity.name.CardField;
 import com.varabei.ivan.model.entity.name.PaymentField;
 import com.varabei.ivan.model.exception.ServiceException;
-import com.varabei.ivan.model.service.CardService;
 import com.varabei.ivan.model.service.PaymentService;
 import com.varabei.ivan.model.service.ServiceFactory;
 import org.apache.logging.log4j.LogManager;
@@ -22,51 +18,26 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.time.YearMonth;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 public class MakePaymentCommand implements ActionCommand {
     private static final Logger log = LogManager.getLogger(MakePaymentCommand.class);
     private static PaymentService paymentService = ServiceFactory.getInstance().getPaymentService();
-    private static CardService cardService = ServiceFactory.getInstance().getCardService();
 
     @Override
     public Router execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         Router router = new Router(String.format(RedirectPath.SUCCESS_PAGE, req.getContextPath()), RouterType.REDIRECT);
-        Long sourceCardId = Long.parseLong(req.getParameter(CardField.ID));
-        String sourceCardCvc = req.getParameter(CardField.CVC);
-        String destinationCardNumber = req.getParameter(RequestParam.DESTINATION_CARD_NUMBER);
-        BigDecimal amount = BigDecimal.valueOf(Double.parseDouble(req.getParameter(PaymentField.AMOUNT)));
-        YearMonth destinationCardValidThru = YearMonth.parse(req.getParameter(RequestParam.DESTINATION_CARD_VALID_THRU));
-        Map<String, String> errors = new HashMap<>();
+        Map<String, String> paymentData = new HashMap<>();
+        paymentData.put(PaymentField.SOURCE_CARD_ID, req.getParameter(CardField.ID));
+        paymentData.put(CardField.CVC, req.getParameter(CardField.CVC));
+        paymentData.put(CardField.NUMBER, req.getParameter(PaymentField.DESTINATION_CARD_NUMBER));
+        paymentData.put(PaymentField.AMOUNT, req.getParameter(PaymentField.AMOUNT));
+        paymentData.put(CardField.VALID_THRU, req.getParameter(CardField.VALID_THRU));
         try {
-            Card sourceCard = cardService.findById(sourceCardId).get();
-            Optional<Card> destinationCard = cardService.findByCardNumber(destinationCardNumber);
-            if (destinationCard.isPresent()) {
-                if (!destinationCard.get().getAccount().isActive()) {
-                    errors.put("destinationIsActive", Error.DESTINATION_ACCOUNT_BLOCKED.name().toLowerCase());
-                }
-            } else {
-                errors.put(CardField.NUMBER, Error.CARD_NUMBER.name().toLowerCase());
-            }
-            if (!sourceCard.getCvc().equals(sourceCardCvc)) {
-                errors.put(CardField.CVC, Error.CVC.name().toLowerCase());
-            }
-            if (sourceCard.getAccount().getBalance().compareTo(amount) < 0) {
-                errors.put(PaymentField.AMOUNT, Error.NOT_ENOUGH_BALANCE.name().toLowerCase());
-            }
-            if (!sourceCard.getAccount().isActive()) {
-                errors.put("sourceIsActive", Error.SOURCE_ACCOUNT_BLOCKED.name().toLowerCase());
-            }
-            if (errors.isEmpty()) {
-                paymentService.makePayment(sourceCardId, sourceCardCvc,
-                        destinationCardNumber, destinationCardValidThru, amount);
-            } else {
-                req.setAttribute(AttributeKey.ERRORS, errors);
-                router.setForward("");
+            if(!paymentService.makePayment(paymentData)){
+                req.setAttribute(AttributeKey.ERRORS, paymentData);
+                router.setForward("/mainServlet?command=card_page_get");
             }
         } catch (ServiceException e) {
             log.error(e);

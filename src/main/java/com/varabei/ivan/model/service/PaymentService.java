@@ -1,17 +1,16 @@
 package com.varabei.ivan.model.service;
 
 import com.varabei.ivan.model.entity.Payment;
-import com.varabei.ivan.model.exception.DaoException;
 import com.varabei.ivan.model.exception.ServiceException;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.YearMonth;
 import java.util.List;
+import java.util.Map;
 
 public interface PaymentService {
-    void makePayment(Long sourceCardId, String sourceCardCvc, String destinationCardNumber,
-                     YearMonth destinationCardValidThru, BigDecimal amount) throws ServiceException;
+//    void makePayment(Long sourceCardId, String sourceCardCvc, String destinationCardNumber,
+//                     YearMonth destinationCardValidThru, BigDecimal amount) throws ServiceException;
+
+    boolean makePayment(Map<String, String> paymentData) throws ServiceException;
 
     int findAmountOfPagesByCardId(Long cardId, int limit) throws ServiceException;
 

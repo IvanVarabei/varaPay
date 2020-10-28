@@ -1,6 +1,6 @@
 package com.varabei.ivan.controller.command.impl;
 
-import com.varabei.ivan.common.Error;
+import com.varabei.ivan.common.ErrorInfo;
 import com.varabei.ivan.controller.AttributeKey;
 import com.varabei.ivan.controller.JspPath;
 import com.varabei.ivan.controller.RequestParam;
@@ -34,10 +34,10 @@ public class TopUpPageCommand implements ActionCommand {
         Map<String, String> errors = new HashMap<>();
         req.setAttribute(BidField.ACCOUNT_ID, accountId);
         if (!amount.matches(DIGITS)) {
-            errors.put(BidField.AMOUNT, Error.NOT_NUMBER.name().toLowerCase());
+            errors.put(BidField.AMOUNT, ErrorInfo.NOT_NUMBER.name().toLowerCase());
         }
         if (Arrays.stream(Currency.values()).noneMatch(c -> currency.equalsIgnoreCase(c.name()))) {
-            errors.put("currency", Error.CAN_NOT_BE_EMPTY.name().toLowerCase());
+            errors.put("currency", ErrorInfo.CAN_NOT_BE_EMPTY.name().toLowerCase());
         }
         if (errors.isEmpty()) {
             BigDecimal properAmount = new BigDecimal(amount);

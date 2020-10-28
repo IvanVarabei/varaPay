@@ -21,11 +21,11 @@ import java.util.List;
 
 public class IncludeCardsCommand implements ActionCommand {
     private static final Logger log = LogManager.getLogger(IncludeCardsCommand.class);
+    private static CardService cardService = ServiceFactory.getInstance().getCardService();
 
     @Override
     public Router execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         Router router = new Router(JspPath.INCLUDE_CARDS, RouterType.INCLUDE);
-        CardService cardService = ServiceFactory.getInstance().getCardService();
         try {
             List<Card> cardList = cardService.findByAccountId(Long.parseLong(req.getParameter(AccountField.ID)));
             req.setAttribute(AttributeKey.CARDS, cardList);

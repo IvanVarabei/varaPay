@@ -26,14 +26,13 @@ public class CardPageCommand implements ActionCommand {
     private static final Logger log = LogManager.getLogger(CardPageCommand.class);
     private static CardService cardService = ServiceFactory.getInstance().getCardService();
     private static PaymentService paymentService = ServiceFactory.getInstance().getPaymentService();
-    private static final int DEFAULT_PAGE_INDEX = 1;
 
     @Override
     public Router execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         Router router = new Router(JspPath.CARD);
         Long cardId = Long.parseLong(req.getParameter(CardField.ID));
         try {
-            int page = DEFAULT_PAGE_INDEX;
+            int page = WebPageConfig.DEFAULT_PAGE_INDEX;
             if (req.getParameter(RequestParam.PAGE) != null) {
                 page = Integer.parseInt(req.getParameter(RequestParam.PAGE));
             }
