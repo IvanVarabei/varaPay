@@ -1,6 +1,6 @@
-package com.varabei.ivan.validator;
+package com.varabei.ivan.model.validator;
 
-import com.varabei.ivan.common.ErrorInfo;
+import com.varabei.ivan.model.service.ErrorInfo;
 import com.varabei.ivan.model.service.DataTransferMapKey;
 
 import java.util.Map;

@@ -3,17 +3,16 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 
+<fmt:setLocale value="${sessionScope.locale}"/>
+<fmt:bundle basename="content" prefix="login.">
+	<fmt:message key="title" var="title"/>
+	<fmt:message key="password" var="password"/>
+	<fmt:message key="log_in" var="log_in"/>
+	<fmt:message key="forgot_password" var="forgot_password"/>
+	<fmt:message key="fail_message" var="fail_message"/>
+</fmt:bundle>
 <tags:general pageTitle="Login">
-	<fmt:setLocale value="${sessionScope.locale}"/>
-	<fmt:bundle basename="content" prefix="login.">
-		<fmt:message key="title" var="title"/>
-		<fmt:message key="password" var="password"/>
-		<fmt:message key="log_in" var="log_in"/>
-		<fmt:message key="forgot_password" var="forgot_password"/>
-		<fmt:message key="fail_message" var="fail_message"/>
-	</fmt:bundle>
-
-	<div class="authorization">
+		<div class="authorization">
 		<div class="authorization__title title">${title}</div>
 		<form class="form" method="post" action="${pageContext.servletContext.contextPath}/mainServlet?command=login_post">
 			<c:if test="${not empty requestScope.error}"><p class="form__error">${fail_message}</p></c:if>

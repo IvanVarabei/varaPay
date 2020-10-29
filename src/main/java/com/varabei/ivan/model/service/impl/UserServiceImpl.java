@@ -1,6 +1,6 @@
 package com.varabei.ivan.model.service.impl;
 
-import com.varabei.ivan.common.ErrorInfo;
+import com.varabei.ivan.model.service.ErrorInfo;
 import com.varabei.ivan.controller.RequestParam;
 import com.varabei.ivan.model.dao.DaoFactory;
 import com.varabei.ivan.model.dao.UserDao;
@@ -11,7 +11,7 @@ import com.varabei.ivan.model.service.DataTransferMapKey;
 import com.varabei.ivan.model.service.MailService;
 import com.varabei.ivan.model.service.UserService;
 import com.varabei.ivan.util.CustomSecurity;
-import com.varabei.ivan.validator.UserValidator;
+import com.varabei.ivan.model.validator.UserValidator;
 
 import java.util.HashMap;
 import java.util.List;

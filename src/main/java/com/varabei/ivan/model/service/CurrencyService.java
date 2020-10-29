@@ -1,10 +1,9 @@
 package com.varabei.ivan.model.service;
 
-import com.varabei.ivan.model.entity.Currency;
-import com.varabei.ivan.model.exception.ServiceException;
-
 import java.math.BigDecimal;
+import java.util.Map;
+import java.util.Optional;
 
 public interface CurrencyService {
-    BigDecimal convertUsdToAnotherCurrency(BigDecimal usdAmount, Currency currency);
+    Optional<BigDecimal> convertUsdToAnotherCurrency(Map<String, String> dataToConvert);
 }

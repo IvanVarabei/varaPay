@@ -1,6 +1,6 @@
 package com.varabei.ivan.model.service.impl;
 
-import com.varabei.ivan.common.ErrorInfo;
+import com.varabei.ivan.model.service.ErrorInfo;
 import com.varabei.ivan.model.dao.CardDao;
 import com.varabei.ivan.model.dao.DaoFactory;
 import com.varabei.ivan.model.dao.PaymentDao;
@@ -10,7 +10,7 @@ import com.varabei.ivan.model.exception.DaoException;
 import com.varabei.ivan.model.exception.ServiceException;
 import com.varabei.ivan.model.service.DataTransferMapKey;
 import com.varabei.ivan.model.service.PaymentService;
-import com.varabei.ivan.validator.PaymentValidator;
+import com.varabei.ivan.model.validator.PaymentValidator;
 
 import java.math.BigDecimal;
 import java.time.YearMonth;

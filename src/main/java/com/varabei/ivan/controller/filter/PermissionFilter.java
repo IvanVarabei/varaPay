@@ -1,5 +1,6 @@
 package com.varabei.ivan.controller.filter;
 
+import com.varabei.ivan.controller.AttributeKey;
 import com.varabei.ivan.controller.JspPath;
 import com.varabei.ivan.controller.RedirectPath;
 import com.varabei.ivan.controller.RequestParam;
@@ -62,7 +63,7 @@ public class PermissionFilter implements Filter {
         if(command != null && !command.isEmpty()){
             allowedRoles = commandNamePermittedRoles.get(CommandType.valueOf(command.toUpperCase()));
         }
-        Object userRole = session.getAttribute(RequestParam.ROLE_NAME);
+        Object userRole = session.getAttribute(AttributeKey.ROLE_NAME);
         if (userRole == null && allowedRoles != null) {
             resp.sendRedirect(String.format(RedirectPath.LOGIN, req.getContextPath()));
         } else {

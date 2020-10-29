@@ -1,6 +1,5 @@
 package com.varabei.ivan.controller.command.impl;
 
-import com.varabei.ivan.common.ErrorInfo;
 import com.varabei.ivan.controller.AttributeKey;
 import com.varabei.ivan.controller.JspPath;
 import com.varabei.ivan.controller.RedirectPath;
@@ -36,7 +35,7 @@ public class UnblockAccountCommand implements ActionCommand {
                 router.setRedirect(String.format(RedirectPath.RUN_ACCOUNTS, req.getContextPath(), query));
             } else {
                 req.setAttribute(AttributeKey.ACCOUNTS, accountService.findDisabledByLoginOrAccountId(query));
-                req.setAttribute(AttributeKey.ERROR, ErrorInfo.SECRET_WORD.name().toLowerCase());
+                req.setAttribute(AttributeKey.ERROR, true);
             }
         } catch (ServiceException e) {
             log.error(e);

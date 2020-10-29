@@ -1,4 +1,4 @@
-package com.varabei.ivan.common;
+package com.varabei.ivan.model.service;
 
 public enum ErrorInfo {
     NAME,

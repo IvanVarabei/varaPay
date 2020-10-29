@@ -11,11 +11,13 @@ public class AttributeKey {
     public static final String BIDS = "bids";
     public static final String CARD = "card";
     public static final String CARDS = "cards";
+    public static final String AMOUNT = "amount";
     public static final String PAYMENTS = "payments";
     public static final String AMOUNT_OF_PAGES = "amountOfPages";
     public static final String CURRENT_PAGE = "currentPage";
     public static final String AMOUNT_IN_CHOSEN_CURRENCY = "amountInChosenCurrency";
     public static final String LOCALE = "locale";
+    public static final String ROLE_NAME = "role_name";
 
     private AttributeKey() {
     }
