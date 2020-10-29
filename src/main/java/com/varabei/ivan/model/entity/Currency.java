@@ -8,9 +8,9 @@ import org.apache.logging.log4j.Logger;
 import java.math.BigDecimal;
 
 public enum Currency {
-    BITCOIN("BTC", "img/btc.png", "btcWalletAddress"),
-    ETHEREUM("ETH", "img/eth.png", "ethWalletAddress"),
-    DASH("DASH", "img/dash.png", "dashWalletAddress");
+    BITCOIN("BTC", "img/btc.png", "1F3BAUckj5dbwYSm9cPRmF73zCXjvjHyR6"),
+    ETHEREUM("ETH", "img/eth.png", "0xc7fa6d4f3b985df30895f175a30d86b91ff17c96"),
+    DASH("DASH", "img/dash.png", "Xywm9ps9wSKv562wkQVeChSCpxeofRPkDe");
 
     private static final Logger log = LogManager.getLogger(Currency.class);
     private static final int PAUSE_BETWEEN_COST_UPDATING = 60_000;
@@ -50,11 +50,13 @@ public enum Currency {
         Thread thread = new Thread(() -> {
             while (true) {
                 try {
+                    if (cost != null) {
+                        Thread.sleep(PAUSE_BETWEEN_COST_UPDATING);
+                    }
                     this.setCost(DaoFactory.getInstance().getCurrencyDao().findCurrencyCostInUsd(this));
-                    Thread.sleep(PAUSE_BETWEEN_COST_UPDATING);
                 } catch (DaoException e) {
                     log.error(e);
-                }catch (InterruptedException e){
+                } catch (InterruptedException e) {
                     log.error(e);
                     Thread.currentThread().interrupt();
                 }

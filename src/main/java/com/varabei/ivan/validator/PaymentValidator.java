@@ -4,7 +4,6 @@ import com.varabei.ivan.common.ErrorInfo;
 import com.varabei.ivan.model.entity.name.CardField;
 import com.varabei.ivan.model.entity.name.PaymentField;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -15,35 +14,41 @@ public class PaymentValidator {
     private static final Pattern CVC_PATTERN = Pattern.compile("^\\d{3}$");
 
     public boolean isValidPayment(Map<String, String> paymentData) {
-        Map<String, String> initialMap = new HashMap<>(paymentData);
-        checkCvc(paymentData);
-        checkDestinationCardNumber(paymentData);
-        checkAmount(paymentData);
-        checkValidThru(paymentData);
-        return initialMap.equals(paymentData);
+        return checkCvc(paymentData) &&
+                checkDestinationCardNumber(paymentData) &&
+                checkAmount(paymentData) &&
+                checkValidThru(paymentData);
     }
 
-    private void checkValidThru(Map<String, String> paymentData) {
+    private boolean checkValidThru(Map<String, String> paymentData) {
         if (!VALID_THRU_PATTERN.matcher(paymentData.get(CardField.VALID_THRU)).find()) {
             paymentData.put(CardField.VALID_THRU, ErrorInfo.VALID_THRU.toString());
+            return false;
         }
+        return true;
     }
 
-    private void checkAmount(Map<String, String> paymentData) {
+    private boolean checkAmount(Map<String, String> paymentData) {
         if (!AMOUNT_PATTERN.matcher(paymentData.get(PaymentField.AMOUNT)).find()) {
             paymentData.put(PaymentField.AMOUNT, ErrorInfo.AMOUNT.toString());
+            return false;
         }
+        return true;
     }
 
-    private void checkDestinationCardNumber(Map<String, String> paymentData) {
+    private boolean checkDestinationCardNumber(Map<String, String> paymentData) {
         if (!CARD_NUMBER_PATTERN.matcher(paymentData.get(CardField.NUMBER)).find()) {
             paymentData.put(CardField.NUMBER, ErrorInfo.CARD_NUMBER.toString());
+            return false;
         }
+        return true;
     }
 
-    private void checkCvc(Map<String, String> paymentData) {
+    private boolean checkCvc(Map<String, String> paymentData) {
         if (!CVC_PATTERN.matcher(paymentData.get(CardField.CVC)).find()) {
             paymentData.put(CardField.CVC, ErrorInfo.CVC.toString());
+            return false;
         }
+        return true;
     }
 }

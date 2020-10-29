@@ -14,6 +14,15 @@ import java.io.IOException;
 public class RequestProcessor extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        processRequest(req, resp);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        processRequest(req, resp);
+    }
+
+    private void processRequest(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         ActionCommand actionCommand = ActionProvider.defineAction(req.getParameter(RequestParam.COMMAND));
         Router router = actionCommand.execute(req, resp);
         switch (router.getType()) {
@@ -21,10 +30,5 @@ public class RequestProcessor extends HttpServlet {
             case REDIRECT -> resp.sendRedirect(router.getPage());
             case INCLUDE -> req.getRequestDispatcher(router.getPage()).include(req, resp);
         }
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        doGet(req, resp);
     }
 }

@@ -6,9 +6,6 @@
 <%@ taglib prefix="f" uri="http://example.com/functions" %>
 
 <jsp:useBean id="card" type="com.varabei.ivan.model.entity.Card" scope="request"/>
-<c:if test="${not empty requestScope.errors}">
-	<jsp:useBean id="errors" type="java.util.Map" scope="request"/>
-</c:if>
 <fmt:setLocale value="${sessionScope.locale}"/>
 <fmt:bundle basename="content" prefix="card.">
 	<fmt:message key="title" var="title"/>
@@ -20,33 +17,33 @@
 	<fmt:message key="history" var="history"/>
 	<fmt:message key="instant" var="instant"/>
 </fmt:bundle>
+<c:if test="${not empty requestScope.errors}">
+	<jsp:useBean id="errors" type="java.util.Map" scope="request"/>
+	<fmt:bundle basename="content" prefix="error.">
+		<c:if test="${errors.amount != param.amount}">
+			<fmt:message key="${errors.amount}" var="amount_error"/>
+		</c:if>
+		<c:if test="${errors.cvc != param.cvc}">
+			<fmt:message key="${errors.cvc}" var="cvc_error"/>
+		</c:if>
+		<c:if test="${errors.card_number != param.destination_card_number}">
+			<fmt:message key="${errors.card_number}" var="destination_card_number_error"/>
+		</c:if>
+		<c:if test="${errors.valid_thru != param.valid_thru}">
+			<fmt:message key="${errors.valid_thru}" var="valid_thru_error"/>
+		</c:if>
+		<c:if test="${errors.card_id != param.card_id}">
+			<fmt:message key="${errors.card_id}" var="card_id_error"/>
+		</c:if>
+	</fmt:bundle>
+</c:if>
 
-<fmt:bundle basename="content" prefix="error.">
-	<c:if test="${errors.amount != param.amount}">
-		<fmt:message key="${errors.amount}" var="amount_error"/>
-	</c:if>
-	<c:if test="${errors.cvc != param.cvc}">
-		<fmt:message key="${errors.cvc}" var="cvc_error"/>
-	</c:if>
-	<c:if test="${errors.card_number != param.destination_card_number}">
-		<fmt:message key="${errors.card_number}" var="destination_card_number_error"/>
-	</c:if>
-	<c:if test="${errors.valid_thru != param.valid_thru}">
-		<fmt:message key="${errors.valid_thru}" var="valid_thru_error"/>
-	</c:if>
-</fmt:bundle>
 <tags:general pageTitle="${title}">
 	<div class="card">
 		<div class="title">${title}</div>
 		<div class="card__payment">
 			<div class="card__sub-title1 sub-title">${from}
-
-
-
-				<p class="card__sub-title-error">Wrong2</p>
-
-
-
+				<p class="card__sub-title-error">${card_id_error}</p>
 			</div>
 			<div class="card__img1">
 				<div class="sub-title card__balance">${card.account.balance}$</div>
@@ -80,8 +77,6 @@
 			<input type="hidden" name="card_id" value="${card.id}" form="makePayment">
 			<button class="button form_button">${pay}</button>
 		</form>
-
-
 		<c:if test="${not empty requestScope.payments}">
 			<jsp:useBean id="payments" type="java.util.List" scope="request"/>
 			<div class="sub-title card__sub-title">${history}</div>

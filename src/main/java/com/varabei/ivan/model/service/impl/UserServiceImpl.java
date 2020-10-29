@@ -81,8 +81,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean updatePassword(Map<String, String> changePasswordData) throws ServiceException {
         Map<String, String> initialMap = new HashMap<>(changePasswordData);
-        new UserValidator().checkPasswords(changePasswordData.get(UserField.PASSWORD),
-                changePasswordData.get(UserField.REPEAT_PASSWORD), changePasswordData);
+        userValidator.checkPasswords(changePasswordData);
         if (signIn(changePasswordData.get(UserField.LOGIN), changePasswordData.get(UserField.OLD_PASSWORD)).isEmpty()) {
             changePasswordData.put(RequestParam.OLD_PASSWORD, ErrorInfo.OLD_PASSWORD.name().toLowerCase());
         }

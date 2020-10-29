@@ -29,7 +29,7 @@ public class MakePaymentCommand implements ActionCommand {
     public Router execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         Router router = new Router(String.format(RedirectPath.SUCCESS_PAGE, req.getContextPath()), RouterType.REDIRECT);
         Map<String, String> paymentData = new HashMap<>();
-        paymentData.put(PaymentField.SOURCE_CARD_ID, req.getParameter(CardField.ID));
+        paymentData.put(CardField.ID, req.getParameter(CardField.ID));
         paymentData.put(CardField.CVC, req.getParameter(CardField.CVC));
         paymentData.put(CardField.NUMBER, req.getParameter(PaymentField.DESTINATION_CARD_NUMBER));
         paymentData.put(PaymentField.AMOUNT, req.getParameter(PaymentField.AMOUNT));
