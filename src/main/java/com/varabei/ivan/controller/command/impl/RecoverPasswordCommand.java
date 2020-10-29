@@ -4,10 +4,10 @@ import com.varabei.ivan.common.ErrorInfo;
 import com.varabei.ivan.controller.AttributeKey;
 import com.varabei.ivan.controller.JspPath;
 import com.varabei.ivan.controller.RedirectPath;
+import com.varabei.ivan.controller.RequestParam;
 import com.varabei.ivan.controller.command.ActionCommand;
 import com.varabei.ivan.controller.router.Router;
 import com.varabei.ivan.controller.router.RouterType;
-import com.varabei.ivan.model.entity.name.UserField;
 import com.varabei.ivan.model.exception.ServiceException;
 import com.varabei.ivan.model.service.MailService;
 import com.varabei.ivan.model.service.ServiceFactory;
@@ -33,7 +33,7 @@ public class RecoverPasswordCommand implements ActionCommand {
     @Override
     public Router execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         Router router = new Router(String.format(RedirectPath.LOGIN, req.getContextPath()), RouterType.REDIRECT);
-        String email = req.getParameter(UserField.EMAIL);
+        String email = req.getParameter(RequestParam.EMAIL);
         String newPassword = CustomSecurity.generateRandom(DEFAULT_PASSWORD_LENGTH);
         try {
             if (userService.findByEmail(email).isPresent()) {

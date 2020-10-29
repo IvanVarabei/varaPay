@@ -8,7 +8,6 @@ import com.varabei.ivan.controller.command.ActionCommand;
 import com.varabei.ivan.controller.router.Router;
 import com.varabei.ivan.model.entity.Card;
 import com.varabei.ivan.model.entity.Payment;
-import com.varabei.ivan.model.entity.name.CardField;
 import com.varabei.ivan.model.exception.ServiceException;
 import com.varabei.ivan.model.service.CardService;
 import com.varabei.ivan.model.service.PaymentService;
@@ -30,7 +29,7 @@ public class CardPageCommand implements ActionCommand {
     @Override
     public Router execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         Router router = new Router(JspPath.CARD);
-        Long cardId = Long.parseLong(req.getParameter(CardField.ID));
+        Long cardId = Long.parseLong(req.getParameter(RequestParam.CARD_ID));
         try {
             int page = WebPageConfig.DEFAULT_PAGE_INDEX;
             if (req.getParameter(RequestParam.PAGE) != null) {

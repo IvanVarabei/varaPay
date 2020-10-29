@@ -5,7 +5,6 @@ import com.varabei.ivan.controller.AttributeKey;
 import com.varabei.ivan.controller.RequestParam;
 import com.varabei.ivan.controller.command.ActionCommand;
 import com.varabei.ivan.controller.router.Router;
-import com.varabei.ivan.model.entity.name.AccountField;
 import com.varabei.ivan.model.exception.ServiceException;
 import com.varabei.ivan.model.service.CardService;
 import com.varabei.ivan.model.service.ServiceFactory;
@@ -29,7 +28,7 @@ public class VerifyCreateCardCommand implements ActionCommand {
         Router router = new Router();
         HttpSession session = req.getSession();
         String tempCode = req.getParameter(RequestParam.TEMP_CODE);
-        Long accountId = Long.parseLong(session.getAttribute(AccountField.ID).toString());
+        Long accountId = Long.parseLong(session.getAttribute(RequestParam.ACCOUNT_ID).toString());
         if (tempCode.equals(session.getAttribute(RequestParam.TEMP_CODE).toString())) {
             try {
                 String cvc = cardService.createCardAndReturnCvc(accountId);

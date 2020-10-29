@@ -1,10 +1,10 @@
 package com.varabei.ivan.model.dao.impl;
 
 import com.varabei.ivan.model.dao.BidDao;
+import com.varabei.ivan.model.dao.ColumnLabel;
 import com.varabei.ivan.model.dao.GenericDao;
 import com.varabei.ivan.model.dao.builder.impl.BidBoulder;
 import com.varabei.ivan.model.entity.Bid;
-import com.varabei.ivan.model.entity.name.BidField;
 import com.varabei.ivan.model.exception.DaoException;
 
 import java.sql.Connection;
@@ -101,9 +101,9 @@ public class BidDaoImpl extends GenericDao<Bid> implements BidDao {
         try {
             startTransaction(connection);
             Long bidAmount = findLong(FIND_BID_AMOUNT_BY_ID, connection,
-                    BidField.AMOUNT, topUpBidId).orElseThrow(DaoException::new);
+                    ColumnLabel.BID_AMOUNT, topUpBidId).orElseThrow(DaoException::new);
             Long bidAccountId = findLong(FIND_BID_ACCOUNT_BY_BID_ID, connection,
-                    BidField.ACCOUNT_ID, topUpBidId).orElseThrow(DaoException::new);
+                    ColumnLabel.ACCOUNT_ID, topUpBidId).orElseThrow(DaoException::new);
             executeUpdate(ADD_ACCOUNT_BALANCE, connection, bidAmount, bidAccountId);
             executeUpdate(SET_STATE_APPROVED, connection, topUpBidId);
             endTransaction(connection);
@@ -155,12 +155,12 @@ public class BidDaoImpl extends GenericDao<Bid> implements BidDao {
 
     @Override
     public Long findAmountOfInProgressBids() throws DaoException {
-        return findLong(FIND_NUMBER_OF_RECORDS, "count").orElseThrow(DaoException::new);
+        return findLong(FIND_NUMBER_OF_RECORDS, ColumnLabel.COUNT).orElseThrow(DaoException::new);
     }
 
     @Override
     public Long findAmountOfBidsByAccountId(Long accountId) throws DaoException {
-        return findLong(FIND_NUMBER_OF_RECORDS_BY_ACCOUNT_ID, "count", accountId)
+        return findLong(FIND_NUMBER_OF_RECORDS_BY_ACCOUNT_ID, ColumnLabel.COUNT, accountId)
                 .orElseThrow(DaoException::new);
     }
 }

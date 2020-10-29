@@ -1,12 +1,11 @@
 package com.varabei.ivan.controller.command.impl;
 
 import com.varabei.ivan.controller.JspPath;
+import com.varabei.ivan.controller.RedirectPath;
 import com.varabei.ivan.controller.RequestParam;
 import com.varabei.ivan.controller.command.ActionCommand;
-import com.varabei.ivan.controller.RedirectPath;
 import com.varabei.ivan.controller.router.Router;
 import com.varabei.ivan.controller.router.RouterType;
-import com.varabei.ivan.model.entity.name.BidField;
 import com.varabei.ivan.model.exception.ServiceException;
 import com.varabei.ivan.model.service.BidService;
 import com.varabei.ivan.model.service.ServiceFactory;
@@ -27,7 +26,7 @@ public class ApproveTopUpBidCommand implements ActionCommand {
         Router router = new Router(String.format(RedirectPath.RUN_BIDS, req.getContextPath(),
                 req.getParameter(RequestParam.PAGE)), RouterType.REDIRECT);
         try {
-            bidService.approveTopUpBid(Long.parseLong(req.getParameter(BidField.ID)));
+            bidService.approveTopUpBid(Long.parseLong(req.getParameter(RequestParam.BID_ID)));
         } catch (ServiceException e) {
             log.error(e);
             router.setForward(JspPath.ERROR_500);

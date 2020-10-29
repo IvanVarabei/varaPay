@@ -3,12 +3,12 @@ package com.varabei.ivan.controller.command.impl;
 import com.varabei.ivan.common.ErrorInfo;
 import com.varabei.ivan.controller.AttributeKey;
 import com.varabei.ivan.controller.JspPath;
-import com.varabei.ivan.controller.command.ActionCommand;
 import com.varabei.ivan.controller.RedirectPath;
+import com.varabei.ivan.controller.RequestParam;
+import com.varabei.ivan.controller.command.ActionCommand;
 import com.varabei.ivan.controller.router.Router;
 import com.varabei.ivan.controller.router.RouterType;
 import com.varabei.ivan.model.entity.User;
-import com.varabei.ivan.model.entity.name.UserField;
 import com.varabei.ivan.model.exception.ServiceException;
 import com.varabei.ivan.model.service.ServiceFactory;
 import com.varabei.ivan.model.service.UserService;
@@ -29,14 +29,14 @@ public class LoginCommand implements ActionCommand {
     @Override
     public Router execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         Router router = new Router(String.format(RedirectPath.PROFILE, req.getContextPath()), RouterType.REDIRECT);
-        String login = req.getParameter(UserField.LOGIN);
-        String password = req.getParameter(UserField.PASSWORD);
+        String login = req.getParameter(RequestParam.LOGIN);
+        String password = req.getParameter(RequestParam.PASSWORD);
         HttpSession session = req.getSession();
         try {
             Optional<User> user = userService.signIn(login, password);
             if (user.isPresent()) {
-                session.setAttribute(UserField.ROLE_NAME, user.get().getRole().name().toLowerCase());
-                session.setAttribute(UserField.LOGIN, user.get().getLogin());
+                session.setAttribute(RequestParam.ROLE_NAME, user.get().getRole().name().toLowerCase());
+                session.setAttribute(RequestParam.LOGIN, user.get().getLogin());
             } else {
                 req.setAttribute(AttributeKey.ERROR, ErrorInfo.LOGIN_OR_PASSWORD);
                 router.setForward(JspPath.LOGIN);

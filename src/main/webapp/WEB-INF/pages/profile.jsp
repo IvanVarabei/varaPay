@@ -10,6 +10,9 @@
 	<fmt:message key="change_password" var="change_password"/>
 	<fmt:message key="accounts" var="accounts"/>
 	<fmt:message key="add_account" var="add_account"/>
+	<fmt:message key="card_created" var="card_created"/>
+	<fmt:message key="your_cvc" var="your_cvc"/>
+	<fmt:message key="cvc_attention" var="cvc_attention"/>
 </fmt:bundle>
 <tags:general pageTitle="${title}">
 	<div class="profile">
@@ -37,8 +40,8 @@
 			<div class="popup__body">
 				<div class="popup__content">
 					<a href="${pageContext.servletContext.contextPath}/mainServlet?command=profile_get" class="popup__close">X</a>
-					<div class="popup__title">Card`s been created</div>
-					<div class="popup__text">Your cvc for this card <b>${param.cvc}</b>. Don`t lose it! If you forget cvc, you can`t use the card!</div>
+					<div class="popup__title">${card_created}</div>
+					<div class="popup__text">${your_cvc} <b>${param.cvc}</b>. ${cvc_attention}</div>
 				</div>
 			</div>
 		</div>

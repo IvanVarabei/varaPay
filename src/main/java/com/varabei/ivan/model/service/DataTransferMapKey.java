@@ -1,6 +1,6 @@
-package com.varabei.ivan.controller;
+package com.varabei.ivan.model.service;
 
-public class RequestParam {
+public class DataTransferMapKey {
     public static final String COMMAND = "command";
     public static final String CURRENCY = "currency";
     public static final String PAGE = "page";
@@ -39,6 +39,6 @@ public class RequestParam {
     public static final String CLIENT_MESSAGE = "client_message";
     public static final String ADMIN_COMMENT = "admin_comment";
 
-    private RequestParam() {
+    private DataTransferMapKey() {
     }
 }

@@ -8,7 +8,6 @@ import com.varabei.ivan.controller.RequestParam;
 import com.varabei.ivan.controller.command.ActionCommand;
 import com.varabei.ivan.controller.router.Router;
 import com.varabei.ivan.model.entity.User;
-import com.varabei.ivan.model.entity.name.UserField;
 import com.varabei.ivan.model.exception.ServiceException;
 import com.varabei.ivan.model.service.ServiceFactory;
 import com.varabei.ivan.model.service.UserService;
@@ -37,8 +36,8 @@ public class VerifyEmailCommand implements ActionCommand {
                 if (userService.findByLogin(login).isPresent()) {
                     req.setAttribute(AttributeKey.ERROR, String.format(ErrorInfo.LOGIN_TAKEN.name().toLowerCase(), login));
                 } else {
-                    userService.signUp(user, session.getAttribute(UserField.PASSWORD).toString()
-                            , session.getAttribute(UserField.SECRET_WORD).toString());
+                    userService.signUp(user, session.getAttribute(RequestParam.PASSWORD).toString()
+                            , session.getAttribute(RequestParam.SECRET_WORD).toString());
                     router.setRedirect(String.format(RedirectPath.SUCCESS_PAGE, req.getContextPath()));
                 }
             } catch (ServiceException e) {

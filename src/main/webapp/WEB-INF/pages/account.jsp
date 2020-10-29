@@ -5,39 +5,55 @@
 <%@ taglib uri="http://sargue.net/jsptags/time" prefix="javatime" %>
 
 <jsp:useBean id="account" type="com.varabei.ivan.model.entity.Account" scope="request"/>
-<tags:general pageTitle="Account">
+<fmt:setLocale value="${sessionScope.locale}"/>
+<fmt:bundle basename="content" prefix="account.">
+	<fmt:message key="title" var="title"/>
+	<fmt:message key="blocked" var="blocked"/>
+	<fmt:message key="active" var="active"/>
+	<fmt:message key="block_button" var="block_button"/>
+	<fmt:message key="top_up" var="top_up"/>
+	<fmt:message key="withdraw" var="withdraw"/>
+	<fmt:message key="history" var="history"/>
+	<fmt:message key="message" var="message"/>
+	<fmt:message key="comment" var="comment"/>
+	<fmt:message key="operation" var="operation"/>
+	<fmt:message key="in_progress" var="in_progress"/>
+	<fmt:message key="approved" var="approved"/>
+	<fmt:message key="rejected" var="rejected"/>
+</fmt:bundle>
+<tags:general pageTitle="${title}">
 	<div class="account">
 		<div class="account__info account__title">
-			<div class="title ">Account №${account.id}</div>
-			<div class="sub-sub-title ${account.active eq true ? 'green' : 'red'}">${account.active eq true ? 'active' : 'blocked'} ${account.balance}$</div>
+			<div class="title ">${title}${account.id}</div>
+			<div class="sub-sub-title ${account.active eq true ? 'green' : 'red'}">${account.active eq true ? active : blocked} ${account.balance}$</div>
 		</div>
 		<form method="post">
 			<div class="account__buttons">
 				<input type="hidden" name="account_id" value="${account.id}">
 				<button class="button"
 								formaction="${pageContext.servletContext.contextPath}/mainServlet?command=block_account_post"
-					${account.active eq true ? '' : 'disabled'}>block
+					${account.active eq true ? '' : 'disabled'}>${block_button}
 				</button>
 				<button class="button"
 								formaction="${pageContext.servletContext.contextPath}/mainServlet?command=top_up_amount_page_get"
-					${account.active eq true ? '' : 'disabled'}>top up
+					${account.active eq true ? '' : 'disabled'}>${top_up}
 				</button>
-				<button class="button" ${account.active eq true ? '' : 'disabled'}>withdraw</button>
+				<button class="button" ${account.active eq true ? '' : 'disabled'}>${withdraw}</button>
 			</div>
 		</form>
 		<jsp:useBean id="bids" type="java.util.List" scope="request"/>
 		<c:if test="${not empty bids}">
-			<div class="sub-title account__sub-title">operation history</div>
+			<div class="sub-title account__sub-title">${history}</div>
 			<div class="operation-header">
-				<div class="operation-header__info operation__part">Operation info</div>
-				<div class="operation-header__client-message operation__part">Your message</div>
-				<div class="operation-header__admin-comment operation__part">Admin comment</div>
+				<div class="operation-header__info operation__part">${operation}</div>
+				<div class="operation-header__client-message operation__part">${message}</div>
+				<div class="operation-header__admin-comment operation__part">${comment}</div>
 			</div>
 			<c:forEach var="bid" items="${bids}">
 				<div class="operation">
 					<div class="operation__id operation__part">№${bid.id}</div>
-					<div class="operation__state operation__part">${bid.state}</div>
-					<div class="operation__type operation__part">${bid.topUp eq true ? 'top up' : 'withdraw'} ${bid.amount}$</div>
+					<div class="operation__state operation__part">${bid.state eq 'IN_PROGRESS' ? in_progress : (bid.state eq 'APPROVED' ? approved : rejected)}</div>
+					<div class="operation__type operation__part">${bid.topUp eq true ? top_up : withdraw} ${bid.amount}$</div>
 					<div class="operation__client-message operation__part">${bid.clientMessage}</div>
 					<div class="operation__admin-comment operation__part">${bid.adminComment}</div>
 					<div class="operation__date operation__part"><javatime:format value="${bid.placingDateTime}"

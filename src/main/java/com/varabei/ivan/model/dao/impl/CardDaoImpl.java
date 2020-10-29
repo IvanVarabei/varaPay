@@ -1,10 +1,10 @@
 package com.varabei.ivan.model.dao.impl;
 
 import com.varabei.ivan.model.dao.CardDao;
+import com.varabei.ivan.model.dao.ColumnLabel;
 import com.varabei.ivan.model.dao.GenericDao;
 import com.varabei.ivan.model.dao.builder.impl.CardBuilder;
 import com.varabei.ivan.model.entity.Card;
-import com.varabei.ivan.model.entity.name.CardField;
 import com.varabei.ivan.model.exception.DaoException;
 
 import java.sql.Connection;
@@ -51,7 +51,7 @@ public class CardDaoImpl extends GenericDao<Card> implements CardDao {
             startTransaction(connection);
             executeUpdate(CREATE_CARD, connection, accountId);
             String cvcOfTheLastCreatedCard = findString(FIND_CVC_OF_THE_LAST_CREATED_CARD, connection,
-                    CardField.CVC, accountId).orElseThrow(DaoException::new);
+                    ColumnLabel.CVC, accountId).orElseThrow(DaoException::new);
             endTransaction(connection);
             return cvcOfTheLastCreatedCard;
         } catch (SQLException | DaoException e) {

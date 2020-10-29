@@ -6,7 +6,6 @@ import com.varabei.ivan.controller.RequestParam;
 import com.varabei.ivan.controller.command.ActionCommand;
 import com.varabei.ivan.controller.router.Router;
 import com.varabei.ivan.model.entity.User;
-import com.varabei.ivan.model.entity.name.UserField;
 import com.varabei.ivan.model.exception.ServiceException;
 import com.varabei.ivan.model.service.ServiceFactory;
 import com.varabei.ivan.model.service.UserService;
@@ -30,23 +29,23 @@ public class SignupCommand implements ActionCommand {
     public Router execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         Router router = new Router(JspPath.VERIFY_EMAIL);
         Map<String, String> signupData = new HashMap<>();
-        signupData.put(UserField.LOGIN, req.getParameter(UserField.LOGIN));
-        signupData.put(UserField.PASSWORD, req.getParameter(UserField.PASSWORD));
+        signupData.put(RequestParam.LOGIN, req.getParameter(RequestParam.LOGIN));
+        signupData.put(RequestParam.PASSWORD, req.getParameter(RequestParam.PASSWORD));
         signupData.put(RequestParam.REPEAT_PASSWORD, req.getParameter(RequestParam.REPEAT_PASSWORD));
-        signupData.put(UserField.FIRST_NAME, req.getParameter(UserField.FIRST_NAME));
-        signupData.put(UserField.LAST_NAME, req.getParameter(UserField.LAST_NAME));
-        signupData.put(UserField.EMAIL, req.getParameter(UserField.EMAIL));
-        signupData.put(UserField.BIRTH, req.getParameter(UserField.BIRTH));
-        signupData.put(UserField.SECRET_WORD, req.getParameter(UserField.SECRET_WORD));
+        signupData.put(RequestParam.FIRST_NAME, req.getParameter(RequestParam.FIRST_NAME));
+        signupData.put(RequestParam.LAST_NAME, req.getParameter(RequestParam.LAST_NAME));
+        signupData.put(RequestParam.EMAIL, req.getParameter(RequestParam.EMAIL));
+        signupData.put(RequestParam.BIRTH, req.getParameter(RequestParam.BIRTH));
+        signupData.put(RequestParam.SECRET_WORD, req.getParameter(RequestParam.SECRET_WORD));
         try {
             Optional<String> tempCode = userService.checkSignupDataAndSendEmail(signupData);
             if (tempCode.isPresent()) {
                 req.getSession().setAttribute(RequestParam.TEMP_CODE, tempCode.get());
-                req.getSession().setAttribute(UserField.PASSWORD, signupData.get(UserField.PASSWORD));
-                req.getSession().setAttribute(UserField.SECRET_WORD, signupData.get(UserField.SECRET_WORD));
-                req.getSession().setAttribute(AttributeKey.USER, new User(signupData.get(UserField.LOGIN),
-                        signupData.get(UserField.FIRST_NAME), signupData.get(UserField.LAST_NAME),
-                        signupData.get(UserField.EMAIL), LocalDate.parse(signupData.get(UserField.BIRTH))));
+                req.getSession().setAttribute(RequestParam.PASSWORD, signupData.get(RequestParam.PASSWORD));
+                req.getSession().setAttribute(RequestParam.SECRET_WORD, signupData.get(RequestParam.SECRET_WORD));
+                req.getSession().setAttribute(AttributeKey.USER, new User(signupData.get(RequestParam.LOGIN),
+                        signupData.get(RequestParam.FIRST_NAME), signupData.get(RequestParam.LAST_NAME),
+                        signupData.get(RequestParam.EMAIL), LocalDate.parse(signupData.get(RequestParam.BIRTH))));
             } else {
                 req.setAttribute(AttributeKey.ERRORS, signupData);
                 router.setForward(JspPath.SIGNUP);

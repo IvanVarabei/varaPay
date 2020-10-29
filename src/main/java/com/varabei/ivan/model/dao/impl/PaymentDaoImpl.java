@@ -1,13 +1,11 @@
 package com.varabei.ivan.model.dao.impl;
 
+import com.varabei.ivan.model.dao.ColumnLabel;
 import com.varabei.ivan.model.dao.GenericDao;
 import com.varabei.ivan.model.dao.PaymentDao;
 import com.varabei.ivan.model.dao.builder.impl.CardBuilder;
 import com.varabei.ivan.model.entity.Card;
 import com.varabei.ivan.model.entity.Payment;
-import com.varabei.ivan.model.entity.name.AccountField;
-import com.varabei.ivan.model.entity.name.CardField;
-import com.varabei.ivan.model.entity.name.PaymentField;
 import com.varabei.ivan.model.exception.DaoException;
 
 import java.math.BigDecimal;
@@ -39,7 +37,6 @@ public class PaymentDaoImpl extends GenericDao<Card> implements PaymentDao {
             " destination_card_id, payment_instant from payments where source_card_id = ?";
     private static final String FIND_INCOMING_PAYMENTS_BY_CARD_ID = "select payment_id, amount, source_card_id," +
             " destination_card_id, payment_instant from payments where destination_card_id = ?";
-    private static final String RESULT_SET_COLUMN_LABEL_COUNT = "count";
 
     public PaymentDaoImpl() {
         super(new CardBuilder());
@@ -47,8 +44,7 @@ public class PaymentDaoImpl extends GenericDao<Card> implements PaymentDao {
 
     @Override
     public Long findNumberOfRecordsByCardId(Long cardId) throws DaoException {
-        return findLong(FIND_NUMBER_OF_RECORDS, RESULT_SET_COLUMN_LABEL_COUNT,
-                cardId, cardId).orElseThrow(DaoException::new);
+        return findLong(FIND_NUMBER_OF_RECORDS, ColumnLabel.COUNT, cardId, cardId).orElseThrow(DaoException::new);
     }
 
     @Override
@@ -57,11 +53,11 @@ public class PaymentDaoImpl extends GenericDao<Card> implements PaymentDao {
         try {
             startTransaction(connection);
             Long destinationCardId = findLong(FIND_CARD_ID_BY_NUMBER, connection,
-                    CardField.ID, destinationCardNumber).orElseThrow(DaoException::new);
+                    ColumnLabel.CARD_ID, destinationCardNumber).orElseThrow(DaoException::new);
             Long sourceAccountId = findLong(FIND_ACCOUNT_ID_BY_CARD_ID, connection,
-                    AccountField.ID, sourceCardId).orElseThrow(DaoException::new);
+                    ColumnLabel.ACCOUNT_ID, sourceCardId).orElseThrow(DaoException::new);
             Long destAccountId = findLong(FIND_ACCOUNT_ID_BY_CARD_ID, connection,
-                    AccountField.ID, destinationCardId).orElseThrow(DaoException::new);
+                    ColumnLabel.ACCOUNT_ID, destinationCardId).orElseThrow(DaoException::new);
             executeUpdate(ADD_ACCOUNT_BALANCE, connection, -amount, sourceAccountId);
             executeUpdate(ADD_ACCOUNT_BALANCE, connection, amount, destAccountId);
             executeUpdate(SET_PAYMENT, connection, sourceCardId, destinationCardId, amount);
@@ -119,17 +115,17 @@ public class PaymentDaoImpl extends GenericDao<Card> implements PaymentDao {
 
     private Payment instantiatePayment(ResultSet resultSet, Connection connection) throws SQLException, DaoException {
         Payment payment = new Payment();
-        Long sourceCardId = resultSet.getLong(PaymentField.SOURCE_CARD_ID);
-        Long destinationCardId = resultSet.getLong(PaymentField.DESTINATION_CARD_ID);
+        Long sourceCardId = resultSet.getLong(ColumnLabel.SOURCE_CARD_ID);
+        Long destinationCardId = resultSet.getLong(ColumnLabel.DESTINATION_CARD_ID);
         Card sourceCard = executeForSingleResult(FIND_CARD_BY_ID, connection, sourceCardId)
                 .orElseThrow(DaoException::new);
         Card destinationCard = executeForSingleResult(FIND_CARD_BY_ID, connection, destinationCardId)
                 .orElseThrow(DaoException::new);
         payment.setSourceCard(sourceCard);
         payment.setDestinationCard(destinationCard);
-        payment.setId(resultSet.getLong(PaymentField.ID));
-        payment.setAmount(BigDecimal.valueOf(resultSet.getLong(PaymentField.AMOUNT)).movePointLeft(2));
-        payment.setPaymentInstant(resultSet.getTimestamp(PaymentField.INSTANT).toLocalDateTime());
+        payment.setId(resultSet.getLong(ColumnLabel.PAYMENT_ID));
+        payment.setAmount(BigDecimal.valueOf(resultSet.getLong(ColumnLabel.PAYMENT_AMOUNT)).movePointLeft(2));
+        payment.setPaymentInstant(resultSet.getTimestamp(ColumnLabel.INSTANT).toLocalDateTime());
         return payment;
     }
 }

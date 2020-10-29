@@ -8,7 +8,6 @@ import com.varabei.ivan.controller.command.ActionCommand;
 import com.varabei.ivan.controller.router.Router;
 import com.varabei.ivan.model.entity.Account;
 import com.varabei.ivan.model.entity.Bid;
-import com.varabei.ivan.model.entity.name.AccountField;
 import com.varabei.ivan.model.exception.ServiceException;
 import com.varabei.ivan.model.service.AccountService;
 import com.varabei.ivan.model.service.BidService;
@@ -30,9 +29,9 @@ public class AccountPageCommand implements ActionCommand {
     @Override
     public Router execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         Router router = new Router(JspPath.ACCOUNT);
-        Long accountId = Long.parseLong(req.getParameter(AccountField.ID));
+        Long accountId = Long.parseLong(req.getParameter(RequestParam.ACCOUNT_ID));
         try {
-            int page = 1;
+            int page = WebPageConfig.DEFAULT_PAGE_INDEX;
             if (req.getParameter(RequestParam.PAGE) != null) {
                 page = Integer.parseInt(req.getParameter(RequestParam.PAGE));
             }

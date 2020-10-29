@@ -7,8 +7,6 @@ import com.varabei.ivan.controller.RequestParam;
 import com.varabei.ivan.controller.command.ActionCommand;
 import com.varabei.ivan.controller.router.Router;
 import com.varabei.ivan.model.entity.Currency;
-import com.varabei.ivan.model.entity.name.AccountField;
-import com.varabei.ivan.model.entity.name.BidField;
 import com.varabei.ivan.model.service.CurrencyService;
 import com.varabei.ivan.model.service.ServiceFactory;
 
@@ -28,13 +26,13 @@ public class TopUpPageCommand implements ActionCommand {
     @Override
     public Router execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         Router router = new Router(JspPath.TOP_UP);
-        Long accountId = Long.parseLong(req.getParameter(AccountField.ID));
-        String amount = req.getParameter(BidField.AMOUNT);
+        Long accountId = Long.parseLong(req.getParameter(RequestParam.ACCOUNT_ID));
+        String amount = req.getParameter(RequestParam.AMOUNT);
         String currency = req.getParameter(RequestParam.CURRENCY);
         Map<String, String> errors = new HashMap<>();
-        req.setAttribute(BidField.ACCOUNT_ID, accountId);
+        req.setAttribute(RequestParam.ACCOUNT_ID, accountId);
         if (!amount.matches(DIGITS)) {
-            errors.put(BidField.AMOUNT, ErrorInfo.NOT_NUMBER.name().toLowerCase());
+            errors.put(RequestParam.AMOUNT, ErrorInfo.NOT_NUMBER.name().toLowerCase());
         }
         if (Arrays.stream(Currency.values()).noneMatch(c -> currency.equalsIgnoreCase(c.name()))) {
             errors.put("currency", ErrorInfo.CAN_NOT_BE_EMPTY.name().toLowerCase());
@@ -44,7 +42,7 @@ public class TopUpPageCommand implements ActionCommand {
             BigDecimal amountInChosenCurrency = currencyService
                     .convertUsdToAnotherCurrency(properAmount, Currency.valueOf(currency.toUpperCase()));
             req.setAttribute(AttributeKey.AMOUNT_IN_CHOSEN_CURRENCY, amountInChosenCurrency);
-            req.setAttribute(BidField.AMOUNT, properAmount);
+            req.setAttribute(RequestParam.AMOUNT, properAmount);
         } else {
             req.setAttribute(AttributeKey.ERRORS, errors);
             router.setForward(JspPath.INPUT_TOP_UP_AMOUNT);

@@ -27,7 +27,7 @@ public class RunBidsCommand implements ActionCommand {
     public Router execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         Router router = new Router(JspPath.RUN_BIDS);
         try {
-            int page = 1;
+            int page = WebPageConfig.DEFAULT_PAGE_INDEX;
             String pageString = req.getParameter(RequestParam.PAGE);
             if (pageString != null && Integer.parseInt(pageString) != 0) {
                 page = Integer.parseInt(req.getParameter(RequestParam.PAGE));

@@ -1,8 +1,7 @@
 package com.varabei.ivan.validator;
 
 import com.varabei.ivan.common.ErrorInfo;
-import com.varabei.ivan.model.entity.name.CardField;
-import com.varabei.ivan.model.entity.name.PaymentField;
+import com.varabei.ivan.model.service.DataTransferMapKey;
 
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -14,39 +13,40 @@ public class PaymentValidator {
     private static final Pattern CVC_PATTERN = Pattern.compile("^\\d{3}$");
 
     public boolean isValidPayment(Map<String, String> paymentData) {
-        return checkCvc(paymentData) &&
-                checkDestinationCardNumber(paymentData) &&
-                checkAmount(paymentData) &&
-                checkValidThru(paymentData);
+        boolean isValid = checkCvc(paymentData);
+        isValid &= checkDestinationCardNumber(paymentData);
+        isValid &= checkAmount(paymentData);
+        isValid &= checkValidThru(paymentData);
+        return isValid;
     }
 
     private boolean checkValidThru(Map<String, String> paymentData) {
-        if (!VALID_THRU_PATTERN.matcher(paymentData.get(CardField.VALID_THRU)).find()) {
-            paymentData.put(CardField.VALID_THRU, ErrorInfo.VALID_THRU.toString());
+        if (!VALID_THRU_PATTERN.matcher(paymentData.get(DataTransferMapKey.VALID_THRU)).find()) {
+            paymentData.put(DataTransferMapKey.VALID_THRU, ErrorInfo.VALID_THRU.toString());
             return false;
         }
         return true;
     }
 
     private boolean checkAmount(Map<String, String> paymentData) {
-        if (!AMOUNT_PATTERN.matcher(paymentData.get(PaymentField.AMOUNT)).find()) {
-            paymentData.put(PaymentField.AMOUNT, ErrorInfo.AMOUNT.toString());
+        if (!AMOUNT_PATTERN.matcher(paymentData.get(DataTransferMapKey.AMOUNT)).find()) {
+            paymentData.put(DataTransferMapKey.AMOUNT, ErrorInfo.AMOUNT.toString());
             return false;
         }
         return true;
     }
 
     private boolean checkDestinationCardNumber(Map<String, String> paymentData) {
-        if (!CARD_NUMBER_PATTERN.matcher(paymentData.get(CardField.NUMBER)).find()) {
-            paymentData.put(CardField.NUMBER, ErrorInfo.CARD_NUMBER.toString());
+        if (!CARD_NUMBER_PATTERN.matcher(paymentData.get(DataTransferMapKey.NUMBER)).find()) {
+            paymentData.put(DataTransferMapKey.NUMBER, ErrorInfo.CARD_NUMBER.toString());
             return false;
         }
         return true;
     }
 
     private boolean checkCvc(Map<String, String> paymentData) {
-        if (!CVC_PATTERN.matcher(paymentData.get(CardField.CVC)).find()) {
-            paymentData.put(CardField.CVC, ErrorInfo.CVC.toString());
+        if (!CVC_PATTERN.matcher(paymentData.get(DataTransferMapKey.CVC)).find()) {
+            paymentData.put(DataTransferMapKey.CVC, ErrorInfo.CVC.toString());
             return false;
         }
         return true;

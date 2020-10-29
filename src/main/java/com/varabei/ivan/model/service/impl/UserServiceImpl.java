@@ -5,9 +5,9 @@ import com.varabei.ivan.controller.RequestParam;
 import com.varabei.ivan.model.dao.DaoFactory;
 import com.varabei.ivan.model.dao.UserDao;
 import com.varabei.ivan.model.entity.User;
-import com.varabei.ivan.model.entity.name.UserField;
 import com.varabei.ivan.model.exception.DaoException;
 import com.varabei.ivan.model.exception.ServiceException;
+import com.varabei.ivan.model.service.DataTransferMapKey;
 import com.varabei.ivan.model.service.MailService;
 import com.varabei.ivan.model.service.UserService;
 import com.varabei.ivan.util.CustomSecurity;
@@ -35,15 +35,15 @@ public class UserServiceImpl implements UserService {
     public Optional<String> checkSignupDataAndSendEmail(Map<String, String> signupData) throws ServiceException {
         Map<String, String> initialMap = new HashMap<>(signupData);
         if (userValidator.isValidSignupData(signupData)) {
-            if (findByEmail(signupData.get(UserField.EMAIL)).isPresent()) {
-                signupData.put(UserField.EMAIL, ErrorInfo.ALREADY_EXISTS.toString());
+            if (findByEmail(signupData.get(DataTransferMapKey.EMAIL)).isPresent()) {
+                signupData.put(DataTransferMapKey.EMAIL, ErrorInfo.ALREADY_EXISTS.toString());
             }
-            if (findByLogin(signupData.get(UserField.LOGIN)).isPresent()) {
-                signupData.put(UserField.LOGIN, ErrorInfo.ALREADY_EXISTS.toString());
+            if (findByLogin(signupData.get(DataTransferMapKey.LOGIN)).isPresent()) {
+                signupData.put(DataTransferMapKey.LOGIN, ErrorInfo.ALREADY_EXISTS.toString());
             }
             if (initialMap.equals(signupData)) {
                 String tempCode = CustomSecurity.generateRandom(VERIFICATION_CODE_LENGTH);
-                mailService.sendEmail(signupData.get(UserField.EMAIL), SUBJECT_VERIFICATION,
+                mailService.sendEmail(signupData.get(DataTransferMapKey.EMAIL), SUBJECT_VERIFICATION,
                         String.format(BODY_VERIFICATION_CODE, tempCode));
                 return Optional.of(tempCode);
             }
@@ -67,7 +67,7 @@ public class UserServiceImpl implements UserService {
     public Optional<User> signIn(String login, String password) throws ServiceException {
         try {
             Optional<String> hashedPassword = userDao.findPasswordByLogin(login);
-            Optional<String> salt = userDao.findSaltByLogin(login);
+            Optional<String> salt = userDao.findSaltByLoginOrEmail(login);
             if (hashedPassword.isPresent() && salt.isPresent() &&
                     hashedPassword.get().equals(CustomSecurity.generateHash(password + salt.get()))) {
                 return userDao.findByLogin(login);
@@ -82,12 +82,13 @@ public class UserServiceImpl implements UserService {
     public boolean updatePassword(Map<String, String> changePasswordData) throws ServiceException {
         Map<String, String> initialMap = new HashMap<>(changePasswordData);
         userValidator.checkPasswords(changePasswordData);
-        if (signIn(changePasswordData.get(UserField.LOGIN), changePasswordData.get(UserField.OLD_PASSWORD)).isEmpty()) {
+        if (signIn(changePasswordData.get(DataTransferMapKey.LOGIN),
+                changePasswordData.get(DataTransferMapKey.OLD_PASSWORD)).isEmpty()) {
             changePasswordData.put(RequestParam.OLD_PASSWORD, ErrorInfo.OLD_PASSWORD.name().toLowerCase());
         }
         if (changePasswordData.equals(initialMap)) {
-            User user = findByLogin(changePasswordData.get(UserField.LOGIN)).get();
-            updatePassword(user.getEmail(), changePasswordData.get(UserField.PASSWORD));
+            User user = findByLogin(changePasswordData.get(DataTransferMapKey.LOGIN)).get();
+            updatePassword(user.getEmail(), changePasswordData.get(DataTransferMapKey.PASSWORD));
             return true;
         } else {
             return false;
@@ -97,7 +98,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updatePassword(String email, String newPassword) throws ServiceException {
         try {
-            String salt = CustomSecurity.generateRandom(SALT_LENGTH);
+            String salt = userDao.findSaltByLoginOrEmail(email).get();
             String hashedPassword = CustomSecurity.generateHash(newPassword + salt);
             userDao.updatePassword(email, hashedPassword, salt);
         } catch (DaoException e) {
