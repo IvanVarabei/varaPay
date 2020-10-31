@@ -1,6 +1,10 @@
 package com.varabei.ivan.model.dao;
 
 public class ColumnLabel {
+    // General
+    public static final String COUNT = "count";
+    public static final String EXISTS = "exists";
+
     // User
     public static final String USER_ID = "user_id";
     public static final String ROLE_NAME = "role_name";
@@ -38,10 +42,6 @@ public class ColumnLabel {
     public static final String BID_AMOUNT = "amount";
     public static final String CLIENT_MESSAGE = "client_message";
     public static final String ADMIN_COMMENT = "admin_comment";
-
-    // General
-    public static final String COUNT = "count";
-    public static final String EXISTS = "exists";
 
     private ColumnLabel() {
     }

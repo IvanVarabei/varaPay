@@ -12,8 +12,13 @@ public final class ServiceFactory {
     private final AccountService accountService = new AccountServiceImpl();
     private final BidService bidService = new BidServiceImpl();
     private final CurrencyService currencyService = new CurrencyServiceImpl();
+    private final DosProtectionService dosProtectionService = new DosProtectionServiceImpl();
 
     private ServiceFactory() {
+    }
+
+    public static ServiceFactory getInstance() {
+        return instance;
     }
 
     public UserService getUserService() {
@@ -44,7 +49,7 @@ public final class ServiceFactory {
         return currencyService;
     }
 
-    public static ServiceFactory getInstance() {
-        return instance;
+    public DosProtectionService getDosProtectionService() {
+        return dosProtectionService;
     }
 }

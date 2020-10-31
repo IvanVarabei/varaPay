@@ -2,7 +2,7 @@ package com.varabei.ivan.controller.command.impl;
 
 import com.varabei.ivan.controller.AttributeKey;
 import com.varabei.ivan.controller.JspPath;
-import com.varabei.ivan.controller.RedirectPath;
+import com.varabei.ivan.controller.CommandPath;
 import com.varabei.ivan.controller.RequestParam;
 import com.varabei.ivan.controller.command.ActionCommand;
 import com.varabei.ivan.controller.router.Router;
@@ -33,7 +33,7 @@ public class ChangePasswordCommand implements ActionCommand {
         changePasswordData.put(RequestParam.LOGIN, req.getSession().getAttribute(RequestParam.LOGIN).toString());
         try {
             if (userService.updatePassword(changePasswordData)) {
-                router.setRedirect(String.format(RedirectPath.CHANGING_PASSWORD, req.getContextPath()));
+                router.setRedirect(String.format(CommandPath.CHANGING_PASSWORD, req.getContextPath()));
             } else {
                 req.setAttribute(AttributeKey.ERRORS, changePasswordData);
             }

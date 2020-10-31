@@ -5,6 +5,7 @@ import com.varabei.ivan.controller.JspPath;
 import com.varabei.ivan.controller.RequestParam;
 import com.varabei.ivan.controller.command.ActionCommand;
 import com.varabei.ivan.controller.router.Router;
+import com.varabei.ivan.model.entity.Currency;
 import com.varabei.ivan.model.service.CurrencyService;
 import com.varabei.ivan.model.service.ServiceFactory;
 
@@ -33,6 +34,7 @@ public class TopUpPageCommand implements ActionCommand {
         if (amountInCurrency.isPresent()) {
             req.setAttribute(AttributeKey.AMOUNT_IN_CHOSEN_CURRENCY, amountInCurrency.get());
             req.setAttribute(AttributeKey.AMOUNT, new BigDecimal(req.getParameter(RequestParam.AMOUNT)));
+            req.setAttribute(AttributeKey.CURRENCY, Currency.valueOf(req.getParameter(RequestParam.CURRENCY)));
         } else {
             req.setAttribute(AttributeKey.ERRORS, dataToConvert);
             router.setForward(JspPath.INPUT_TOP_UP_AMOUNT);

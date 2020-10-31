@@ -11,9 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class CardServiceImpl implements CardService {
-    private static final CardDao cardDao = DaoFactory.getInstance().getCardDao();
-    private static final int AMOUNT_OF_FIGURES_IN_CARD_NUMBER = 16;
-    private static final String REGEX_NOT_DIGIT = "\\D+";
+    private static CardDao cardDao = DaoFactory.getInstance().getCardDao();
 
     @Override
     public String createCardAndReturnCvc(Long accountId) throws ServiceException {
@@ -32,19 +30,6 @@ public class CardServiceImpl implements CardService {
             throw new ServiceException(daoException);
         }
     }
-//
-//    @Override
-//    public Optional<Card> findByCardNumber(String cardNumber) throws ServiceException {
-//        try {
-//            String clearNumber = cardNumber.replaceAll(REGEX_NOT_DIGIT, "");
-//            if (clearNumber.length() == AMOUNT_OF_FIGURES_IN_CARD_NUMBER) {
-//                return cardDao.findByCardNumber(clearNumber);
-//            }
-//            throw new ServiceException();
-//        } catch (DaoException daoException) {
-//            throw new ServiceException(daoException);
-//        }
-//    }
 
     @Override
     public List<Card> findByAccountId(Long accountId) throws ServiceException {

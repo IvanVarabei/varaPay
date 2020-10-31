@@ -28,8 +28,8 @@ public class CardDaoImpl extends GenericDao<Card> implements CardDao {
             "    join accounts on card_id = ? and cards.account_id = accounts.account_id\n" +
             "    join users on accounts.user_id = users.user_id\n" +
             "    join roles on users.role_id = roles.role_id";
-    private static final String FIND_CARD_BY_CARD_NUMBER = "select card_id, card_number, valid_thru, cvc, cards.account_id,\n" +
-            "                   balance, is_active, users.user_id, users.login, password, salt,users.email,\n" +
+    private static final String FIND_CARD_BY_CARD_NUMBER = "select card_id, card_number, valid_thru, cvc, " +
+            "cards.account_id, balance, is_active, users.user_id, users.login, password, salt,users.email,\n" +
             "                   users.firstname, users.lastname, users.birth, roles.role_name from cards\n" +
             "                join accounts on card_number = ? and to_char(valid_thru, 'YYYY-MM') = ?\n" +
             "                                     and cards.account_id = accounts.account_id\n" +

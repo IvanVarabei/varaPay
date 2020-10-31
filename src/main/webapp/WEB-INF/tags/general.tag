@@ -45,9 +45,9 @@
 							<p class="header__link">+375 29 7324595</p>
 						</li>
 						<c:if test="${empty sessionScope.login}">
-						<li>
-							<a href="${pageContext.request.contextPath}" class="header__link">${welcome}</a>
-						</li>
+							<li>
+								<a href="${pageContext.request.contextPath}" class="header__link">${welcome}</a>
+							</li>
 						</c:if>
 						<c:if test="${not empty sessionScope.login}">
 							<li>
@@ -57,10 +57,12 @@
 						</c:if>
 						<c:if test="${sessionScope.role_name eq 'admin'}">
 							<li>
-								<a href="${pageContext.request.contextPath}/mainServlet?command=run_accounts_get" class="header__link">${run_accounts}</a>
+								<a href="${pageContext.request.contextPath}/mainServlet?command=run_accounts_get"
+									 class="header__link">${run_accounts}</a>
 							</li>
 							<li>
-								<a href="${pageContext.request.contextPath}/mainServlet?command=run_bids_get" class="header__link">${run_bids}</a>
+								<a href="${pageContext.request.contextPath}/mainServlet?command=run_bids_get"
+									 class="header__link">${run_bids}</a>
 							</li>
 						</c:if>
 						<c:if test="${empty sessionScope.login}">
@@ -75,7 +77,8 @@
 						</c:if>
 						<c:if test="${not empty sessionScope.login}">
 							<li>
-								<a href="${pageContext.request.contextPath}/mainServlet?command=logout" class="header__link">${logout}</a>
+								<a href="${pageContext.request.contextPath}/mainServlet?command=logout"
+									 class="header__link">${logout}</a>
 							</li>
 						</c:if>
 						<li>
@@ -88,10 +91,17 @@
 						</select>
 						<input type="hidden" name="command" value="change_language">
 						<c:forEach var="currentParam" items="${param}">
-							<c:if test="${currentParam.value eq 'card_page_get' and param.cvc != null}">
-								<input type="hidden" name="${currentParam.key}" value="make_payment_post">
-							</c:if>
-							<input type="hidden" name="${currentParam.key}" value="${currentParam.value}">
+							<c:choose>
+								<c:when test="${currentParam.value eq 'card_page_get' and param.cvc != null}">
+									<input type="hidden" name="${currentParam.key}" value="make_payment_post">
+								</c:when>
+								<c:when test="${currentParam.value eq 'top_up_page_get' and param.amountInChosenCurrency != null}">
+									<input type="hidden" name="${currentParam.key}" value="place_top_up_bid_post">
+								</c:when>
+								<c:otherwise>
+									<input type="hidden" name="${currentParam.key}" value="${currentParam.value}">
+								</c:otherwise>
+							</c:choose>
 						</c:forEach>
 						</form>
 						</li>

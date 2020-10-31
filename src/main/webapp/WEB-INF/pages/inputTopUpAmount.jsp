@@ -3,6 +3,9 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 
+<c:if test="${not empty requestScope.errors}">
+	<jsp:useBean id="errors" type="java.util.Map" scope="request"/>
+</c:if>
 <jsp:useBean id="account_id" type="java.lang.Long" scope="request"/>
 <fmt:setLocale value="${sessionScope.locale}"/>
 <fmt:bundle basename="content" prefix="top_up.">
@@ -11,16 +14,21 @@
 	<fmt:message key="currency_input" var="currency_input"/>
 	<fmt:message key="continue_button" var="continue_button"/>
 </fmt:bundle>
-<tags:general pageTitle="${title}">
-	<c:if test="${not empty requestScope.errors}">
-		<jsp:useBean id="errors" type="java.util.Map" scope="request"/>
+<fmt:bundle basename="content" prefix="error.">
+	<c:if test="${errors.amount != param.amount}">
+		<fmt:message key="${errors.amount}" var="amount_error"/>
 	</c:if>
+	<c:if test="${errors.currency != param.currency}">
+		<fmt:message key="${errors.currency}" var="currency_error"/>
+	</c:if>
+</fmt:bundle>
+<tags:general pageTitle="${title}">
 	<div class="topup1">
 		<div class="title topup1__title">${title}</div>
 		<form class="form" method="post" action="${pageContext.servletContext.contextPath}/mainServlet?command=top_up_page_get">
 			<input type="hidden" name="account_id" value="${account_id}">
 			<p class="form__input-label">${amount} $</p><input type="text" name="amount" class="input form__input" value="${not empty param.amount ? param.amount : ''}">
-			<p class="form__error">${errors.amount}</p>
+			<p class="form__error">${amount_error}</p>
 			<p class="form__input-label">${currency_input}</p>
 			<select class="input" name="currency">
 				<option>${param['currency']}</option>
@@ -30,7 +38,7 @@
 					</c:if>
 				</c:forEach>
 			</select>
-			<p class="form__error">${errors.currency}</p>
+			<p class="form__error">${currency_error}</p>
 			<button class="button form_button">${continue_button}</button>
 		</form>
 	</div>

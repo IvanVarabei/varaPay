@@ -14,6 +14,7 @@
 	<fmt:message key="account_id" var="account_id"/>
 	<fmt:message key="secret_word" var="secret_word"/>
 	<fmt:message key="enable" var="enable"/>
+	<fmt:message key="fail_message" var="fail_message"/>
 </fmt:bundle>
 <tags:general pageTitle="${title}">
 	<div class="run-accounts">
@@ -37,7 +38,7 @@
 					<form class="run-account-form" method="post"
 								action="${pageContext.servletContext.contextPath}/mainServlet?command=unblock_account_post&query=${param.query}">
 						<input class="input" name="secret_word">
-						<c:if test="${not empty requestScope.error and account.id eq param.account_id}"><p class="form__error">${requestScope.error}</p></c:if>
+						<c:if test="${not empty requestScope.error and account.id eq param.account_id}"><p class="form__error">${fail_message}</p></c:if>
 						<input type="hidden" name="account_id" value="${account.id}">
 						<button class="button">${enable}</button>
 					</form>

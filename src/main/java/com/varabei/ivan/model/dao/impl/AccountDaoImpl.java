@@ -11,7 +11,8 @@ import java.util.List;
 import java.util.Optional;
 
 public class AccountDaoImpl extends GenericDao<Account> implements AccountDao {
-    private static final String CHANGE_ACTIVE_BY_ID = "update accounts set is_active = not is_active where account_id= ?";
+    private static final String CHANGE_ACTIVE_BY_ID = "update accounts set is_active = not is_active " +
+            "where account_id= ?";
     private static final String CREATE_ACCOUNT = "insert into accounts (user_id) values (?)";
     private static final String ABANDON_ACCOUNT = "update accounts set is_abandoned = true where account_id= ?";
     private static final String FIND_ACCOUNTS_BY_LOGIN =
@@ -92,11 +93,6 @@ public class AccountDaoImpl extends GenericDao<Account> implements AccountDao {
     }
 
     @Override
-    public void delete(Long accountId) throws DaoException {
-        executeUpdate(ABANDON_ACCOUNT, accountId);
-    }
-
-    @Override
     public Optional<Long> findAccountBalance(Long accountId) throws DaoException {
         return findLong(FIND_ACCOUNT_BALANCE_BY_ID, ColumnLabel.BALANCE, accountId);
     }
@@ -104,5 +100,10 @@ public class AccountDaoImpl extends GenericDao<Account> implements AccountDao {
     @Override
     public void changeActive(Long accountId) throws DaoException {
         executeUpdate(CHANGE_ACTIVE_BY_ID, accountId);
+    }
+
+    @Override
+    public void delete(Long accountId) throws DaoException {
+        executeUpdate(ABANDON_ACCOUNT, accountId);
     }
 }

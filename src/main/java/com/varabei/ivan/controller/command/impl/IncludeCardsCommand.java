@@ -27,7 +27,8 @@ public class IncludeCardsCommand implements ActionCommand {
     public Router execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         Router router = new Router(JspPath.INCLUDE_CARDS, RouterType.INCLUDE);
         try {
-            List<Card> cardList = cardService.findByAccountId(Long.parseLong(req.getParameter(RequestParam.ACCOUNT_ID)));
+            Long accountId = Long.parseLong(req.getParameter(RequestParam.ACCOUNT_ID));
+            List<Card> cardList = cardService.findByAccountId(accountId);
             req.setAttribute(AttributeKey.CARDS, cardList);
         } catch (ServiceException e) {
             log.error(e);

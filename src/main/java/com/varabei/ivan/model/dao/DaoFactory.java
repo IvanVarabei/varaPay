@@ -14,6 +14,10 @@ public final class DaoFactory {
     private DaoFactory() {
     }
 
+    public static DaoFactory getInstance() {
+        return instance;
+    }
+
     public UserDao getUserDao() {
         return userDao;
     }
@@ -36,9 +40,5 @@ public final class DaoFactory {
 
     public CurrencyDao getCurrencyDao() {
         return currencyDao;
-    }
-
-    public static DaoFactory getInstance() {
-        return instance;
     }
 }

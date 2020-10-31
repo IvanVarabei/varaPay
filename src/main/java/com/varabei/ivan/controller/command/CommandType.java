@@ -1,6 +1,5 @@
-package com.varabei.ivan.controller.command.client;
+package com.varabei.ivan.controller.command;
 
-import com.varabei.ivan.controller.command.ActionCommand;
 import com.varabei.ivan.controller.command.impl.*;
 
 public enum CommandType {
@@ -20,7 +19,9 @@ public enum CommandType {
     DELETE_ACCOUNT_POST(new DeleteAccountCommand()),
     CREATE_ACCOUNT_POST(new CreateAccountCommand()),
     DELETE_CARD_POST(new DeleteCardCommand()),
+    VERIFY_EMAIL_GET(new VerifyEmailPageCommand()),
     VERIFY_CREATE_CARD_POST(new VerifyCreateCardCommand()),
+    VERIFY_CREATE_CARD_GET(new VerifyCreateCardPageCommand()),
     CREATE_CARD_POST(new CreateCardCommand()),
     ACCOUNT_PAGE_GET(new AccountPageCommand()),
     TOP_UP_AMOUNT_PAGE_GET(new TopUpAmountPageCommand()),

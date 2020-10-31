@@ -2,9 +2,11 @@ package com.varabei.ivan.controller.command.impl;
 
 import com.varabei.ivan.controller.AttributeKey;
 import com.varabei.ivan.controller.JspPath;
+import com.varabei.ivan.controller.CommandPath;
 import com.varabei.ivan.controller.RequestParam;
 import com.varabei.ivan.controller.command.ActionCommand;
 import com.varabei.ivan.controller.router.Router;
+import com.varabei.ivan.controller.router.RouterType;
 import com.varabei.ivan.model.entity.User;
 import com.varabei.ivan.model.exception.ServiceException;
 import com.varabei.ivan.model.service.ServiceFactory;
@@ -27,7 +29,7 @@ public class SignupCommand implements ActionCommand {
 
     @Override
     public Router execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        Router router = new Router(JspPath.VERIFY_EMAIL);
+        Router router = new Router(String.format(CommandPath.VERIFY_EMAIL, req.getContextPath()), RouterType.REDIRECT);
         Map<String, String> signupData = new HashMap<>();
         signupData.put(RequestParam.LOGIN, req.getParameter(RequestParam.LOGIN));
         signupData.put(RequestParam.PASSWORD, req.getParameter(RequestParam.PASSWORD));

@@ -1,6 +1,7 @@
 package com.varabei.ivan.controller.command.impl;
 
 import com.varabei.ivan.controller.JspPath;
+import com.varabei.ivan.controller.CommandPath;
 import com.varabei.ivan.controller.RequestParam;
 import com.varabei.ivan.controller.command.ActionCommand;
 import com.varabei.ivan.controller.router.Router;
@@ -28,7 +29,7 @@ public class CreateCardCommand implements ActionCommand {
 
     @Override
     public Router execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        Router router = new Router(JspPath.VERIFY_CREATE_CARD);
+        Router router = new Router();
         Long accountId = Long.parseLong(req.getParameter(RequestParam.ACCOUNT_ID));
         try {
             String login = req.getSession().getAttribute(RequestParam.LOGIN).toString();
@@ -37,6 +38,7 @@ public class CreateCardCommand implements ActionCommand {
             mailService.sendEmail(user.getEmail(), MAIL_SUBJECT, String.format(MAIL_BODY, tempCode));
             req.getSession().setAttribute(RequestParam.TEMP_CODE, tempCode);
             req.getSession().setAttribute(RequestParam.ACCOUNT_ID, accountId);
+            router.setRedirect(String.format(CommandPath.VERIFY_CREATE_CARD, req.getContextPath()));
         } catch (ServiceException e) {
             log.error(e);
             router.setForward(JspPath.ERROR_500);

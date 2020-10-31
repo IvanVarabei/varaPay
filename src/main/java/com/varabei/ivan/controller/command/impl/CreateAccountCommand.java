@@ -1,7 +1,7 @@
 package com.varabei.ivan.controller.command.impl;
 
 import com.varabei.ivan.controller.JspPath;
-import com.varabei.ivan.controller.RedirectPath;
+import com.varabei.ivan.controller.CommandPath;
 import com.varabei.ivan.controller.RequestParam;
 import com.varabei.ivan.controller.command.ActionCommand;
 import com.varabei.ivan.controller.router.Router;
@@ -23,7 +23,7 @@ public class CreateAccountCommand implements ActionCommand {
 
     @Override
     public Router execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        Router router = new Router(String.format(RedirectPath.PROFILE, req.getContextPath()), RouterType.REDIRECT);
+        Router router = new Router(String.format(CommandPath.PROFILE, req.getContextPath()), RouterType.REDIRECT);
         Long userId = Long.parseLong(req.getParameter(RequestParam.USER_ID));
         try {
             accountService.create(userId);

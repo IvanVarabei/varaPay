@@ -1,7 +1,7 @@
 package com.varabei.ivan.controller.command.impl;
 
 import com.varabei.ivan.controller.JspPath;
-import com.varabei.ivan.controller.RedirectPath;
+import com.varabei.ivan.controller.CommandPath;
 import com.varabei.ivan.controller.RequestParam;
 import com.varabei.ivan.controller.command.ActionCommand;
 import com.varabei.ivan.controller.router.Router;
@@ -26,7 +26,7 @@ public class BlockAccountCommand implements ActionCommand {
         Long accountId = Long.parseLong(req.getParameter(RequestParam.ACCOUNT_ID));
         try {
             accountService.changeActive(accountId);
-            router.setRedirect(String.format(RedirectPath.ACCOUNT, req.getContextPath(), accountId));
+            router.setRedirect(String.format(CommandPath.ACCOUNT, req.getContextPath(), accountId));
         } catch (ServiceException e) {
             log.error(e);
             router.setForward(JspPath.ERROR_500);

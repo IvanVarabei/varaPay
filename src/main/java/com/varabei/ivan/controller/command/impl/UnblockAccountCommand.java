@@ -2,7 +2,7 @@ package com.varabei.ivan.controller.command.impl;
 
 import com.varabei.ivan.controller.AttributeKey;
 import com.varabei.ivan.controller.JspPath;
-import com.varabei.ivan.controller.RedirectPath;
+import com.varabei.ivan.controller.CommandPath;
 import com.varabei.ivan.controller.RequestParam;
 import com.varabei.ivan.controller.command.ActionCommand;
 import com.varabei.ivan.controller.router.Router;
@@ -32,7 +32,7 @@ public class UnblockAccountCommand implements ActionCommand {
         try {
             if (userService.isAuthenticSecretWord(accountId, secretWord)) {
                 accountService.changeActive(accountId);
-                router.setRedirect(String.format(RedirectPath.RUN_ACCOUNTS, req.getContextPath(), query));
+                router.setRedirect(String.format(CommandPath.RUN_ACCOUNTS, req.getContextPath(), query));
             } else {
                 req.setAttribute(AttributeKey.ACCOUNTS, accountService.findDisabledByLoginOrAccountId(query));
                 req.setAttribute(AttributeKey.ERROR, true);

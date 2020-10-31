@@ -31,19 +31,44 @@ public class PaymentDaoImpl extends GenericDao<Card> implements PaymentDao {
     private static final String FIND_PAYMENTS_BY_CARD_ID = "select payment_id, amount, source_card_id, " +
             "destination_card_id, payment_instant from payments where source_card_id = ? or destination_card_id = ? " +
             "order by payment_instant desc limit ? offset ?";
-    private static final String FIND_NUMBER_OF_RECORDS="select count(*) from payments where source_card_id = ?" +
+    private static final String FIND_NUMBER_OF_RECORDS = "select count(*) from payments where source_card_id = ?" +
             " or destination_card_id = ?;";
-    private static final String FIND_OUTGOING_PAYMENTS_BY_CARD_ID = "select payment_id, amount, source_card_id," +
-            " destination_card_id, payment_instant from payments where source_card_id = ?";
-    private static final String FIND_INCOMING_PAYMENTS_BY_CARD_ID = "select payment_id, amount, source_card_id," +
-            " destination_card_id, payment_instant from payments where destination_card_id = ?";
 
     public PaymentDaoImpl() {
         super(new CardBuilder());
     }
 
     @Override
-    public Long findNumberOfRecordsByCardId(Long cardId) throws DaoException {
+    public List<Payment> findPaymentsByCardId(Long cardId, int limit, int offset) throws DaoException {
+        Connection connection = pool.getConnection();
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        List<Payment> payments = new ArrayList<>();
+        try {
+            preparedStatement = connection.prepareStatement(FIND_PAYMENTS_BY_CARD_ID);
+            setParameters(preparedStatement, cardId, cardId, limit, offset);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                payments.add(instantiatePayment(resultSet, connection));
+            }
+        } catch (SQLException e) {
+            throw new DaoException("can not get access to db", e);
+        } finally {
+            try {
+                closeResource(resultSet);
+            } finally {
+                try {
+                    closeResource(preparedStatement);
+                } finally {
+                    pool.releaseConnection(connection);
+                }
+            }
+        }
+        return payments;
+    }
+
+    @Override
+    public Long findAmountOfRecordsByCardId(Long cardId) throws DaoException {
         return findLong(FIND_NUMBER_OF_RECORDS, ColumnLabel.COUNT, cardId, cardId).orElseThrow(DaoException::new);
     }
 
@@ -68,49 +93,6 @@ public class PaymentDaoImpl extends GenericDao<Card> implements PaymentDao {
         } finally {
             pool.releaseConnection(connection);
         }
-    }
-
-    @Override
-    public List<Payment> findPaymentsByCardId(Long cardId, int limit, int offset) throws DaoException {
-        return findPayments(FIND_PAYMENTS_BY_CARD_ID, cardId, limit, offset);
-    }
-
-    @Override
-    public List<Payment> findOutgoingPayments(Long cardId) throws DaoException {
-        return null;//findPayments(FIND_OUTGOING_PAYMENTS_BY_CARD_ID, cardId);
-    }
-
-    @Override
-    public List<Payment> findIncomingPayments(Long cardId) throws DaoException {
-        return null;// findPayments(FIND_INCOMING_PAYMENTS_BY_CARD_ID, cardId);
-    }
-
-    private List<Payment> findPayments(String query, Long cardId, int limit, int offset) throws DaoException {
-        Connection connection = pool.getConnection();
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-        List<Payment> payments = new ArrayList<>();
-        try {
-            preparedStatement = connection.prepareStatement(query);
-            setParameters(preparedStatement, cardId, cardId, limit, offset);
-            resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                payments.add(instantiatePayment(resultSet, connection));
-            }
-        } catch (SQLException e) {
-            throw new DaoException("can not get access to db", e);
-        } finally {
-            try {
-                closeResource(resultSet);
-            } finally {
-                try {
-                    closeResource(preparedStatement);
-                } finally {
-                    pool.releaseConnection(connection);
-                }
-            }
-        }
-        return payments;
     }
 
     private Payment instantiatePayment(ResultSet resultSet, Connection connection) throws SQLException, DaoException {

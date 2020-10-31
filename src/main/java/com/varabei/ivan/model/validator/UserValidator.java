@@ -1,7 +1,7 @@
 package com.varabei.ivan.model.validator;
 
-import com.varabei.ivan.model.service.ErrorInfo;
 import com.varabei.ivan.model.service.DataTransferMapKey;
+import com.varabei.ivan.model.service.ErrorInfo;
 
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -26,20 +26,21 @@ public class UserValidator {
     public boolean checkPasswords(Map<String, String> signupData) {
         String password = signupData.get(DataTransferMapKey.PASSWORD);
         String repeatPassword = signupData.get(DataTransferMapKey.REPEAT_PASSWORD);
-        if (password.equals(repeatPassword)) {
-            if (password.length() < MIN_PASSWORD_LENGTH || password.length() > MAX_PASSWORD_LENGTH) {
-                signupData.put(DataTransferMapKey.PASSWORD, ErrorInfo.LENGTH.name().toLowerCase());
+        if (password.length() < MIN_PASSWORD_LENGTH || password.length() > MAX_PASSWORD_LENGTH) {
+            signupData.put(DataTransferMapKey.PASSWORD, ErrorInfo.LENGTH.toString());
+            return false;
+        } else {
+            if (!password.equals(repeatPassword)) {
+                signupData.put(DataTransferMapKey.REPEAT_PASSWORD, ErrorInfo.DIFFERENT_PASSWORDS.toString());
                 return false;
             }
-            return true;
         }
-        signupData.put(DataTransferMapKey.REPEAT_PASSWORD, ErrorInfo.DIFFERENT_PASSWORDS.name().toLowerCase());
-        return false;
+        return true;
     }
 
     private boolean checkName(String potentialName, Map<String, String> signupData, String errorKey) {
         if (!NAME_PATTERN.matcher(potentialName).find()) {
-            signupData.put(errorKey, ErrorInfo.NAME.name().toLowerCase());
+            signupData.put(errorKey, ErrorInfo.NAME.toString());
             return false;
         }
         return true;
@@ -47,7 +48,7 @@ public class UserValidator {
 
     private boolean checkEmail(Map<String, String> signupData) {
         if (!EMAIL_PATTERN.matcher(signupData.get(DataTransferMapKey.EMAIL)).find()) {
-            signupData.put(DataTransferMapKey.EMAIL, ErrorInfo.EMAIL.name().toLowerCase());
+            signupData.put(DataTransferMapKey.EMAIL, ErrorInfo.EMAIL.toString());
             return false;
         }
         return true;
@@ -55,7 +56,7 @@ public class UserValidator {
 
     private boolean checkLogin(Map<String, String> signupData) {
         if (!LOGIN_PATTERN.matcher(signupData.get(DataTransferMapKey.LOGIN)).find()) {
-            signupData.put(DataTransferMapKey.LOGIN, ErrorInfo.LOGIN.name().toLowerCase());
+            signupData.put(DataTransferMapKey.LOGIN, ErrorInfo.LOGIN.toString());
             return false;
         }
         return true;

@@ -22,8 +22,7 @@
 				<img src="img/silhouette.svg" alt="">
 			</div>
 			<div class="profile__text">${user.login}</div>
-			<div class="profile__text">${user.firstName}</div>
-			<div class="profile__text">${user.lastName}</div>
+			<div class="profile__text">${user.firstName} ${user.lastName}</div>
 			<div class="profile__text">${user.email}</div>
 			<div class="profile__text">${user.birth}</div>
 			<div class="profile__text"><a href="${pageContext.servletContext.contextPath}/mainServlet?command=change_password_get"><b>${change_password}</b></a></div>

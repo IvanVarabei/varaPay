@@ -50,12 +50,12 @@ public enum Currency {
         Thread thread = new Thread(() -> {
             while (true) {
                 try {
-                    if (cost != null) {
-                        Thread.sleep(PAUSE_BETWEEN_COST_UPDATING);
-                    }
                     this.setCost(DaoFactory.getInstance().getCurrencyDao().findCurrencyCostInUsd(this));
                 } catch (DaoException e) {
                     log.error(e);
+                }
+                try {
+                    Thread.sleep(PAUSE_BETWEEN_COST_UPDATING);
                 } catch (InterruptedException e) {
                     log.error(e);
                     Thread.currentThread().interrupt();

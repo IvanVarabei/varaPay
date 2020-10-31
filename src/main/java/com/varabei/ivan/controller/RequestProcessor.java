@@ -1,8 +1,7 @@
-package com.varabei.ivan.controller.servlet;
+package com.varabei.ivan.controller;
 
-import com.varabei.ivan.controller.RequestParam;
 import com.varabei.ivan.controller.command.ActionCommand;
-import com.varabei.ivan.controller.command.provider.ActionProvider;
+import com.varabei.ivan.controller.command.ActionProvider;
 import com.varabei.ivan.controller.router.Router;
 
 import javax.servlet.ServletException;

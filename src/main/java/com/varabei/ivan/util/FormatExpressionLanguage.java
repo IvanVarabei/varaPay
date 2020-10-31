@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class FormatExpressionLanguage {
+    private static final String REGEX_TO_SPLIT_CARD_NUMBER = "(?<=\\G.{4})";
+
     private FormatExpressionLanguage() {
     }
 
@@ -12,6 +14,6 @@ public class FormatExpressionLanguage {
     }
 
     public static String formatCardNumber(String cardNumber) {
-        return String.join(" ", cardNumber.split("(?<=\\G.{4})"));
+        return String.join(" ", cardNumber.split(REGEX_TO_SPLIT_CARD_NUMBER));
     }
 }

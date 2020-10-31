@@ -1,11 +1,11 @@
 package com.varabei.ivan.model.service.impl;
 
 import com.varabei.ivan.model.dao.AccountDao;
+import com.varabei.ivan.model.dao.DaoFactory;
 import com.varabei.ivan.model.entity.Account;
 import com.varabei.ivan.model.exception.DaoException;
-import com.varabei.ivan.model.dao.DaoFactory;
-import com.varabei.ivan.model.service.AccountService;
 import com.varabei.ivan.model.exception.ServiceException;
+import com.varabei.ivan.model.service.AccountService;
 
 import java.util.List;
 import java.util.Optional;
@@ -34,11 +34,20 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    public List<Account> findByUserLogin(String login) throws ServiceException {
+        try {
+            return accountDao.findByUserLogin(login);
+        } catch (DaoException daoException) {
+            throw new ServiceException(daoException);
+        }
+    }
+
+    @Override
     public List<Account> findDisabledByLoginOrAccountId(String query) throws ServiceException {
         try {
-            if(DIGIT.matcher(query).find()){
+            if (DIGIT.matcher(query).find()) {
                 return accountDao.findDisabledByAccountId(Long.parseLong(query));
-            }else {
+            } else {
                 return accountDao.findDisabledByLogin(query);
             }
         } catch (DaoException daoException) {
@@ -64,15 +73,6 @@ public class AccountServiceImpl implements AccountService {
             } else {
                 throw new ServiceException("You can`t delete not nil balance account");
             }
-        } catch (DaoException daoException) {
-            throw new ServiceException(daoException);
-        }
-    }
-
-    @Override
-    public List<Account> findByUserLogin(String login) throws ServiceException {
-        try {
-            return accountDao.findByUserLogin(login);
         } catch (DaoException daoException) {
             throw new ServiceException(daoException);
         }

@@ -2,7 +2,7 @@ package com.varabei.ivan.controller.command.impl;
 
 import com.varabei.ivan.controller.AttributeKey;
 import com.varabei.ivan.controller.JspPath;
-import com.varabei.ivan.controller.RedirectPath;
+import com.varabei.ivan.controller.CommandPath;
 import com.varabei.ivan.controller.RequestParam;
 import com.varabei.ivan.controller.command.ActionCommand;
 import com.varabei.ivan.controller.router.Router;
@@ -26,7 +26,7 @@ public class MakePaymentCommand implements ActionCommand {
 
     @Override
     public Router execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        Router router = new Router(String.format(RedirectPath.SUCCESS_PAGE, req.getContextPath()), RouterType.REDIRECT);
+        Router router = new Router(String.format(CommandPath.SUCCESS_PAGE, req.getContextPath()), RouterType.REDIRECT);
         Map<String, String> paymentData = new HashMap<>();
         paymentData.put(RequestParam.CARD_ID, req.getParameter(RequestParam.CARD_ID));
         paymentData.put(RequestParam.CVC, req.getParameter(RequestParam.CVC));
@@ -34,9 +34,9 @@ public class MakePaymentCommand implements ActionCommand {
         paymentData.put(RequestParam.AMOUNT, req.getParameter(RequestParam.AMOUNT));
         paymentData.put(RequestParam.VALID_THRU, req.getParameter(RequestParam.VALID_THRU));
         try {
-            if(!paymentService.makePayment(paymentData)){
+            if (!paymentService.makePayment(paymentData)) {
                 req.setAttribute(AttributeKey.ERRORS, paymentData);
-                router.setForward("/mainServlet?command=card_page_get");//todo
+                router.setForward(CommandPath.CARD_PAGE);
             }
         } catch (ServiceException e) {
             log.error(e);

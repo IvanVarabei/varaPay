@@ -1,4 +1,4 @@
-package com.varabei.ivan.controller.listener;
+package com.varabei.ivan.controller;
 
 import com.varabei.ivan.model.pool.ConnectionPool;
 

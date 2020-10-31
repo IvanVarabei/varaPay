@@ -48,10 +48,10 @@ public class ChangeLanguageCommand implements ActionCommand {
         HttpSession session = req.getSession();
         session.setAttribute(AttributeKey.LOCALE, locale);
         StringBuilder sb = new StringBuilder();
-        if(req.getParameterValues("command").length > 1) {
+        if(req.getParameterValues(RequestParam.COMMAND).length > 1) {
             Map<String, String[]> paramMap = req.getParameterMap();
             for (Map.Entry<String, String[]> pair : paramMap.entrySet()) {
-                if (!pair.getKey().equals("locale")) {
+                if (!pair.getKey().equals("locale")) {//todo
                     String[] values = pair.getValue();
                     for (String value : values) {
                         if (!value.equals("change_language")) {

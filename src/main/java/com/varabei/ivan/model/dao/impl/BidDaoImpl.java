@@ -14,24 +14,16 @@ import java.util.List;
 public class BidDaoImpl extends GenericDao<Bid> implements BidDao {
     private static final String FIND_BID_ACCOUNT_BY_BID_ID = "select account_id from bids where bid_id = ?";
     private static final String FIND_BID_AMOUNT_BY_ID = "select amount from bids where bid_id = ?";
-    private static final String FIND_TOP_UP_BIDS = "select accounts.account_id, accounts.balance, accounts.is_active," +
-            " bids.bid_id, bids.amount, bids.placing_date_time " +
-            "from bids join accounts on bids.account_id = accounts.account_id " +
-            "and is_top_up = true and bids.is_abandoned = false";
-    private static final String FIND_WITHDRAW_BIDS = "select accounts.account_id, accounts.balance, accounts.is_active," +
-            " bids.bid_id, bids.amount, bids.placing_date_time " +
-            "from bids join accounts on bids.account_id = accounts.account_id " +
-            "and is_top_up = false and bids.is_abandoned = false";
     private static final String FIND_IN_PROGRESS_BIDS =
             "select bid_id, bid_states.state,bids.amount,is_top_up, bids.client_message, bids.admin_comment,\n" +
-            "       placing_date_time, accounts.account_id, accounts.account_id\n" +
-            "       balance, is_active, users.user_id, users.login, password, salt,users.email,\n" +
-            "       users.firstname, users.lastname, users.birth, roles.role_name from bids\n" +
-            "       join bid_states on bids.bid_state_id = bid_states.bid_state_id\n" +
-            "    join accounts on bids.account_id = accounts.account_id\n" +
-            "        and bids.bid_state_id = 1\n" +
-            "    join users on accounts.user_id = users.user_id\n" +
-            "    join roles on users.role_id = roles.role_id order by placing_date_time desc limit ? offset ?";
+                    "       placing_date_time, accounts.account_id, accounts.account_id\n" +
+                    "       balance, is_active, users.user_id, users.login, password, salt,users.email,\n" +
+                    "       users.firstname, users.lastname, users.birth, roles.role_name from bids\n" +
+                    "       join bid_states on bids.bid_state_id = bid_states.bid_state_id\n" +
+                    "    join accounts on bids.account_id = accounts.account_id\n" +
+                    "        and bids.bid_state_id = 1\n" +
+                    "    join users on accounts.user_id = users.user_id\n" +
+                    "    join roles on users.role_id = roles.role_id order by placing_date_time desc limit ? offset ?";
     private static final String FIND_BY_ACCOUNT_ID =
             "select bid_id, bid_states.state,bids.amount, is_top_up, bids.client_message, bids.admin_comment,\n" +
                     "       placing_date_time, accounts.account_id, accounts.account_id\n" +
@@ -41,15 +33,11 @@ public class BidDaoImpl extends GenericDao<Bid> implements BidDao {
                     "    join accounts on bids.account_id = ? and  bids.account_id = accounts.account_id\n" +
                     "    join users on accounts.user_id = users.user_id\n" +
                     "    join roles on users.role_id = roles.role_id limit ? offset ?";
-    private static final String FIND_BID_BY_ID = "select accounts.account_id, accounts.balance, accounts.is_active," +
-            " bids.bid_id, bids.amount, bids.placing_date_time " +
-            "from bids join accounts on bids.account_id = accounts.account_id and bid_id = ?";
     private static final String PLACE_TOP_UP_BID = "insert into bids (account_id, amount, is_top_up, client_message) " +
             "VALUES (?, ?, true, ?)";
     private static final String PLACE_WITHDRAW_BID = "insert into bids (account_id, amount, is_top_up, message) " +
             "VALUES (?, ?, false, ?);";
     private static final String ADD_ACCOUNT_BALANCE = "update accounts set balance = balance + ? where account_id = ?";
-    private static final String ABANDON_BID = "update bids set is_abandoned = true where bid_id = ?";
     private static final String UPDATE_ADMIN_COMMENT = "update bids set admin_comment = ? where bid_id = ?";
     private static final String SET_STATE_REJECTED = "update bids set bid_state_id = 3 where bid_id = ?";
     private static final String SET_STATE_APPROVED = "update bids set bid_state_id = 2 where bid_id = ?";
@@ -62,16 +50,6 @@ public class BidDaoImpl extends GenericDao<Bid> implements BidDao {
 
     public BidDaoImpl() {
         super(new BidBoulder());
-    }
-
-    @Override
-    public List<Bid> findInProgressBids(int limit, int offset) throws DaoException {
-        return executeQuery(FIND_IN_PROGRESS_BIDS, limit, offset);
-    }
-
-    @Override
-    public List<Bid> findByAccountId(Long accountId, int limit, int offset) throws DaoException {
-        return executeQuery(FIND_BY_ACCOUNT_ID, accountId ,limit, offset);
     }
 
     @Override
@@ -89,10 +67,32 @@ public class BidDaoImpl extends GenericDao<Bid> implements BidDao {
             endTransaction(connection);
         } catch (SQLException e) {
             cancelTransaction(connection);
-            throw  new DaoException("can not get access to db", e);
+            throw new DaoException("can not get access to db", e);
         } finally {
             pool.releaseConnection(connection);
         }
+    }
+
+    @Override
+    public List<Bid> findInProgressBids(int limit, int offset) throws DaoException {
+        return executeQuery(FIND_IN_PROGRESS_BIDS, limit, offset);
+    }
+
+    @Override
+    public List<Bid> findByAccountId(Long accountId, int limit, int offset) throws DaoException {
+        return executeQuery(FIND_BY_ACCOUNT_ID, accountId, limit, offset);
+    }
+
+
+    @Override
+    public Long findAmountOfInProgressBids() throws DaoException {
+        return findLong(FIND_NUMBER_OF_RECORDS, ColumnLabel.COUNT).orElseThrow(DaoException::new);
+    }
+
+    @Override
+    public Long findAmountOfBidsByAccountId(Long accountId) throws DaoException {
+        return findLong(FIND_NUMBER_OF_RECORDS_BY_ACCOUNT_ID, ColumnLabel.COUNT, accountId)
+                .orElseThrow(DaoException::new);
     }
 
     @Override
@@ -151,16 +151,5 @@ public class BidDaoImpl extends GenericDao<Bid> implements BidDao {
         } finally {
             pool.releaseConnection(connection);
         }
-    }
-
-    @Override
-    public Long findAmountOfInProgressBids() throws DaoException {
-        return findLong(FIND_NUMBER_OF_RECORDS, ColumnLabel.COUNT).orElseThrow(DaoException::new);
-    }
-
-    @Override
-    public Long findAmountOfBidsByAccountId(Long accountId) throws DaoException {
-        return findLong(FIND_NUMBER_OF_RECORDS_BY_ACCOUNT_ID, ColumnLabel.COUNT, accountId)
-                .orElseThrow(DaoException::new);
     }
 }

@@ -1,7 +1,5 @@
-package com.varabei.ivan.controller.command.provider;
+package com.varabei.ivan.controller.command;
 
-import com.varabei.ivan.controller.command.ActionCommand;
-import com.varabei.ivan.controller.command.client.CommandType;
 import com.varabei.ivan.controller.command.impl.WelcomeCommand;
 
 public class ActionProvider {

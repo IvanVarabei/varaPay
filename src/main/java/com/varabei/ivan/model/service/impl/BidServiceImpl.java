@@ -11,7 +11,29 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public class BidServiceImpl implements BidService {
-    private static final BidDao bidDao = DaoFactory.getInstance().getTopUpBidDao();
+    private static BidDao bidDao = DaoFactory.getInstance().getTopUpBidDao();
+
+    @Override
+    public boolean placeTopUpBid(Long accountId, BigDecimal amount, String message) throws ServiceException {
+        try {
+            if (message != null && message.length() > 0) {
+                bidDao.placeTopUpBid(accountId, amount.movePointRight(2).longValue(), message);
+                return true;
+            }
+        } catch (DaoException daoException) {
+            throw new ServiceException(daoException);
+        }
+        return false;
+    }
+
+    @Override
+    public void placeWithdrawBid(Long accountId, BigDecimal amount, String message) throws ServiceException {
+        try {
+            bidDao.placeWithdrawBid(accountId, amount.movePointRight(2).longValue(), message);
+        } catch (DaoException daoException) {
+            throw new ServiceException(daoException);
+        }
+    }
 
     @Override
     public List<Bid> findInProgressBids(int limit, int pageIndex) throws ServiceException {
@@ -23,7 +45,7 @@ public class BidServiceImpl implements BidService {
     }
 
     @Override
-    public List<Bid> findByAccountId(Long accountId,  int limit, int pageIndex) throws ServiceException {
+    public List<Bid> findByAccountId(Long accountId, int limit, int pageIndex) throws ServiceException {
         try {
             return bidDao.findByAccountId(accountId, limit, (pageIndex - 1) * limit);
         } catch (DaoException daoException) {
@@ -32,18 +54,20 @@ public class BidServiceImpl implements BidService {
     }
 
     @Override
-    public void placeTopUpBid(Long accountId, BigDecimal amount, String message) throws ServiceException {
+    public int findAmountOfPages(int limit) throws ServiceException {
         try {
-            bidDao.placeTopUpBid(accountId,  amount.movePointRight(2).longValue(), message);
+            Long numberOfRecords = bidDao.findAmountOfInProgressBids();
+            return (int) Math.ceil(numberOfRecords * 1d / limit);
         } catch (DaoException daoException) {
             throw new ServiceException(daoException);
         }
     }
 
     @Override
-    public void placeWithdrawBid(Long accountId, BigDecimal amount, String message) throws ServiceException {
+    public int findAmountOfPagesByAccountId(Long accountId, int limit) throws ServiceException {
         try {
-            bidDao.placeWithdrawBid(accountId,  amount.movePointRight(2).longValue(), message);
+            Long numberOfRecords = bidDao.findAmountOfBidsByAccountId(accountId);
+            return (int) Math.ceil(numberOfRecords * 1d / limit);
         } catch (DaoException daoException) {
             throw new ServiceException(daoException);
         }
@@ -80,26 +104,6 @@ public class BidServiceImpl implements BidService {
     public void rejectWithdrawBid(Long withdrawBidId, String adminComment) throws ServiceException {
         try {
             bidDao.rejectWithdrawBid(withdrawBidId, adminComment);
-        } catch (DaoException daoException) {
-            throw new ServiceException(daoException);
-        }
-    }
-
-    @Override
-    public int findAmountOfPages(int limit) throws ServiceException {
-        try {
-            Long numberOfRecords = bidDao.findAmountOfInProgressBids();
-            return (int) Math.ceil(numberOfRecords * 1d / limit);
-        } catch (DaoException daoException) {
-            throw new ServiceException(daoException);
-        }
-    }
-
-    @Override
-    public int findAmountOfPagesByAccountId(Long accountId, int limit) throws ServiceException {
-        try {
-            Long numberOfRecords = bidDao.findAmountOfBidsByAccountId(accountId);
-            return (int) Math.ceil(numberOfRecords * 1d / limit);
         } catch (DaoException daoException) {
             throw new ServiceException(daoException);
         }
