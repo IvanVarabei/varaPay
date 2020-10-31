@@ -39,6 +39,7 @@ public class RequestParam {
     public static final String CLIENT_MESSAGE = "client_message";
     public static final String ADMIN_COMMENT = "admin_comment";
     public static final String CURRENCY = "currency";
+    public static final String AMOUNT_IN_CHOSEN_CURRENCY = "amountInChosenCurrency";
 
     private RequestParam() {
     }

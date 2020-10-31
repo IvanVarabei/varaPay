@@ -42,6 +42,8 @@ public class ColumnLabel {
     public static final String BID_AMOUNT = "amount";
     public static final String CLIENT_MESSAGE = "client_message";
     public static final String ADMIN_COMMENT = "admin_comment";
+    public static final String AMOUNT_IN_CHOSEN_CURRENCY = "amount_in_chosen_currency";
+    public static final String CURRENCY_NAME = "currency_name";
 
     private ColumnLabel() {
     }

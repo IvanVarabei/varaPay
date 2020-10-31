@@ -21,7 +21,7 @@
 </fmt:bundle>
 <tags:general pageTitle="${title}">
 	<div class="topup2">
-		<div class="title topup2__title">${title}</div>
+		<div class="title topup2__title">${title} ${amount}$</div>
 		<div class="steps">
 			<div class="step">
 				1. ${text_part_1_1} <b>${currency}</b> ${text_part_1_2} ${currency} ${text_part_1_3}

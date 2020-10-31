@@ -5,6 +5,7 @@ import com.varabei.ivan.model.dao.builder.IdentifiableBuilder;
 import com.varabei.ivan.model.entity.Account;
 import com.varabei.ivan.model.entity.Bid;
 import com.varabei.ivan.model.entity.BidState;
+import com.varabei.ivan.model.entity.Currency;
 
 import java.math.BigDecimal;
 import java.sql.ResultSet;
@@ -22,6 +23,8 @@ public class BidBoulder implements IdentifiableBuilder<Bid> {
         bid.setState(BidState.valueOf(resultSet.getString(ColumnLabel.STATE).toUpperCase()));
         bid.setTopUp(resultSet.getBoolean(ColumnLabel.IS_TOP_UP));
         bid.setAmount(BigDecimal.valueOf(resultSet.getLong(ColumnLabel.BID_AMOUNT)).movePointLeft(2));
+        bid.setAmountInChosenCurrency(BigDecimal.valueOf(resultSet.getDouble(ColumnLabel.AMOUNT_IN_CHOSEN_CURRENCY)));
+        bid.setCurrency(Currency.valueOf(resultSet.getString(ColumnLabel.CURRENCY_NAME)));
         bid.setPlacingDateTime((resultSet.getTimestamp(ColumnLabel.PLACING_DATE_TIME).toLocalDateTime()));
         bid.setClientMessage(resultSet.getString(ColumnLabel.CLIENT_MESSAGE));
         bid.setAdminComment(resultSet.getString(ColumnLabel.ADMIN_COMMENT));

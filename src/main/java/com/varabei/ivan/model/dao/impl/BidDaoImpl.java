@@ -5,8 +5,10 @@ import com.varabei.ivan.model.dao.ColumnLabel;
 import com.varabei.ivan.model.dao.GenericDao;
 import com.varabei.ivan.model.dao.builder.impl.BidBoulder;
 import com.varabei.ivan.model.entity.Bid;
+import com.varabei.ivan.model.entity.Currency;
 import com.varabei.ivan.model.exception.DaoException;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
@@ -15,26 +17,28 @@ public class BidDaoImpl extends GenericDao<Bid> implements BidDao {
     private static final String FIND_BID_ACCOUNT_BY_BID_ID = "select account_id from bids where bid_id = ?";
     private static final String FIND_BID_AMOUNT_BY_ID = "select amount from bids where bid_id = ?";
     private static final String FIND_IN_PROGRESS_BIDS =
-            "select bid_id, bid_states.state,bids.amount,is_top_up, bids.client_message, bids.admin_comment,\n" +
-                    "       placing_date_time, accounts.account_id, accounts.account_id\n" +
+            "select bid_id, state, bids.amount, amount_in_chosen_currency, currency_name, is_top_up, client_message, " +
+                    "admin_comment, placing_date_time, accounts.account_id, accounts.account_id\n" +
                     "       balance, is_active, users.user_id, users.login, password, salt,users.email,\n" +
                     "       users.firstname, users.lastname, users.birth, roles.role_name from bids\n" +
                     "       join bid_states on bids.bid_state_id = bid_states.bid_state_id\n" +
                     "    join accounts on bids.account_id = accounts.account_id\n" +
                     "        and bids.bid_state_id = 1\n" +
-                    "    join users on accounts.user_id = users.user_id\n" +
+                    "    join users on accounts.user_id = users.user_id\n " +
+                    " join currencies on bids.currency_id = currencies.currency_id " +
                     "    join roles on users.role_id = roles.role_id order by placing_date_time desc limit ? offset ?";
     private static final String FIND_BY_ACCOUNT_ID =
-            "select bid_id, bid_states.state,bids.amount, is_top_up, bids.client_message, bids.admin_comment,\n" +
-                    "       placing_date_time, accounts.account_id, accounts.account_id\n" +
+            "select bid_id, state, bids.amount, amount_in_chosen_currency, currency_name, is_top_up, client_message, " +
+                    "admin_comment, placing_date_time, accounts.account_id, accounts.account_id\n" +
                     "       balance, is_active, users.user_id, users.login, password, salt,users.email,\n" +
                     "       users.firstname, users.lastname, users.birth, roles.role_name from bids\n" +
                     "       join bid_states on bids.bid_state_id = bid_states.bid_state_id\n" +
                     "    join accounts on bids.account_id = ? and  bids.account_id = accounts.account_id\n" +
                     "    join users on accounts.user_id = users.user_id\n" +
+                    " join currencies on bids.currency_id = currencies.currency_id " +
                     "    join roles on users.role_id = roles.role_id limit ? offset ?";
-    private static final String PLACE_TOP_UP_BID = "insert into bids (account_id, amount, is_top_up, client_message) " +
-            "VALUES (?, ?, true, ?)";
+    private static final String PLACE_TOP_UP_BID = "insert into bids (account_id, amount, amount_in_chosen_currency," +
+            " currency_id, client_message, is_top_up) VALUES (?, ?, ?, ?, ?, true)";
     private static final String PLACE_WITHDRAW_BID = "insert into bids (account_id, amount, is_top_up, message) " +
             "VALUES (?, ?, false, ?);";
     private static final String ADD_ACCOUNT_BALANCE = "update accounts set balance = balance + ? where account_id = ?";
@@ -53,8 +57,9 @@ public class BidDaoImpl extends GenericDao<Bid> implements BidDao {
     }
 
     @Override
-    public void placeTopUpBid(Long accountId, Long amount, String message) throws DaoException {
-        executeUpdate(PLACE_TOP_UP_BID, accountId, amount, message);
+    public void placeTopUpBid(Long accountId, Long amount, BigDecimal amountInChosenCurrency,
+                              Currency currency, String message) throws DaoException {
+        executeUpdate(PLACE_TOP_UP_BID, accountId, amount, amountInChosenCurrency, currency.ordinal(), message);
     }
 
     @Override

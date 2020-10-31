@@ -14,8 +14,8 @@
     grid-template: repeat(4, 1fr) / 1fr 1.2fr 2fr;
     grid-template-areas: "id message form"
                          "bid-type message form"
-                         "email message form"
-                         "date message form"
+                         "currency message form"
+                         "date email form"
                          "edge edge edge";
 }
 .run-bids__id {
@@ -28,14 +28,17 @@
 .run-bids__operation-type {
     grid-area: bid-type;
 }
-.run-bids__email {
-    grid-area: email;
+.run-bids__currency{
+    grid-area: currency;
 }
 .run-bids__date {
     grid-area: date;
 }
 .run-bids__user-message {
     grid-area: message;
+}
+.run-bids__email {
+    grid-area: email;
 }
 .run-bids__form {
     grid-area: form;

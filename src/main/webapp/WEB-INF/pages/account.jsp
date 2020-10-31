@@ -54,6 +54,7 @@
 					<div class="operation__id operation__part">№${bid.id}</div>
 					<div class="operation__state operation__part">${bid.state eq 'IN_PROGRESS' ? in_progress : (bid.state eq 'APPROVED' ? approved : rejected)}</div>
 					<div class="operation__type operation__part">${bid.topUp eq true ? top_up : withdraw} ${bid.amount}$</div>
+					<div class="operation__currency operation__part">${bid.amountInChosenCurrency} ${bid.currency.conciseName}</div>
 					<div class="operation__client-message operation__part">${bid.clientMessage}</div>
 					<div class="operation__admin-comment operation__part">${bid.adminComment}</div>
 					<div class="operation__date operation__part"><javatime:format value="${bid.placingDateTime}"

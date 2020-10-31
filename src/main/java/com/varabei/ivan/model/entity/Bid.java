@@ -7,6 +7,8 @@ public class Bid extends Identifiable {
     private Account account;
     private BidState state;
     private BigDecimal amount;
+    private BigDecimal amountInChosenCurrency;
+    private Currency currency;
     private String clientMessage;
     private String adminComment;
     private LocalDateTime placingDateTime;
@@ -34,6 +36,22 @@ public class Bid extends Identifiable {
 
     public void setAmount(BigDecimal amount) {
         this.amount = amount;
+    }
+
+    public BigDecimal getAmountInChosenCurrency() {
+        return amountInChosenCurrency;
+    }
+
+    public void setAmountInChosenCurrency(BigDecimal amountInChosenCurrency) {
+        this.amountInChosenCurrency = amountInChosenCurrency;
+    }
+
+    public Currency getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(Currency currency) {
+        this.currency = currency;
     }
 
     public String getClientMessage() {
@@ -86,6 +104,13 @@ public class Bid extends Identifiable {
         if (account != null ? !account.equals(bid.account) : bid.account != null) {
             return false;
         }
+        if (amountInChosenCurrency != null ? !amountInChosenCurrency.equals(bid.amountInChosenCurrency) :
+                bid.amountInChosenCurrency != null) {
+            return false;
+        }
+        if (currency != bid.currency) {
+            return false;
+        }
         if (state != null ? !state.equals(bid.state) : bid.state != null) {
             return false;
         }
@@ -107,6 +132,8 @@ public class Bid extends Identifiable {
         result = 31 * result + (account != null ? account.hashCode() : 0);
         result = 31 * result + (state != null ? state.hashCode() : 0);
         result = 31 * result + (amount != null ? amount.hashCode() : 0);
+        result = 31 * result + (amountInChosenCurrency != null ? amountInChosenCurrency.hashCode() : 0);
+        result = 31 * result + (currency != null ? currency.hashCode() : 0);
         result = 31 * result + (clientMessage != null ? clientMessage.hashCode() : 0);
         result = 31 * result + (adminComment != null ? adminComment.hashCode() : 0);
         result = 31 * result + (placingDateTime != null ? placingDateTime.hashCode() : 0);
@@ -118,8 +145,10 @@ public class Bid extends Identifiable {
     public String toString() {
         final StringBuilder sb = new StringBuilder("Bid{");
         sb.append("account=").append(account);
-        sb.append(", state='").append(state).append('\'');
+        sb.append(", state=").append(state);
         sb.append(", amount=").append(amount);
+        sb.append(", amountInChosenCurrency=").append(amountInChosenCurrency);
+        sb.append(", currency=").append(currency);
         sb.append(", clientMessage='").append(clientMessage).append('\'');
         sb.append(", adminComment='").append(adminComment).append('\'');
         sb.append(", placingDateTime=").append(placingDateTime);

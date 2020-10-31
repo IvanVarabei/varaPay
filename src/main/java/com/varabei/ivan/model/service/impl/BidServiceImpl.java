@@ -3,6 +3,7 @@ package com.varabei.ivan.model.service.impl;
 import com.varabei.ivan.model.dao.BidDao;
 import com.varabei.ivan.model.dao.DaoFactory;
 import com.varabei.ivan.model.entity.Bid;
+import com.varabei.ivan.model.entity.Currency;
 import com.varabei.ivan.model.exception.DaoException;
 import com.varabei.ivan.model.exception.ServiceException;
 import com.varabei.ivan.model.service.BidService;
@@ -14,10 +15,12 @@ public class BidServiceImpl implements BidService {
     private static BidDao bidDao = DaoFactory.getInstance().getTopUpBidDao();
 
     @Override
-    public boolean placeTopUpBid(Long accountId, BigDecimal amount, String message) throws ServiceException {
+    public boolean placeTopUpBid(Long accountId, BigDecimal amount, BigDecimal amountInChosenCurrency,
+                                 Currency currency, String message) throws ServiceException {
         try {
             if (message != null && message.length() > 0) {
-                bidDao.placeTopUpBid(accountId, amount.movePointRight(2).longValue(), message);
+                bidDao.placeTopUpBid(accountId, amount.movePointRight(2).longValue(),
+                        amountInChosenCurrency, currency,message);
                 return true;
             }
         } catch (DaoException daoException) {

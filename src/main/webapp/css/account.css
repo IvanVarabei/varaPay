@@ -30,8 +30,9 @@
     grid-template-areas: "id client-message admin-comment"
                          "state client-message admin-comment"
                              "type client-message admin-comment"
+                             "currency client-message admin-comment"
                              "date client-message admin-comment"
-                            "edge edge edge";
+                             "edge edge edge";
 }
 .operation__part{
     padding: 4px;
@@ -45,6 +46,9 @@
 }
 .operation__type {
     grid-area: type;
+}
+.operation__currency{
+    grid-area: currency;
 }
 .operation__client-message {
     grid-area: client-message;

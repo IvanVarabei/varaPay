@@ -1,12 +1,13 @@
 package com.varabei.ivan.controller.command.impl;
 
 import com.varabei.ivan.controller.AttributeKey;
-import com.varabei.ivan.controller.JspPath;
 import com.varabei.ivan.controller.CommandPath;
+import com.varabei.ivan.controller.JspPath;
 import com.varabei.ivan.controller.RequestParam;
 import com.varabei.ivan.controller.command.ActionCommand;
 import com.varabei.ivan.controller.router.Router;
 import com.varabei.ivan.controller.router.RouterType;
+import com.varabei.ivan.model.entity.Currency;
 import com.varabei.ivan.model.exception.ServiceException;
 import com.varabei.ivan.model.service.BidService;
 import com.varabei.ivan.model.service.ServiceFactory;
@@ -27,10 +28,12 @@ public class PlaceTopUpBidCommand implements ActionCommand {
     public Router execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         Router router = new Router(String.format(CommandPath.SUCCESS_PAGE, req.getContextPath()), RouterType.REDIRECT);
         Long accountId = Long.parseLong(req.getParameter(RequestParam.ACCOUNT_ID));
-        BigDecimal amount = new BigDecimal(req.getParameter(RequestParam.AMOUNT));
+        BigDecimal amountUsd = new BigDecimal(req.getParameter(RequestParam.AMOUNT));
+        BigDecimal amountInChosenCurrency = new BigDecimal(req.getParameter(RequestParam.AMOUNT_IN_CHOSEN_CURRENCY));
+        Currency currency = Currency.valueOf(req.getParameter(RequestParam.CURRENCY));
         String message = req.getParameter(RequestParam.CLIENT_MESSAGE);
         try {
-            if (!bidService.placeTopUpBid(accountId, amount, message)) {
+            if (!bidService.placeTopUpBid(accountId, amountUsd, amountInChosenCurrency, currency, message)) {
                 req.setAttribute(AttributeKey.ERROR, true);
                 router.setForward(CommandPath.TOP_UP_PAGE);
             }
