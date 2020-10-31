@@ -7,19 +7,19 @@ import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
 
-public enum Currency {
+public enum CustomCurrency {
     BITCOIN("BTC", "img/btc.png", "1F3BAUckj5dbwYSm9cPRmF73zCXjvjHyR6"),
     ETHEREUM("ETH", "img/eth.png", "0xc7fa6d4f3b985df30895f175a30d86b91ff17c96"),
     DASH("DASH", "img/dash.png", "Xywm9ps9wSKv562wkQVeChSCpxeofRPkDe");
 
-    private static final Logger log = LogManager.getLogger(Currency.class);
+    private static final Logger log = LogManager.getLogger(CustomCurrency.class);
     private static final int PAUSE_BETWEEN_COST_UPDATING = 60_000;
     private final String conciseName;
     private BigDecimal cost;
     private final String wallet;
     private final String img;
 
-    Currency(String conciseName, String img, String wallet) {
+    CustomCurrency(String conciseName, String img, String wallet) {
         this.conciseName = conciseName;
         this.img = img;
         this.wallet = wallet;

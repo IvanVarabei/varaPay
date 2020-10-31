@@ -1,7 +1,7 @@
 package com.varabei.ivan.model.validator;
 
 import com.varabei.ivan.model.service.ErrorInfo;
-import com.varabei.ivan.model.entity.Currency;
+import com.varabei.ivan.model.entity.CustomCurrency;
 import com.varabei.ivan.model.service.DataTransferMapKey;
 
 import java.util.Arrays;
@@ -27,7 +27,7 @@ public class CurrencyValidator {
 
     private boolean isValidCurrency(Map<String, String> dataToConvert) {
         String currency = dataToConvert.get(DataTransferMapKey.CURRENCY);
-        if (Arrays.stream(Currency.values()).noneMatch(c -> currency.equalsIgnoreCase(c.name()))) {
+        if (Arrays.stream(CustomCurrency.values()).noneMatch(c -> currency.equalsIgnoreCase(c.name()))) {
             dataToConvert.put(DataTransferMapKey.CURRENCY, ErrorInfo.CAN_NOT_BE_EMPTY.toString());
             return false;
         }

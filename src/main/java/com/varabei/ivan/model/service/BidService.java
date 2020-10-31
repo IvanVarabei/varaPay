@@ -1,7 +1,7 @@
 package com.varabei.ivan.model.service;
 
 import com.varabei.ivan.model.entity.Bid;
-import com.varabei.ivan.model.entity.Currency;
+import com.varabei.ivan.model.entity.CustomCurrency;
 import com.varabei.ivan.model.exception.ServiceException;
 
 import java.math.BigDecimal;
@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface BidService {
     boolean placeTopUpBid(Long accountId, BigDecimal amount, BigDecimal amountInChosenCurrency,
-                          Currency currency, String message) throws ServiceException;
+                          CustomCurrency currency, String message) throws ServiceException;
 
     void placeWithdrawBid(Long accountId, BigDecimal amount, String message) throws ServiceException;
 

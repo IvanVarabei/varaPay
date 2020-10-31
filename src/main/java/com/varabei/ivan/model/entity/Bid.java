@@ -8,7 +8,7 @@ public class Bid extends Identifiable {
     private BidState state;
     private BigDecimal amount;
     private BigDecimal amountInChosenCurrency;
-    private Currency currency;
+    private CustomCurrency currency;
     private String clientMessage;
     private String adminComment;
     private LocalDateTime placingDateTime;
@@ -46,11 +46,11 @@ public class Bid extends Identifiable {
         this.amountInChosenCurrency = amountInChosenCurrency;
     }
 
-    public Currency getCurrency() {
+    public CustomCurrency getCurrency() {
         return currency;
     }
 
-    public void setCurrency(Currency currency) {
+    public void setCurrency(CustomCurrency currency) {
         this.currency = currency;
     }
 

@@ -32,7 +32,7 @@ public class CardDaoImpl extends GenericDao<Card> implements CardDao {
             "cards.account_id, balance, is_active, users.user_id, users.login, password, salt,users.email,\n" +
             "                   users.firstname, users.lastname, users.birth, roles.role_name from cards\n" +
             "                join accounts on card_number = ? and to_char(valid_thru, 'YYYY-MM') = ?\n" +
-            "                                     and cards.account_id = accounts.account_id\n" +
+            "                and cards.is_abandoned = false and cards.account_id = accounts.account_id\n" +
             "                join users on accounts.user_id = users.user_id\n" +
             "                join roles on users.role_id = roles.role_id";
     private static final String ABANDON_CARD = "update cards set is_abandoned = true where card_Id = ?";

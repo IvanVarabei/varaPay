@@ -17,5 +17,5 @@ public interface AccountService {
 
     void changeActive(Long accountId) throws ServiceException;
 
-    void delete(Long accountId) throws ServiceException;
+    Optional<String > delete(Long accountId) throws ServiceException;
 }

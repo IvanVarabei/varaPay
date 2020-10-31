@@ -1,6 +1,6 @@
 package com.varabei.ivan.model.service.impl;
 
-import com.varabei.ivan.model.entity.Currency;
+import com.varabei.ivan.model.entity.CustomCurrency;
 import com.varabei.ivan.model.service.CurrencyService;
 import com.varabei.ivan.model.service.DataTransferMapKey;
 import com.varabei.ivan.model.validator.CurrencyValidator;
@@ -18,7 +18,7 @@ public class CurrencyServiceImpl implements CurrencyService {
     public Optional<BigDecimal> convertUsdToAnotherCurrency(Map<String, String> dataToConvert) {
         if (currencyValidator.isValidDataToConvert(dataToConvert)) {
             BigDecimal amountUsd = new BigDecimal(dataToConvert.get(DataTransferMapKey.AMOUNT));
-            BigDecimal currencyCost = Currency.valueOf(dataToConvert.get(DataTransferMapKey.CURRENCY)).getCost();
+            BigDecimal currencyCost = CustomCurrency.valueOf(dataToConvert.get(DataTransferMapKey.CURRENCY)).getCost();
             BigDecimal amountInChosenCurrency =
                     amountUsd.divide(currencyCost, AMOUNT_OF_DIGITS_AFTER_COLUMN, RoundingMode.CEILING);
             return Optional.of(amountInChosenCurrency);

@@ -1,7 +1,7 @@
 package com.varabei.ivan.model.dao.impl;
 
 import com.varabei.ivan.model.dao.CurrencyDao;
-import com.varabei.ivan.model.entity.Currency;
+import com.varabei.ivan.model.entity.CustomCurrency;
 import com.varabei.ivan.model.exception.DaoException;
 
 import java.io.BufferedReader;
@@ -19,7 +19,7 @@ public class CurrencyDaoImpl implements CurrencyDao {
     private static final Pattern PRICE_FROM_API_RESPONSE = Pattern.compile("(?<=\"asks\":\\[\\[\").+?(?=\")");
 
     @Override
-    public BigDecimal findCurrencyCostInUsd(Currency currency) throws DaoException {
+    public BigDecimal findCurrencyCostInUsd(CustomCurrency currency) throws DaoException {
         try {
             URL queryUrl = new URL(String.format(API_EXCHANGE_SOME_CURRENCY_TO_USD, currency.getConciseName()));
             HttpURLConnection connection = (HttpURLConnection) queryUrl.openConnection();

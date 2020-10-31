@@ -19,7 +19,7 @@
 			<div class="profile__account-text">${account.balance}$</div>
 			<div class="profile__account-text  ${account.active eq true ? 'green' : 'red'}">${account.active eq true ? active : blocked}</div>
 			<input type="hidden" name="account_id" value="${account.id}">
-			<button class="button" ${account.balance > 0 ? 'disabled' : ''} formaction="${pageContext.servletContext.contextPath}/mainServlet?command=delete_account_post">
+			<button class="button" formaction="${pageContext.servletContext.contextPath}/mainServlet?command=delete_account_post">
 				${delete}
 			</button>
 		</a>

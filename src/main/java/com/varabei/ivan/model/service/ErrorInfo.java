@@ -19,7 +19,9 @@ public enum ErrorInfo {
     CAN_NOT_BE_EMPTY,
     CARD_DOES_NOT_EXISTS,
     AMOUNT,
-    VALID_THRU;
+    VALID_THRU,
+    BALANCE_NOT_EMPTY,
+    IN_PROGRESS_BIDS;
 
     @Override
     public String toString() {

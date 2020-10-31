@@ -1,8 +1,8 @@
 package com.varabei.ivan.controller.filter;
 
 import com.varabei.ivan.controller.AttributeKey;
-import com.varabei.ivan.controller.JspPath;
 import com.varabei.ivan.controller.CommandPath;
+import com.varabei.ivan.controller.JspPath;
 import com.varabei.ivan.controller.RequestParam;
 import com.varabei.ivan.controller.command.CommandType;
 import com.varabei.ivan.model.entity.Role;
@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.util.EnumMap;
 import java.util.List;
 
-public class PermissionFilter implements Filter {
+public class SecurityFilter implements Filter {
     private static final EnumMap<CommandType, List<Role>> commandNamePermittedRoles = new EnumMap<>(CommandType.class);
 
     @Override
@@ -54,16 +54,17 @@ public class PermissionFilter implements Filter {
     }
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+            throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse resp = (HttpServletResponse) response;
         HttpSession session = req.getSession();
+        Object userRole = session.getAttribute(AttributeKey.ROLE_NAME);
         String command = req.getParameter(RequestParam.COMMAND);
         List<Role> allowedRoles = null;
-        if(command != null && !command.isEmpty()){
+        if (command != null && !command.isEmpty()) {
             allowedRoles = commandNamePermittedRoles.get(CommandType.valueOf(command.toUpperCase()));
         }
-        Object userRole = session.getAttribute(AttributeKey.ROLE_NAME);
         if (userRole == null && allowedRoles != null) {
             resp.sendRedirect(String.format(CommandPath.LOGIN, req.getContextPath()));
         } else {

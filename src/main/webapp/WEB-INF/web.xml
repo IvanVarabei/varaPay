@@ -7,6 +7,10 @@
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
 
+    <session-config>
+        <session-timeout>180</session-timeout>
+    </session-config>
+
     <listener>
         <listener-class>com.varabei.ivan.controller.ConnectionPoolDestroyerListener</listener-class>
     </listener>
@@ -31,7 +35,7 @@
 
 <!--    <filter>-->
 <!--        <filter-name>PermissionFilter</filter-name>-->
-<!--        <filter-class>com.varabei.ivan.controller.filter.PermissionFilter</filter-class>-->
+<!--        <filter-class>com.varabei.ivan.controller.filter.SecurityFilter</filter-class>-->
 <!--    </filter>-->
 <!--    <filter-mapping>-->
 <!--        <filter-name>PermissionFilter</filter-name>-->

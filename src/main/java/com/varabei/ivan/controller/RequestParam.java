@@ -7,6 +7,7 @@ public class RequestParam {
     public static final String TEMP_CODE = "tempCode";
     public static final String LOCALE = "locale";
     public static final String QUERY = "query";
+    public static final String CHANGE_LANGUAGE = "change_language";
 
     // User
     public static final String USER_ID = "user_id";

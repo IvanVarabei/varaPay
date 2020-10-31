@@ -13,6 +13,10 @@
 	<fmt:message key="card_created" var="card_created"/>
 	<fmt:message key="your_cvc" var="your_cvc"/>
 	<fmt:message key="cvc_attention" var="cvc_attention"/>
+	<fmt:message key="cannot_be_deleted" var="cannot_be_deleted"/>
+	<c:if test="${not empty requestScope.error}">
+		<fmt:message key="${requestScope.error}" var="error"/>
+	</c:if>
 </fmt:bundle>
 <tags:general pageTitle="${title}">
 	<div class="profile">
@@ -35,7 +39,16 @@
 			<button class="button">${add_account}</button>
 			</form>
 		</div>
-		<div id="popup" class="popup ${not empty param.cvc ? 'popup_visible' : ''}">
+		<div class="popup ${not empty requestScope.error ? 'popup_visible' : ''}">
+			<div class="popup__body">
+				<div class="popup__content">
+					<a href="${pageContext.servletContext.contextPath}/mainServlet?command=profile_get" class="popup__close">X</a>
+					<div class="popup__title">${cannot_be_deleted}</div>
+					<div class="popup__text">${error}</div>
+				</div>
+			</div>
+		</div>
+		<div class="popup ${not empty param.cvc ? 'popup_visible' : ''}">
 			<div class="popup__body">
 				<div class="popup__content">
 					<a href="${pageContext.servletContext.contextPath}/mainServlet?command=profile_get" class="popup__close">X</a>
@@ -44,6 +57,5 @@
 				</div>
 			</div>
 		</div>
-
 	</div>
 </tags:general>

@@ -7,7 +7,7 @@ import com.varabei.ivan.controller.RequestParam;
 import com.varabei.ivan.controller.command.ActionCommand;
 import com.varabei.ivan.controller.router.Router;
 import com.varabei.ivan.controller.router.RouterType;
-import com.varabei.ivan.model.entity.Currency;
+import com.varabei.ivan.model.entity.CustomCurrency;
 import com.varabei.ivan.model.exception.ServiceException;
 import com.varabei.ivan.model.service.BidService;
 import com.varabei.ivan.model.service.ServiceFactory;
@@ -30,7 +30,7 @@ public class PlaceTopUpBidCommand implements ActionCommand {
         Long accountId = Long.parseLong(req.getParameter(RequestParam.ACCOUNT_ID));
         BigDecimal amountUsd = new BigDecimal(req.getParameter(RequestParam.AMOUNT));
         BigDecimal amountInChosenCurrency = new BigDecimal(req.getParameter(RequestParam.AMOUNT_IN_CHOSEN_CURRENCY));
-        Currency currency = Currency.valueOf(req.getParameter(RequestParam.CURRENCY));
+        CustomCurrency currency = CustomCurrency.valueOf(req.getParameter(RequestParam.CURRENCY));
         String message = req.getParameter(RequestParam.CLIENT_MESSAGE);
         try {
             if (!bidService.placeTopUpBid(accountId, amountUsd, amountInChosenCurrency, currency, message)) {

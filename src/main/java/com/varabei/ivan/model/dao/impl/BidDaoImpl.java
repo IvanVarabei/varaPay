@@ -5,7 +5,7 @@ import com.varabei.ivan.model.dao.ColumnLabel;
 import com.varabei.ivan.model.dao.GenericDao;
 import com.varabei.ivan.model.dao.builder.impl.BidBoulder;
 import com.varabei.ivan.model.entity.Bid;
-import com.varabei.ivan.model.entity.Currency;
+import com.varabei.ivan.model.entity.CustomCurrency;
 import com.varabei.ivan.model.exception.DaoException;
 
 import java.math.BigDecimal;
@@ -51,6 +51,8 @@ public class BidDaoImpl extends GenericDao<Bid> implements BidDao {
     private static final String FIND_NUMBER_OF_RECORDS = "select count(*) from bids where bid_state_id = 1";
     private static final String FIND_NUMBER_OF_RECORDS_BY_ACCOUNT_ID =
             "select count(*) from bids where account_id = ?";
+    private static final String IS_PRESENT_IN_PROGRESS_BID_BY_ACCOUNT_ID = "select exists(select 1 from bids " +
+            "where bid_state_id = 1 and account_id = ?)";
 
     public BidDaoImpl() {
         super(new BidBoulder());
@@ -58,7 +60,7 @@ public class BidDaoImpl extends GenericDao<Bid> implements BidDao {
 
     @Override
     public void placeTopUpBid(Long accountId, Long amount, BigDecimal amountInChosenCurrency,
-                              Currency currency, String message) throws DaoException {
+                              CustomCurrency currency, String message) throws DaoException {
         executeUpdate(PLACE_TOP_UP_BID, accountId, amount, amountInChosenCurrency, currency.ordinal(), message);
     }
 
@@ -88,7 +90,6 @@ public class BidDaoImpl extends GenericDao<Bid> implements BidDao {
         return executeQuery(FIND_BY_ACCOUNT_ID, accountId, limit, offset);
     }
 
-
     @Override
     public Long findAmountOfInProgressBids() throws DaoException {
         return findLong(FIND_NUMBER_OF_RECORDS, ColumnLabel.COUNT).orElseThrow(DaoException::new);
@@ -98,6 +99,11 @@ public class BidDaoImpl extends GenericDao<Bid> implements BidDao {
     public Long findAmountOfBidsByAccountId(Long accountId) throws DaoException {
         return findLong(FIND_NUMBER_OF_RECORDS_BY_ACCOUNT_ID, ColumnLabel.COUNT, accountId)
                 .orElseThrow(DaoException::new);
+    }
+
+    @Override
+    public boolean isPresentInProgressBids(Long accountId) throws DaoException {
+        return findBoolean(IS_PRESENT_IN_PROGRESS_BID_BY_ACCOUNT_ID, ColumnLabel.EXISTS, accountId);
     }
 
     @Override

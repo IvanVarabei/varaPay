@@ -1,7 +1,7 @@
 package com.varabei.ivan.model.dao;
 
 import com.varabei.ivan.model.entity.Bid;
-import com.varabei.ivan.model.entity.Currency;
+import com.varabei.ivan.model.entity.CustomCurrency;
 import com.varabei.ivan.model.exception.DaoException;
 
 import java.math.BigDecimal;
@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface BidDao {
     void placeTopUpBid(Long accountId, Long amount, BigDecimal amountInChosenCurrency,
-                       Currency currency, String message) throws DaoException;
+                       CustomCurrency currency, String message) throws DaoException;
 
     void placeWithdrawBid(Long accountId, Long amount, String message) throws DaoException;
 
@@ -20,6 +20,8 @@ public interface BidDao {
     Long findAmountOfInProgressBids() throws DaoException;
 
     Long findAmountOfBidsByAccountId(Long accountId) throws DaoException;
+
+    boolean isPresentInProgressBids(Long accountId) throws DaoException;
 
     void approveTopUpBid(Long topUpBidId) throws DaoException;
 

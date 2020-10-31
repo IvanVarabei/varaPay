@@ -6,7 +6,7 @@
 <jsp:useBean id="account_id" type="java.lang.Long" scope="request"/>
 <jsp:useBean id="amount" type="java.math.BigDecimal" scope="request"/>
 <jsp:useBean id="amountInChosenCurrency" type="java.math.BigDecimal" scope="request"/>
-<jsp:useBean id="currency" type="com.varabei.ivan.model.entity.Currency" scope="request"/>
+<jsp:useBean id="currency" type="com.varabei.ivan.model.entity.CustomCurrency" scope="request"/>
 <fmt:setLocale value="${sessionScope.locale}"/>
 <fmt:bundle basename="content" prefix="top_up.">
 	<fmt:message key="title" var="title"/>
