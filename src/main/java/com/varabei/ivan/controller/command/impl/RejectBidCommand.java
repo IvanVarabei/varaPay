@@ -17,16 +17,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class ApproveTopUpBidCommand implements ActionCommand {
-    private static final Logger log = LogManager.getLogger(ApproveTopUpBidCommand.class);
-    private static BidService bidService = ServiceFactory.getInstance().getToUpBidService();
+public class RejectBidCommand implements ActionCommand {
+    private static final Logger log = LogManager.getLogger(RejectBidCommand.class);
+    private static BidService bidService = ServiceFactory.getInstance().getBidService();
 
     @Override
     public Router execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         Router router = new Router(String.format(CommandPath.RUN_BIDS, req.getContextPath(),
                 req.getParameter(RequestParam.PAGE)), RouterType.REDIRECT);
         try {
-            bidService.approveTopUpBid(Long.parseLong(req.getParameter(RequestParam.BID_ID)));
+            String adminComment = req.getParameter(RequestParam.ADMIN_COMMENT);
+            bidService.rejectBid(Long.parseLong(req.getParameter(RequestParam.BID_ID)), adminComment);
         } catch (ServiceException e) {
             log.error(e);
             router.setForward(JspPath.ERROR_500);

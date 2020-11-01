@@ -9,7 +9,7 @@
 	<li>
 		<div class="currency">
 			<div class="currency__image">
-				<img src="${currency.img}">
+				<img src="${currency.img}" alt="">
 			</div>
 			<div class="currency__name">${currency.name()}</div>
 			<div class="currency__concise">${currency.conciseName}</div>

@@ -21,7 +21,7 @@ import java.util.List;
 
 public class RunBidsCommand implements ActionCommand {
     private static final Logger log = LogManager.getLogger(RunBidsCommand.class);
-    private static BidService bidService = ServiceFactory.getInstance().getToUpBidService();
+    private static BidService bidService = ServiceFactory.getInstance().getBidService();
 
     @Override
     public Router execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {

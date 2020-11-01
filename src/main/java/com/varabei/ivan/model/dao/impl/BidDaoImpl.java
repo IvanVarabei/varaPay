@@ -39,8 +39,8 @@ public class BidDaoImpl extends GenericDao<Bid> implements BidDao {
                     "    join roles on users.role_id = roles.role_id limit ? offset ?";
     private static final String PLACE_TOP_UP_BID = "insert into bids (account_id, amount, amount_in_chosen_currency," +
             " currency_id, client_message, is_top_up) VALUES (?, ?, ?, ?, ?, true)";
-    private static final String PLACE_WITHDRAW_BID = "insert into bids (account_id, amount, is_top_up, message) " +
-            "VALUES (?, ?, false, ?);";
+    private static final String PLACE_WITHDRAW_BID = "insert into bids (account_id, amount, " +
+            "amount_in_chosen_currency, currency_id, client_message, is_top_up) VALUES (?, ?, ?, ?, ?, false)";
     private static final String ADD_ACCOUNT_BALANCE = "update accounts set balance = balance + ? where account_id = ?";
     private static final String UPDATE_ADMIN_COMMENT = "update bids set admin_comment = ? where bid_id = ?";
     private static final String SET_STATE_REJECTED = "update bids set bid_state_id = 3 where bid_id = ?";
@@ -53,6 +53,7 @@ public class BidDaoImpl extends GenericDao<Bid> implements BidDao {
             "select count(*) from bids where account_id = ?";
     private static final String IS_PRESENT_IN_PROGRESS_BID_BY_ACCOUNT_ID = "select exists(select 1 from bids " +
             "where bid_state_id = 1 and account_id = ?)";
+    private static final String IS_TOP_UP_BID = "select is_top_up from bids where bid_id = ?";
 
     public BidDaoImpl() {
         super(new BidBoulder());
@@ -65,11 +66,12 @@ public class BidDaoImpl extends GenericDao<Bid> implements BidDao {
     }
 
     @Override
-    public void placeWithdrawBid(Long accountId, Long amount, String message) throws DaoException {
+    public void placeWithdrawBid(Long accountId, Long amount, BigDecimal amountInChosenCurrency,
+                                 CustomCurrency currency, String message) throws DaoException {
         Connection connection = pool.getConnection();
         try {
             startTransaction(connection);
-            executeUpdate(PLACE_WITHDRAW_BID, connection, accountId, amount, message);
+            executeUpdate(PLACE_WITHDRAW_BID, accountId, amount, amountInChosenCurrency, currency.ordinal(), message);
             executeUpdate(ADD_ACCOUNT_BALANCE, connection, -amount, accountId);
             endTransaction(connection);
         } catch (SQLException e) {
@@ -104,6 +106,11 @@ public class BidDaoImpl extends GenericDao<Bid> implements BidDao {
     @Override
     public boolean isPresentInProgressBids(Long accountId) throws DaoException {
         return findBoolean(IS_PRESENT_IN_PROGRESS_BID_BY_ACCOUNT_ID, ColumnLabel.EXISTS, accountId);
+    }
+
+    @Override
+    public boolean isTopUpBid(Long bidId) throws DaoException {
+        return findBoolean(IS_TOP_UP_BID, ColumnLabel.IS_TOP_UP, bidId);
     }
 
     @Override

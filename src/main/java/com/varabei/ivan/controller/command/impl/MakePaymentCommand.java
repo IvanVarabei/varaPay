@@ -30,7 +30,7 @@ public class MakePaymentCommand implements ActionCommand {
         Map<String, String> paymentData = new HashMap<>();
         paymentData.put(RequestParam.CARD_ID, req.getParameter(RequestParam.CARD_ID));
         paymentData.put(RequestParam.CVC, req.getParameter(RequestParam.CVC));
-        paymentData.put(RequestParam.NUMBER, req.getParameter(RequestParam.DESTINATION_CARD_NUMBER));
+        paymentData.put(RequestParam.CARD_NUMBER, req.getParameter(RequestParam.CARD_NUMBER));
         paymentData.put(RequestParam.AMOUNT, req.getParameter(RequestParam.AMOUNT));
         paymentData.put(RequestParam.VALID_THRU, req.getParameter(RequestParam.VALID_THRU));
         try {

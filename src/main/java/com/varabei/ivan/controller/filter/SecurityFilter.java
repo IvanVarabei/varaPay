@@ -33,8 +33,7 @@ public class SecurityFilter implements Filter {
         commandNamePermittedRoles.put(CommandType.CARD_PAGE_GET, client);
         commandNamePermittedRoles.put(CommandType.MAKE_PAYMENT_POST, client);
         commandNamePermittedRoles.put(CommandType.BLOCK_ACCOUNT_POST, client);
-        commandNamePermittedRoles.put(CommandType.PLACE_TOP_UP_BID_POST, client);
-        commandNamePermittedRoles.put(CommandType.PLACE_WITHDRAW_BID_POST, client);
+        commandNamePermittedRoles.put(CommandType.PLACE_BID_POST, client);
         commandNamePermittedRoles.put(CommandType.DELETE_ACCOUNT_POST, client);
         commandNamePermittedRoles.put(CommandType.CREATE_ACCOUNT_POST, client);
         commandNamePermittedRoles.put(CommandType.DELETE_CARD_POST, client);
@@ -42,15 +41,13 @@ public class SecurityFilter implements Filter {
         commandNamePermittedRoles.put(CommandType.CREATE_CARD_POST, client);
         commandNamePermittedRoles.put(CommandType.ACCOUNT_PAGE_GET, client);
         commandNamePermittedRoles.put(CommandType.TOP_UP_AMOUNT_PAGE_GET, client);
-        commandNamePermittedRoles.put(CommandType.TOP_UP_PAGE_GET, client);
+        commandNamePermittedRoles.put(CommandType.TOP_UP_MESSAGE_PAGE_GET, client);
 
         commandNamePermittedRoles.put(CommandType.RUN_ACCOUNTS_GET, admin);
         commandNamePermittedRoles.put(CommandType.RUN_BIDS_GET, admin);
-        commandNamePermittedRoles.put(CommandType.APPROVE_TOP_UP_BID_POST, admin);
-        commandNamePermittedRoles.put(CommandType.APPROVE_WITHDRAW_BID_POST, admin);
-        commandNamePermittedRoles.put(CommandType.REJECT_TOP_UP_BID_POST, admin);
-        commandNamePermittedRoles.put(CommandType.REJECT_WITHDRAW_BID_POST, admin);
-        commandNamePermittedRoles.put(CommandType.UNBLOCK_ACCOUNT_POST, admin);
+        commandNamePermittedRoles.put(CommandType.APPROVE_BID_POST, admin);
+        commandNamePermittedRoles.put(CommandType.REJECT_BID_POST, admin);
+        commandNamePermittedRoles.put(CommandType.ENABLE_ACCOUNT_POST, admin);
     }
 
     @Override

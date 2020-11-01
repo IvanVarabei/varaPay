@@ -3,6 +3,7 @@ package com.varabei.ivan.controller.command.impl;
 import com.varabei.ivan.controller.AttributeKey;
 import com.varabei.ivan.controller.RequestParam;
 import com.varabei.ivan.controller.command.ActionCommand;
+import com.varabei.ivan.controller.command.CommandType;
 import com.varabei.ivan.controller.router.Router;
 import com.varabei.ivan.controller.router.RouterType;
 
@@ -33,7 +34,7 @@ public class ChangeLanguageCommand implements ActionCommand {
                 if (!pair.getKey().equals(RequestParam.LOCALE)) {
                     String[] values = pair.getValue();
                     for (String value : values) {
-                        if (!value.equals(RequestParam.CHANGE_LANGUAGE)) {
+                        if (!value.equalsIgnoreCase(CommandType.CHANGE_LANGUAGE.name())) {
                             queryString.append(pair.getKey());
                             queryString.append("=");
                             queryString.append(value);

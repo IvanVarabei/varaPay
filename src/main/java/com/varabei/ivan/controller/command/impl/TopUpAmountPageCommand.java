@@ -17,8 +17,8 @@ public class TopUpAmountPageCommand implements ActionCommand {
     @Override
     public Router execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         Long accountId = Long.parseLong(req.getParameter(RequestParam.ACCOUNT_ID));
-        req.setAttribute(RequestParam.ACCOUNT_ID, accountId);
+        req.setAttribute(AttributeKey.ACCOUNT_ID, accountId);
         req.setAttribute(AttributeKey.CURRENCIES, List.of(CustomCurrency.values()));
-        return new Router(JspPath.INPUT_TOP_UP_AMOUNT);
+        return new Router(JspPath.TOP_UP_AMOUNT);
     }
 }

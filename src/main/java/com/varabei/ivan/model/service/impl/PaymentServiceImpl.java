@@ -49,7 +49,7 @@ public class PaymentServiceImpl implements PaymentService {
         if (paymentValidator.isValidPayment(paymentData)) {
             try {
                 Long sourceCardId = Long.parseLong(paymentData.get(DataTransferMapKey.CARD_ID));
-                String destinationCardNumber = paymentData.get(DataTransferMapKey.NUMBER).replace(" ", "");
+                String destinationCardNumber = paymentData.get(DataTransferMapKey.CARD_NUMBER).replace(" ", "");
                 BigDecimal amount = new BigDecimal(paymentData.get(DataTransferMapKey.AMOUNT));
                 checkSourceCard(paymentData, amount);
                 checkDestinationCard(paymentData);
@@ -79,15 +79,15 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     private void checkDestinationCard(Map<String, String> paymentData) throws DaoException {
-        String destinationCardNumber = paymentData.get(DataTransferMapKey.NUMBER).replace(" ", "");
+        String destinationCardNumber = paymentData.get(DataTransferMapKey.CARD_NUMBER).replace(" ", "");
         YearMonth validThru = YearMonth.parse(paymentData.get(DataTransferMapKey.VALID_THRU));
         Optional<Card> destinationCard = cardDao.findByCardNumberAndValidThru(destinationCardNumber, validThru);
         if (destinationCard.isPresent()) {
             if (!destinationCard.get().getAccount().isActive()) {
-                paymentData.put(DataTransferMapKey.NUMBER, ErrorInfo.DESTINATION_ACCOUNT_BLOCKED.toString());
+                paymentData.put(DataTransferMapKey.CARD_NUMBER, ErrorInfo.DESTINATION_ACCOUNT_BLOCKED.toString());
             }
         } else {
-            paymentData.put(DataTransferMapKey.NUMBER, ErrorInfo.CARD_DOES_NOT_EXISTS.toString());
+            paymentData.put(DataTransferMapKey.CARD_NUMBER, ErrorInfo.CARD_DOES_NOT_EXISTS.toString());
         }
     }
 }

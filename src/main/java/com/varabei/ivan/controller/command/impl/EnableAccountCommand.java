@@ -18,8 +18,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class UnblockAccountCommand implements ActionCommand {
-    private static final Logger log = LogManager.getLogger(UnblockAccountCommand.class);
+public class EnableAccountCommand implements ActionCommand {
+    private static final Logger log = LogManager.getLogger(EnableAccountCommand.class);
     private static AccountService accountService = ServiceFactory.getInstance().getAccountService();
     private static UserService userService = ServiceFactory.getInstance().getUserService();
 

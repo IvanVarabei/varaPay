@@ -9,9 +9,11 @@
 	<fmt:message key="temp_code" var="temp_code"/>
 	<fmt:message key="submit" var="submit"/>
 </fmt:bundle>
-<fmt:bundle basename="content" prefix="error.">
-	<fmt:message key="${requestScope.error}" var="fail_message"/>
-</fmt:bundle>
+<c:if test="${not empty requestScope.error}">
+	<fmt:bundle basename="content" prefix="error.">
+		<fmt:message key="${requestScope.error}" var="fail_message"/>
+	</fmt:bundle>
+</c:if>
 <tags:general pageTitle="${title}">
 	<div class="authorization">
 		<div class="authorization__title title">${title}</div>
@@ -19,7 +21,7 @@
 					action="${pageContext.servletContext.contextPath}/mainServlet?command=verify_email_post">
 			<p class="form__input-label">${temp_code}</p><input class="input form__input" name="tempCode"
 																													value="${param.tempCode}">
-			<c:if test="${not empty requestScope.error}"><p class="form__error">${fail_message}</p></c:if>
+			<p class="form__error">${fail_message}</p>
 			<button class="button form_button">${submit}</button>
 		</form>
 	</div>

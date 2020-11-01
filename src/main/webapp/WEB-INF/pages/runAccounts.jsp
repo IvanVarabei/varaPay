@@ -36,10 +36,10 @@
 					<div class="run-account__item">${account.user.email}</div>
 					<div class="run-account__item">${account.id}</div>
 					<form class="run-account-form" method="post"
-								action="${pageContext.servletContext.contextPath}/mainServlet?command=unblock_account_post&query=${param.query}">
-						<input class="input" name="secret_word">
-						<c:if test="${not empty requestScope.error and account.id eq param.account_id}"><p class="form__error">${fail_message}</p></c:if>
-						<input type="hidden" name="account_id" value="${account.id}">
+								action="${pageContext.servletContext.contextPath}/mainServlet?command=enable_account_post&query=${param.query}">
+						<input class="input" name="secretWord">
+						<c:if test="${not empty requestScope.error and account.id eq param.accountId}"><p class="form__error">${fail_message}</p></c:if>
+						<input type="hidden" name="accountId" value="${account.id}">
 						<button class="button">${enable}</button>
 					</form>
 				</c:forEach>

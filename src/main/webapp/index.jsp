@@ -1,4 +1,3 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page contentType="text/html;charset=UTF-8"%>
 
-<c:redirect url="mainServlet"/>
+<jsp:forward page="mainServlet?command=welcome_get"/>

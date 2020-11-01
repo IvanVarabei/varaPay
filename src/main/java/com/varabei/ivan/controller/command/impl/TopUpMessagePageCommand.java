@@ -18,18 +18,17 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-public class TopUpPageCommand implements ActionCommand {
+public class TopUpMessagePageCommand implements ActionCommand {
     private static CurrencyService currencyService = ServiceFactory.getInstance().getCurrencyService();
 
     @Override
     public Router execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        Router router = new Router(JspPath.TOP_UP);
+        Router router = new Router(JspPath.TOP_UP_MESSAGE);
         Map<String, String> dataToConvert = new HashMap<>();
         dataToConvert.put(RequestParam.ACCOUNT_ID, req.getParameter(RequestParam.ACCOUNT_ID));
         dataToConvert.put(RequestParam.AMOUNT, req.getParameter(RequestParam.AMOUNT));
         dataToConvert.put(RequestParam.CURRENCY, req.getParameter(RequestParam.CURRENCY));
-        Long accountId = Long.parseLong(req.getParameter(RequestParam.ACCOUNT_ID));
-        req.setAttribute(RequestParam.ACCOUNT_ID, accountId);
+        req.setAttribute(RequestParam.ACCOUNT_ID, Long.parseLong(req.getParameter(RequestParam.ACCOUNT_ID)));
         Optional<BigDecimal> amountInCurrency = currencyService.convertUsdToAnotherCurrency(dataToConvert);
         if (amountInCurrency.isPresent()) {
             req.setAttribute(AttributeKey.AMOUNT_IN_CHOSEN_CURRENCY, amountInCurrency.get());
@@ -37,7 +36,7 @@ public class TopUpPageCommand implements ActionCommand {
             req.setAttribute(AttributeKey.CURRENCY, CustomCurrency.valueOf(req.getParameter(RequestParam.CURRENCY)));
         } else {
             req.setAttribute(AttributeKey.ERRORS, dataToConvert);
-            router.setForward(JspPath.INPUT_TOP_UP_AMOUNT);
+            router.setForward(JspPath.TOP_UP_AMOUNT);
         }
         return router;
     }

@@ -11,7 +11,8 @@ public interface BidDao {
     void placeTopUpBid(Long accountId, Long amount, BigDecimal amountInChosenCurrency,
                        CustomCurrency currency, String message) throws DaoException;
 
-    void placeWithdrawBid(Long accountId, Long amount, String message) throws DaoException;
+    void placeWithdrawBid(Long accountId, Long amount, BigDecimal amountInChosenCurrency,
+                          CustomCurrency currency, String message) throws DaoException;
 
     List<Bid> findInProgressBids(int recordsPerPage, int page) throws DaoException;
 
@@ -22,6 +23,8 @@ public interface BidDao {
     Long findAmountOfBidsByAccountId(Long accountId) throws DaoException;
 
     boolean isPresentInProgressBids(Long accountId) throws DaoException;
+
+    boolean isTopUpBid(Long bidId) throws DaoException;
 
     void approveTopUpBid(Long topUpBidId) throws DaoException;
 

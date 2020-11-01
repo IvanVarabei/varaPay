@@ -20,9 +20,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
 
-public class PlaceTopUpBidCommand implements ActionCommand {
-    private static final Logger log = LogManager.getLogger(PlaceTopUpBidCommand.class);
-    private static BidService bidService = ServiceFactory.getInstance().getToUpBidService();
+public class PlaceBidCommand implements ActionCommand {
+    private static final Logger log = LogManager.getLogger(PlaceBidCommand.class);
+    private static BidService bidService = ServiceFactory.getInstance().getBidService();
 
     @Override
     public Router execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
@@ -33,9 +33,16 @@ public class PlaceTopUpBidCommand implements ActionCommand {
         CustomCurrency currency = CustomCurrency.valueOf(req.getParameter(RequestParam.CURRENCY));
         String message = req.getParameter(RequestParam.CLIENT_MESSAGE);
         try {
-            if (!bidService.placeTopUpBid(accountId, amountUsd, amountInChosenCurrency, currency, message)) {
-                req.setAttribute(AttributeKey.ERROR, true);
-                router.setForward(CommandPath.TOP_UP_PAGE);
+            if (Boolean.parseBoolean(req.getParameter(RequestParam.IS_TOP_UP))) {
+                if (!bidService.placeTopUpBid(accountId, amountUsd, amountInChosenCurrency, currency, message)) {
+                    req.setAttribute(AttributeKey.ERROR, true);
+                    router.setForward(CommandPath.TOP_UP_MESSAGE_PAGE);
+                }
+            } else {
+                if (!bidService.placeWithdrawBid(accountId, amountUsd, amountInChosenCurrency, currency, message)) {
+                    req.setAttribute(AttributeKey.ERROR, true);
+                    router.setForward(CommandPath.WITHDRAW_MESSAGE_PAGE);
+                }
             }
         } catch (ServiceException e) {
             log.error(e);

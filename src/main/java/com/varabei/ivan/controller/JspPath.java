@@ -6,6 +6,7 @@ public class JspPath {
     public static final String VERIFY_EMAIL = "/WEB-INF/pages/verifyEmail.jsp";
     public static final String ACCOUNT = "/WEB-INF/pages/account.jsp";
     public static final String ERROR_500 = "/WEB-INF/pages/error500.jsp";
+    public static final String ERROR_404 = "/WEB-INF/pages/error404.jsp";
     public static final String CARD = "/WEB-INF/pages/card.jsp";
     public static final String CHANGE_PASSWORD = "/WEB-INF/pages/changePassword.jsp";
     public static final String VERIFY_CREATE_CARD = "/WEB-INF/pages/verifyCreateCard.jsp";
@@ -18,8 +19,10 @@ public class JspPath {
     public static final String RUN_ACCOUNTS = "/WEB-INF/pages/runAccounts.jsp";
     public static final String RUN_BIDS = "/WEB-INF/pages/runBids.jsp";
     public static final String SUCCESS_PAGE = "/WEB-INF/pages/success.jsp";
-    public static final String INPUT_TOP_UP_AMOUNT = "/WEB-INF/pages/inputTopUpAmount.jsp";
-    public static final String TOP_UP = "/WEB-INF/pages/topUp.jsp";
+    public static final String TOP_UP_AMOUNT = "/WEB-INF/pages/topUpAmount.jsp";
+    public static final String TOP_UP_MESSAGE = "/WEB-INF/pages/topUpMessage.jsp";
+    public static final String WITHDRAW_AMOUNT = "/WEB-INF/pages/withdrawAmount.jsp";
+    public static final String WITHDRAW_MESSAGE = "/WEB-INF/pages/withdrawMessage.jsp";
     public static final String ACCESS_DENIED = "/WEB-INF/pages/accessDenied.jsp";
 
     private JspPath() {

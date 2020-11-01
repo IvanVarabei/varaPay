@@ -140,7 +140,9 @@ public class UserServiceImpl implements UserService {
             updatePassword(user.get().getEmail(), changePasswordData.get(DataTransferMapKey.PASSWORD));
             return true;
         }
-        changePasswordData.put(RequestParam.OLD_PASSWORD, ErrorInfo.OLD_PASSWORD.toString());
+        if (user.isEmpty()) {
+            changePasswordData.put(RequestParam.OLD_PASSWORD, ErrorInfo.OLD_PASSWORD.toString());
+        }
         return false;
     }
 

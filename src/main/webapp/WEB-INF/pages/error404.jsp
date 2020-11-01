@@ -4,10 +4,10 @@
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 
 <fmt:setLocale value="${sessionScope.locale}"/>
-<fmt:bundle basename="content" prefix="code_500.">
+<fmt:bundle basename="content" prefix="code_404.">
 	<fmt:message key="message" var="message"/>
 </fmt:bundle>
-<tags:general pageTitle="500">
+<tags:general pageTitle="404">
 	<div class="authorization">
 		<div class="authorization__title sub-sub-title">${message}</div>
 	</div>

@@ -24,7 +24,7 @@ import java.util.List;
 public class AccountPageCommand implements ActionCommand {
     private static final Logger log = LogManager.getLogger(AccountPageCommand.class);
     private static AccountService accountService = ServiceFactory.getInstance().getAccountService();
-    private static BidService bidService = ServiceFactory.getInstance().getToUpBidService();
+    private static BidService bidService = ServiceFactory.getInstance().getBidService();
 
     @Override
     public Router execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {

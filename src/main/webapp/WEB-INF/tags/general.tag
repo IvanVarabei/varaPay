@@ -4,6 +4,19 @@
 <%@ tag trimDirectiveWhitespaces="true" %>
 <%@ attribute name="pageTitle" required="true" %>
 
+<fmt:setLocale value="${sessionScope.locale}"/>
+<fmt:bundle basename="content" prefix="header.">
+	<fmt:message key="welcome" var="welcome"/>
+	<fmt:message key="signup" var="signup"/>
+	<fmt:message key="login" var="login"/>
+	<fmt:message key="logout" var="logout"/>
+	<fmt:message key="profile" var="profile"/>
+	<fmt:message key="run_bids" var="run_bids"/>
+	<fmt:message key="run_accounts" var="run_accounts"/>
+</fmt:bundle>
+<fmt:bundle basename="content" prefix="sidebar.">
+	<fmt:message key="currency_rates" var="currency_rates"/>
+</fmt:bundle>
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -11,19 +24,7 @@
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/css/nullStile.css">
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/css/common.css">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<fmt:setLocale value="${sessionScope.locale}"/>
-	<fmt:bundle basename="content" prefix="header.">
-		<fmt:message key="welcome" var="welcome"/>
-		<fmt:message key="signup" var="signup"/>
-		<fmt:message key="login" var="login"/>
-		<fmt:message key="logout" var="logout"/>
-		<fmt:message key="profile" var="profile"/>
-		<fmt:message key="run_bids" var="run_bids"/>
-		<fmt:message key="run_accounts" var="run_accounts"/>
-	</fmt:bundle>
-	<fmt:bundle basename="content" prefix="sidebar.">
-		<fmt:message key="currency_rates" var="currency_rates"/>
-	</fmt:bundle>
+	<link rel="shortcut icon" href="${pageContext.request.contextPath}/img/favicon.ico"/>
 </head>
 <body>
 <div class="wrapper">
@@ -55,7 +56,7 @@
 									 class="header__link">${profile}</a>
 							</li>
 						</c:if>
-						<c:if test="${sessionScope.role_name eq 'admin'}">
+						<c:if test="${sessionScope.roleName eq 'admin'}">
 							<li>
 								<a href="${pageContext.request.contextPath}/mainServlet?command=run_accounts_get"
 									 class="header__link">${run_accounts}</a>
@@ -95,8 +96,9 @@
 								<c:when test="${currentParam.value eq 'card_page_get' and param.cvc != null}">
 									<input type="hidden" name="${currentParam.key}" value="make_payment_post">
 								</c:when>
-								<c:when test="${currentParam.value eq 'top_up_page_get' and param.amountInChosenCurrency != null}">
-									<input type="hidden" name="${currentParam.key}" value="place_top_up_bid_post">
+								<c:when test="${(currentParam.value eq 'top_up_message_page_get'
+								or currentParam.value eq 'withdraw_message_page_get') and param.amountInChosenCurrency != null}">
+									<input type="hidden" name="${currentParam.key}" value="place_bid_post">
 								</c:when>
 								<c:otherwise>
 									<input type="hidden" name="${currentParam.key}" value="${currentParam.value}">
@@ -130,6 +132,6 @@
 		<div class="footer__text">varabei.ivan@gmail.com</div>
 	</footer>
 </div>
-<script src="js/script.js"></script>
+<script src="js/burgerMenu.js"></script>
 </body>
 </html>

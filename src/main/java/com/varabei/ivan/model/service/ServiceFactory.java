@@ -6,12 +6,12 @@ import com.varabei.ivan.model.service.impl.*;
 public final class ServiceFactory {
     private static final ServiceFactory instance = new ServiceFactory();
     private final MailService mailService = new MailServiceImpl();
-    private final UserService userService = new UserServiceImpl(mailService);
+    private final CurrencyService currencyService = new CurrencyServiceImpl();
     private final CardService cardService = new CardServiceImpl();
     private final PaymentService paymentService = new PaymentServiceImpl();
     private final AccountService accountService = new AccountServiceImpl();
-    private final BidService bidService = new BidServiceImpl();
-    private final CurrencyService currencyService = new CurrencyServiceImpl();
+    private final UserService userService = new UserServiceImpl(mailService);
+    private final BidService bidService = new BidServiceImpl(currencyService);
     private final DosProtectionService dosProtectionService = new DosProtectionServiceImpl();
 
     private ServiceFactory() {
@@ -33,7 +33,7 @@ public final class ServiceFactory {
         return paymentService;
     }
 
-    public BidService getToUpBidService() {
+    public BidService getBidService() {
         return bidService;
     }
 

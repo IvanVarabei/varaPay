@@ -34,8 +34,8 @@ public class LoginCommand implements ActionCommand {
         try {
             Optional<User> user = userService.signIn(login, password);
             if (user.isPresent()) {
-                session.setAttribute(RequestParam.ROLE_NAME, user.get().getRole().name().toLowerCase());
-                session.setAttribute(RequestParam.LOGIN, user.get().getLogin());
+                session.setAttribute(AttributeKey.ROLE_NAME, user.get().getRole().name().toLowerCase());
+                session.setAttribute(AttributeKey.LOGIN, user.get().getLogin());
             } else {
                 req.setAttribute(AttributeKey.ERROR, true);
                 router.setForward(JspPath.LOGIN);

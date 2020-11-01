@@ -11,7 +11,7 @@
 	<fmt:message key="forgot_password" var="forgot_password"/>
 	<fmt:message key="fail_message" var="fail_message"/>
 </fmt:bundle>
-<tags:general pageTitle="Login">
+<tags:general pageTitle="${title}">
 		<div class="authorization">
 		<div class="authorization__title title">${title}</div>
 		<form class="form" method="post" action="${pageContext.servletContext.contextPath}/mainServlet?command=login_post">

@@ -4,7 +4,6 @@
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 <%@ taglib uri="http://sargue.net/jsptags/time" prefix="javatime" %>
 
-<jsp:useBean id="account" type="com.varabei.ivan.model.entity.Account" scope="request"/>
 <fmt:setLocale value="${sessionScope.locale}"/>
 <fmt:bundle basename="content" prefix="account.">
 	<fmt:message key="title" var="title"/>
@@ -21,6 +20,7 @@
 	<fmt:message key="approved" var="approved"/>
 	<fmt:message key="rejected" var="rejected"/>
 </fmt:bundle>
+<jsp:useBean id="account" type="com.varabei.ivan.model.entity.Account" scope="request"/>
 <tags:general pageTitle="${title}">
 	<div class="account">
 		<div class="account__info account__title">
@@ -29,20 +29,22 @@
 		</div>
 		<form method="post">
 			<div class="account__buttons">
-				<input type="hidden" name="account_id" value="${account.id}">
+				<input type="hidden" name="accountId" value="${account.id}">
 				<button class="button"
-								formaction="${pageContext.servletContext.contextPath}/mainServlet?command=block_account_post"
+								formaction="${pageContext.servletContext.contextPath}/mainServlet?command=block_account_post&page=${requestScope.currentPage}"
 					${account.active eq true ? '' : 'disabled'}>${block_button}
 				</button>
 				<button class="button"
 								formaction="${pageContext.servletContext.contextPath}/mainServlet?command=top_up_amount_page_get"
 					${account.active eq true ? '' : 'disabled'}>${top_up}
 				</button>
-				<button class="button" ${account.active eq true ? '' : 'disabled'}>${withdraw}</button>
+				<button class="button"
+								formaction="${pageContext.servletContext.contextPath}/mainServlet?command=withdraw_amount_page_get"
+					${account.active eq true ? '' : 'disabled'}>${withdraw}</button>
 			</div>
 		</form>
-		<jsp:useBean id="bids" type="java.util.List" scope="request"/>
-		<c:if test="${not empty bids}">
+		<c:if test="${not empty requestScope.bids}">
+			<jsp:useBean id="bids" type="java.util.List" scope="request"/>
 			<div class="sub-title account__sub-title">${history}</div>
 			<div class="operation-header">
 				<div class="operation-header__info operation__part">${operation}</div>
@@ -65,5 +67,5 @@
 		</c:if>
 	</div>
 	<tags:pagination amountOfPages="${requestScope.amountOfPages}" currentPage="${requestScope.currentPage}" url="
-			${pageContext.servletContext.contextPath}/mainServlet?command=account_page_get&account_id=${account.id}"/>
+			${pageContext.servletContext.contextPath}/mainServlet?command=account_page_get&accountId=${account.id}"/>
 </tags:general>

@@ -17,8 +17,10 @@ public class AttributeKey {
     public static final String CURRENT_PAGE = "currentPage";
     public static final String AMOUNT_IN_CHOSEN_CURRENCY = "amountInChosenCurrency";
     public static final String LOCALE = "locale";
-    public static final String ROLE_NAME = "role_name";
+    public static final String ROLE_NAME = "roleName";
     public static final String CURRENCY = "currency";
+    public static final String LOGIN = "login";
+    public static final String ACCOUNT_ID = "accountId";
 
     private AttributeKey() {
     }
