@@ -16,12 +16,18 @@
 	<fmt:message key="enable" var="enable"/>
 	<fmt:message key="fail_message" var="fail_message"/>
 </fmt:bundle>
+<fmt:bundle basename="content" prefix="error.">
+	<fmt:message key="can_not_be_empty" var="can_not_be_empty"/>
+	<fmt:message key="name" var="client_name_error"/>
+</fmt:bundle>
 <tags:general pageTitle="${title}">
 	<div class="run-accounts">
 		<div class="title run-accounts__title">${title}</div>
 		<form class="form run-accounts__search-form" action="${pageContext.servletContext.contextPath}/mainServlet">
 			<input type="hidden" name="command" value="run_accounts_get">
-			<p class="form__input-label">${account_id_or_login}</p><input class="input form__input" name="query" value="${param.query}">
+			<p class="form__input-label">${account_id_or_login}</p>
+			<input class="input form__input" name="query" value="${param.query}" required
+						 oninvalid="this.setCustomValidity('${can_not_be_empty}')" onchange="this.setCustomValidity('')">
 			<button class="button form_button">${find_blocked}</button>
 		</form>
 		<c:if test="${not empty requestScope.accounts}">
@@ -37,8 +43,11 @@
 					<div class="run-account__item">${account.id}</div>
 					<form class="run-account-form" method="post"
 								action="${pageContext.servletContext.contextPath}/mainServlet?command=enable_account_post&query=${param.query}">
-						<input class="input" name="secretWord">
-						<c:if test="${not empty requestScope.error and account.id eq param.accountId}"><p class="form__error">${fail_message}</p></c:if>
+						<input class="input" name="secretWord" value="${param.secretWord}" pattern="^[A-Za-zА-Яа-яЁё]{3,20}$"
+									 required oninvalid="this.setCustomValidity('${client_name_error}')" onchange="this.setCustomValidity('')">
+						<c:if test="${not empty requestScope.error and account.id eq param.accountId}">
+							<p class="form__error">${fail_message}</p>
+						</c:if>
 						<input type="hidden" name="accountId" value="${account.id}">
 						<button class="button">${enable}</button>
 					</form>

@@ -14,6 +14,9 @@
 	<fmt:message key="submit" var="submit"/>
 	<fmt:message key="fail_message" var="fail_message"/>
 </fmt:bundle>
+<fmt:bundle basename="content" prefix="error.">
+	<fmt:message key="can_not_be_empty" var="can_not_be_empty"/>
+</fmt:bundle>
 <jsp:useBean id="accountId" type="java.lang.Long" scope="request"/>
 <jsp:useBean id="amount" type="java.math.BigDecimal" scope="request"/>
 <jsp:useBean id="amountInChosenCurrency" type="java.math.BigDecimal" scope="request"/>
@@ -28,8 +31,11 @@
 			<div class="step">2. ${text_part_2_1} <span class="green"><b>${currency}</b></span> ${text_part_2_2}</div>
 			<div class="step">3. ${text_part_3}</div>
 		</div>
-		<form class="form" method="post" action="${pageContext.servletContext.contextPath}/mainServlet?command=place_bid_post">
-			<p class="form__input-label">${message}</p><input type="text" name="clientMessage" class="input form__input">
+		<form class="form" method="post"
+					action="${pageContext.servletContext.contextPath}/mainServlet?command=place_bid_post">
+			<p class="form__input-label">${message}</p>
+			<input type="text" name="clientMessage" class="input form__input" required
+						 oninvalid="this.setCustomValidity('${can_not_be_empty}')" onchange="this.setCustomValidity('')">
 			<c:if test="${not empty requestScope.error}"><p class="form__error">${fail_message}</p></c:if>
 			<input type="hidden" name="isTopUp" value="false">
 			<input type="hidden" name="accountId" value="${accountId}">

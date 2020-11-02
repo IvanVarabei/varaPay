@@ -11,6 +11,10 @@
 	<fmt:message key="repeat_password" var="repeat_password"/>
 	<fmt:message key="button" var="button"/>
 </fmt:bundle>
+<fmt:bundle basename="content" prefix="error.">
+	<fmt:message key="length" var="client_password_error"/>
+	<fmt:message key="different_passwords" var="client_repeat_password_error"/>
+</fmt:bundle>
 <c:if test="${not empty requestScope.errors}">
 	<jsp:useBean id="errors" type="java.util.Map" scope="request"/>
 	<fmt:bundle basename="content" prefix="error.">
@@ -30,15 +34,36 @@
 		<div class="authorization__title title">${title}</div>
 		<form class="form" method="post"
 					action="${pageContext.servletContext.contextPath}/mainServlet?command=change_password_post">
-			<p class="form__input-label">${old_password}</p><input class="input form__input" name="oldPassword"
-																														 type="password">
+
+			<p class="form__input-label">${old_password}</p>
+			<input class="input form__input" name="oldPassword" type="password" pattern=".{3,20}" required
+						 oninvalid="this.setCustomValidity('${client_password_error}')" onchange="this.setCustomValidity('')">
 			<p class="form__error">${old_password_error}</p>
-			<p class="form__input-label">${password}</p><input class="input form__input" name="password" type="password">
+
+			<p class="form__input-label">${password}</p>
+			<input class="input form__input" id="password" name="password" type="password" pattern=".{3,20}" required
+						 oninvalid="this.setCustomValidity('${client_password_error}')" onchange="this.setCustomValidity('')">
 			<p class="form__error">${password_error}</p>
-			<p class="form__input-label">${repeat_password}</p><input class="input form__input" name="repeatPassword"
-																																type="password">
+
+			<p class="form__input-label">${repeat_password}</p>
+			<input class="input form__input" id="password-check" name="repeatPassword" type="password" title="">
 			<p class="form__error">${repeat_password_error}</p>
+
 			<button class="button form_button">${button}</button>
 		</form>
 	</div>
+	<script>
+      document.addEventListener('DOMContentLoaded', function () {
+          var pass1 = document.querySelector('#password'),
+              pass2 = document.querySelector('#password-check')
+          pass1.addEventListener('input', function () {
+              this.value != pass2.value ? pass2.setCustomValidity('${client_repeat_password_error}') :
+                  pass2.setCustomValidity('')
+          })
+          pass2.addEventListener('input', function (e) {
+              this.value != pass1.value ? this.setCustomValidity('${client_repeat_password_error}') :
+                  this.setCustomValidity('')
+          })
+      })
+	</script>
 </tags:general>

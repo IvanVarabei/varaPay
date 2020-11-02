@@ -83,8 +83,8 @@
 							</li>
 						</c:if>
 						<li>
-							<form action="${pageContext.request.contextPath}/mainServlet" method="post">
-								<select name="locale" onchange="this.form.submit()">
+							<form id="change_lang" action="${pageContext.request.contextPath}/mainServlet" method="post">
+								<select form="change_lang" name="locale" onchange="this.form.submit()">
 						<li>
 							<option value="en-US" ${sessionScope.locale.language eq 'en' ? 'selected' : ''}>EN</option>
 							<option value="ru-RU" ${sessionScope.locale.language eq 'ru' ? 'selected' : ''}>RU</option>

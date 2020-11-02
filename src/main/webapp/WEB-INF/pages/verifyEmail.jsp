@@ -9,6 +9,9 @@
 	<fmt:message key="temp_code" var="temp_code"/>
 	<fmt:message key="submit" var="submit"/>
 </fmt:bundle>
+<fmt:bundle basename="content" prefix="error.">
+	<fmt:message key="can_not_be_empty" var="can_not_be_empty"/>
+</fmt:bundle>
 <c:if test="${not empty requestScope.error}">
 	<fmt:bundle basename="content" prefix="error.">
 		<fmt:message key="${requestScope.error}" var="fail_message"/>
@@ -19,8 +22,9 @@
 		<div class="authorization__title title">${title}</div>
 		<form class="form" method="post"
 					action="${pageContext.servletContext.contextPath}/mainServlet?command=verify_email_post">
-			<p class="form__input-label">${temp_code}</p><input class="input form__input" name="tempCode"
-																													value="${param.tempCode}">
+			<p class="form__input-label">${temp_code}</p>
+			<input class="input form__input" name="tempCode" value="${param.tempCode}" required
+						 oninvalid="this.setCustomValidity('${can_not_be_empty}')" onchange="this.setCustomValidity('')">
 			<p class="form__error">${fail_message}</p>
 			<button class="button form_button">${submit}</button>
 		</form>

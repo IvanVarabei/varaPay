@@ -15,10 +15,16 @@
 	<fmt:message key="birth" var="birth"/>
 	<fmt:message key="button" var="button"/>
 </fmt:bundle>
+<fmt:bundle basename="content" prefix="error.">
+	<fmt:message key="login" var="client_login_error"/>
+	<fmt:message key="length" var="client_password_error"/>
+	<fmt:message key="different_passwords" var="client_repeat_password_error"/>
+	<fmt:message key="name" var="client_name_error"/>
+	<fmt:message key="email" var="client_email_error"/>
+</fmt:bundle>
 <c:if test="${not empty requestScope.errors}">
 	<jsp:useBean id="errors" type="java.util.Map" scope="request"/>
 	<fmt:bundle basename="content" prefix="error.">
-		<fmt:message key="login" var="login_error1"/>
 		<c:if test="${errors.login != param.login}">
 			<fmt:message key="${errors.login}" var="login_error"/>
 		</c:if>
@@ -47,37 +53,62 @@
 		<div class="authorization__title title">${title}</div>
 		<form class="form" method="post" action="${pageContext.servletContext.contextPath}/mainServlet">
 			<input type="hidden" name="command" value="signup_post">
-							<p class="form__input-label">${log_in}</p><input class="input form__input" name="login" value="${param.login}">
-							<p class="form__error">${login_error}</p>
 
+			<p class="form__input-label">${log_in}</p>
+			<input class="input form__input" name="login" value="${param.login}" pattern="^[a-zA-Z0-9_]{3,25}$" required
+						 oninvalid="this.setCustomValidity('${client_login_error}')" onchange="this.setCustomValidity('')"/>
+			<p class="form__error">${login_error}</p>
 
-<%--			<p class="form__input-label">${log_in}</p>--%>
-<%--			<input class="input form__input" name="login" required--%>
-<%--						 pattern="^[a-zA-Z0-9_]{3,25}$"--%>
-<%--						 oninvalid="this.setCustomValidity('${login_error1}')"--%>
-<%--						 onchange="this.setCustomValidity('')"--%>
-<%--						 value="${param.login}"/>--%>
-
-			<p class="form__input-label">${password}</p><input class="input form__input" name="password" type="password">
+			<p class="form__input-label">${password}</p>
+			<input class="input form__input" id="password" name="password" type="password" pattern=".{3,20}" required
+						 oninvalid="this.setCustomValidity('${client_password_error}')" onchange="this.setCustomValidity('')">
 			<p class="form__error">${password_error}</p>
-			<p class="form__input-label">${repeat_password}</p><input class="input form__input" name="repeatPassword"
-																																type="password">
+
+			<p class="form__input-label">${repeat_password}</p>
+			<input class="input form__input" id="password-check" name="repeatPassword" type="password" title="">
 			<p class="form__error">${repeat_password_error}</p>
-			<p class="form__input-label">${firstname}</p><input class="input form__input" name="firstName"
-																													value="${param.firstName}">
+
+			<p class="form__input-label">${firstname}</p>
+			<input class="input form__input" name="firstName" value="${param.firstName}" pattern="^[A-Za-zА-Яа-яЁё]{3,20}$"
+						 required oninvalid="this.setCustomValidity('${client_name_error}')" onchange="this.setCustomValidity('')">
 			<p class="form__error">${firstname_error}</p>
-			<p class="form__input-label">${lastname}</p><input class="input form__input" name="lastName"
-																												 value="${param.lastName}">
+
+			<p class="form__input-label">${lastname}</p>
+			<input class="input form__input" name="lastName" value="${param.lastName}" pattern="^[A-Za-zА-Яа-яЁё]{3,20}$"
+						 required oninvalid="this.setCustomValidity('${client_name_error}')" onchange="this.setCustomValidity('')">
 			<p class="form__error">${lastname_error}</p>
-			<p class="form__input-label">${email}</p><input class="input form__input" name="email" value="${param.email}">
+
+			<p class="form__input-label">${email}</p>
+			<input class="input form__input" name="email" value="${param.email}"
+						 pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+						 required oninvalid="this.setCustomValidity('${client_email_error}')" onchange="this.setCustomValidity('')">
 			<p class="form__error">${email_error}</p>
-			<p class="form__input-label">${birth}</p><input class="input form__input" name="birth"
-																											value="${not empty param.birth ? param.birth : '2000-01-01'}"
-																											type="date" min="1920-01-01" max="2010-01-01">
-			<p class="form__input-label">Secret</p><input class="input form__input" name="secretWord"
-																										value="${param.secretWord}">
+
+			<p class="form__input-label">${birth}</p>
+			<input class="input form__input" name="birth" value="${not empty param.birth ? param.birth : '2000-01-01'}"
+						 type="date" min="1920-01-01" max="2010-01-01">
+
+			<p class="form__input-label">Secret</p>
+			<input class="input form__input" name="secretWord" value="${param.secretWord}" pattern="^[A-Za-zА-Яа-яЁё]{3,20}$"
+						 required oninvalid="this.setCustomValidity('${client_name_error}')" onchange="this.setCustomValidity('')">
 			<p class="form__error">${secret_word_error}</p>
-			<button class="button form_button">${button}</button>
+
+				<%--			<button class="button form_button">${button}</button>--%>
+			<input id="submit" name="submit" type="submit" class="button form_button" value="${button}">
 		</form>
 	</div>
+	<script>
+      document.addEventListener('DOMContentLoaded', function () {
+          var pass1 = document.querySelector('#password'),
+              pass2 = document.querySelector('#password-check')
+          pass1.addEventListener('input', function () {
+              this.value != pass2.value ? pass2.setCustomValidity('${client_repeat_password_error}') :
+                  pass2.setCustomValidity('')
+          })
+          pass2.addEventListener('input', function (e) {
+              this.value != pass1.value ? this.setCustomValidity('${client_repeat_password_error}') :
+                  this.setCustomValidity('')
+          })
+      })
+	</script>
 </tags:general>
