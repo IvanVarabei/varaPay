@@ -32,7 +32,7 @@
 		<form class="profile__card-button" method="post"
 					action="${pageContext.servletContext.contextPath}/mainServlet?command=create_card_post">
 			<input type="hidden" name="accountId" value="${account.id}"/>
-			<button class="button">${add_card}</button>
+			<button class="button" ${account.active ? '' : 'disabled'}>${add_card}</button>
 		</form>
 	</div>
 </c:forEach>

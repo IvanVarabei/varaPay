@@ -8,6 +8,8 @@
 <fmt:setLocale value="${sessionScope.locale}"/>
 <fmt:bundle basename="content" prefix="card.">
 	<fmt:message key="title" var="title"/>
+	<fmt:message key="blocked" var="blocked"/>
+	<fmt:message key="active" var="active"/>
 	<fmt:message key="from" var="from"/>
 	<fmt:message key="to" var="to"/>
 	<fmt:message key="amount" var="amount"/>
@@ -46,7 +48,12 @@
 <jsp:useBean id="card" type="com.varabei.ivan.model.entity.Card" scope="request"/>
 <tags:general pageTitle="${title}">
 	<div class="card">
-		<div class="title">${title}</div>
+		<div class="account__info account__title">
+			<div class="title ">${title}</div>
+			<div class="sub-sub-title ${card.account.active eq true ? 'green' : 'red'}">
+					${card.account.active eq true ? active : blocked}
+			</div>
+		</div>
 		<div class="card__payment">
 			<div class="card__sub-title1 sub-title">${from}
 				<p class="card__sub-title-error">${card_id_error}</p>
@@ -68,13 +75,14 @@
 			<div class="card__img2">
 				<div>
 					<input class="input card__input-number" name="cardNumber" form="makePayment" value="${param.cardNumber}"
-								 pattern="^(\s?\d\s?){16}$" required onchange="this.setCustomValidity('')"
+								 pattern="^(\s?\d\s?){16}$" required ${card.account.active ? '' : 'disabled'}
+								 onchange="this.setCustomValidity('')"
 								 oninvalid="this.setCustomValidity('${client_card_number_error}')">
 				</div>
 				<div>
 					<input class="input card__input-date" type="month" name="validThru" form="makePayment" required min="2023-10"
-								 value="${param.validThru}" onchange="this.setCustomValidity('')"
-								 oninvalid="this.setCustomValidity('${can_not_be_empty}')">
+								 value="${param.validThru}" ${card.account.active ? '' : 'disabled'}
+								 onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('${can_not_be_empty}')">
 				</div>
 				<img src="img/card1.png"/>
 			</div>
@@ -85,17 +93,19 @@
 
 			<p class="form__input-label">${amount}</p>
 			<input class="input form__input" name="amount" form="makePayment" type="number" value="${param.amount}"
+				${card.account.active ? '' : 'disabled'}
 						 step="0.01" max="${card.account.balance}" required onchange="this.setCustomValidity('')"
 						 oninvalid="this.setCustomValidity('${client_amount_error}, ${client_less_than_error} ${card.account.balance}')">
 			<p class="form__error">${amount_error}</p>
 
 			<p class="form__input-label">${cvc}</p>
-			<input class="input form__input" name="cvc" value="${param.cvc}" pattern="^\d{3}$" required
+			<input class="input form__input" name="cvc" value="${param.cvc}" ${card.account.active ? '' : 'disabled'}
+						 pattern="^\d{3}$" required
 						 onchange="this.setCustomValidity('')" oninvalid="this.setCustomValidity('${client_cvc_error}')">
 			<p class="form__error">${cvc_error}</p>
 
 			<input type="hidden" name="cardId" value="${card.id}" form="makePayment">
-			<button class="button form_button">${pay}</button>
+			<button class="button form_button" ${card.account.active ? '' : 'disabled'}>${pay}</button>
 		</form>
 		<c:if test="${not empty requestScope.payments}">
 			<jsp:useBean id="payments" type="java.util.List" scope="request"/>

@@ -1,7 +1,12 @@
-.input{
-	font-size: 26px;
-	padding: 10px;
+.input {
+    font-size: 26px;
+    padding: 10px;
 }
+
 .input:focus {
-  background-color: #5181b8;
+    background-color: #5181b8;
+}
+
+input:disabled {
+    background: #dddddd;
 }
