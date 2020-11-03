@@ -1,6 +1,17 @@
 `Java` `Servlet api` `Jsp` `Jdbc` `Postgresql`
 
 # Payment system "VaraPay"
+The application is intended to help customers to send and recive payments. In addition to base functional, there are some extra-features such as:
+- Dos protection
+- Interaction with currency exchange web api to get currency costs
+- Adding salt to password hashing
+- Registration with email
+- Recovering forgotten password
+- Pagination
+- Client, server validation
+- Custom functions in the data base
+- Adaptive layout (HTML5, CSS) using media queries without any frameworks
+- CSS, JavaScript burger menu animation
 ## Business use case
 ### Roles
 - Guest
