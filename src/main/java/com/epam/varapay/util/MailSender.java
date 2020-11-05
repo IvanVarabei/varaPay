@@ -11,24 +11,24 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-public class MailServiceImpl {
-    private static final Logger log = LogManager.getLogger(MailServiceImpl.class);
-    private static final MailServiceImpl instance = new MailServiceImpl();
+public class MailSender {
+    private static final Logger log = LogManager.getLogger(MailSender.class);
+    private static final MailSender instance = new MailSender();
     private static Session session;
     private static final String MAIL_PROPERTIES_FILE = "mail.properties";
     private static final String MAIL_USER_NAME_KEY = "mail.user.name";
     private static final String MAIL_PASSWORD_KEY = "mail.user.password";
     private static final String CONTENT_TYPE = "text/html";
 
-    private MailServiceImpl() {
+    private MailSender() {
     }
 
-    public static MailServiceImpl getInstance() {
+    public static MailSender getInstance() {
         return instance;
     }
 
     static {
-        try (InputStream is = MailServiceImpl.class.getClassLoader().getResourceAsStream(MAIL_PROPERTIES_FILE)) {
+        try (InputStream is = MailSender.class.getClassLoader().getResourceAsStream(MAIL_PROPERTIES_FILE)) {
             Properties properties = new Properties();
             properties.load(is);
             String userName = properties.getProperty(MAIL_USER_NAME_KEY);
@@ -46,17 +46,17 @@ public class MailServiceImpl {
     }
 
     public void sendEmail(String mailTo, String subject, String message) {
-        MailSender sender = new MailSender(mailTo, subject, message);
+        MailLetter sender = new MailLetter(mailTo, subject, message);
         sender.send();
     }
 
-    private static class MailSender {
+    private static class MailLetter {
         private MimeMessage message;
         private String sendToEmail;
         private String mailSubject;
         private String mailText;
 
-        public MailSender(String sendToEmail, String mailSubject, String mailText) {
+        public MailLetter(String sendToEmail, String mailSubject, String mailText) {
             this.sendToEmail = sendToEmail;
             this.mailSubject = mailSubject;
             this.mailText = mailText;

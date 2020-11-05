@@ -7,7 +7,7 @@ import com.epam.varapay.model.dao.BidDao;
 import com.epam.varapay.model.dao.DaoFactory;
 import com.epam.varapay.model.entity.Account;
 import com.epam.varapay.model.service.AccountService;
-import com.epam.varapay.model.service.ErrorInfo;
+import com.epam.varapay.model.service.ErrorMessage;
 
 import java.util.List;
 import java.util.Optional;
@@ -72,10 +72,10 @@ public class AccountServiceImpl implements AccountService {
         try {
             Optional<Long> balance = accountDao.findAccountBalance(accountId);
             if (balance.isEmpty() || balance.get() > 0) {
-                return Optional.of(ErrorInfo.BALANCE_NOT_EMPTY.toString());
+                return Optional.of(ErrorMessage.BALANCE_NOT_EMPTY.toString());
             }
             if (bidDao.isPresentInProgressBids(accountId)) {
-                return Optional.of(ErrorInfo.IN_PROGRESS_BIDS.toString());
+                return Optional.of(ErrorMessage.IN_PROGRESS_BIDS.toString());
             }
             accountDao.delete(accountId);
         } catch (DaoException daoException) {

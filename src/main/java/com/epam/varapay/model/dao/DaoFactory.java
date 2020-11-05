@@ -1,7 +1,6 @@
 package com.epam.varapay.model.dao;
 
 import com.epam.varapay.model.dao.impl.*;
-import com.varabei.ivan.model.dao.impl.*;
 
 public final class DaoFactory {
     private static final DaoFactory instance = new DaoFactory();

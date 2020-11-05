@@ -1,17 +1,17 @@
 package com.epam.varapay.model.service.impl;
 
 import com.epam.varapay.controller.RequestParam;
-import com.epam.varapay.model.service.UserService;
 import com.epam.varapay.model.dao.DaoFactory;
 import com.epam.varapay.model.dao.UserDao;
 import com.epam.varapay.model.entity.User;
 import com.epam.varapay.model.exception.DaoException;
 import com.epam.varapay.model.exception.ServiceException;
 import com.epam.varapay.model.service.DataTransferMapKey;
-import com.epam.varapay.model.service.ErrorInfo;
-import com.epam.varapay.model.service.MailService;
+import com.epam.varapay.model.service.ErrorMessage;
+import com.epam.varapay.model.service.UserService;
 import com.epam.varapay.model.validator.UserValidator;
 import com.epam.varapay.util.CustomSecurity;
+import com.epam.varapay.util.MailSender;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,7 +20,7 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
     private static UserValidator userValidator = new UserValidator();
     private static UserDao userDao = DaoFactory.getInstance().getUserDao();
-    private MailService mailService;
+    private static MailSender mailSender = MailSender.getInstance();
     private static final String MAIL_SUBJECT_VERIFICATION = "Email verification";
     private static final String MAIL_SUBJECT_NEW_PASSWORD = "Your new password";
     private static final String MAIL_BODY_VERIFICATION = "Hi! Your verification code is : %s. " +
@@ -31,23 +31,20 @@ public class UserServiceImpl implements UserService {
     private static final int VERIFICATION_CODE_LENGTH = 4;
     private static final int SALT_LENGTH = 64;
 
-    public UserServiceImpl(MailService mailService) {
-        this.mailService = mailService;
-    }
 
     @Override
     public Optional<String> checkSignupDataAndSendEmail(Map<String, String> signupData) throws ServiceException {
         Map<String, String> initialMap = new HashMap<>(signupData);
         if (userValidator.isValidSignupData(signupData)) {
             if (findByEmail(signupData.get(DataTransferMapKey.EMAIL)).isPresent()) {
-                signupData.put(DataTransferMapKey.EMAIL, ErrorInfo.ALREADY_EXISTS.toString());
+                signupData.put(DataTransferMapKey.EMAIL, ErrorMessage.ALREADY_EXISTS.toString());
             }
             if (findByLogin(signupData.get(DataTransferMapKey.LOGIN)).isPresent()) {
-                signupData.put(DataTransferMapKey.LOGIN, ErrorInfo.ALREADY_EXISTS.toString());
+                signupData.put(DataTransferMapKey.LOGIN, ErrorMessage.ALREADY_EXISTS.toString());
             }
             if (initialMap.equals(signupData)) {
                 String tempCode = CustomSecurity.generateRandom(VERIFICATION_CODE_LENGTH);
-                mailService.sendEmail(signupData.get(DataTransferMapKey.EMAIL), MAIL_SUBJECT_VERIFICATION,
+                mailSender.sendEmail(signupData.get(DataTransferMapKey.EMAIL), MAIL_SUBJECT_VERIFICATION,
                         String.format(MAIL_BODY_VERIFICATION, tempCode));
                 return Optional.of(tempCode);
             }
@@ -62,7 +59,7 @@ public class UserServiceImpl implements UserService {
         try {
             if (tempCode.equals(originalTempCode)) {
                 if (userDao.findByLogin(user.getLogin()).isPresent()) {
-                    error = Optional.of(ErrorInfo.LOGIN_OCCUPIED.toString());
+                    error = Optional.of(ErrorMessage.LOGIN_OCCUPIED.toString());
                 } else {
                     String salt = CustomSecurity.generateRandom(SALT_LENGTH);
                     password = CustomSecurity.generateHash(password + salt);
@@ -70,7 +67,7 @@ public class UserServiceImpl implements UserService {
                     userDao.create(user, password, salt, secretWord);
                 }
             } else {
-                error = Optional.of(ErrorInfo.TEMP_CODE.toString());
+                error = Optional.of(ErrorMessage.TEMP_CODE.toString());
             }
         } catch (DaoException e) {
             throw new ServiceException(e);
@@ -124,7 +121,7 @@ public class UserServiceImpl implements UserService {
     public boolean recoverPassword(String email) throws ServiceException {
         if (findByEmail(email).isPresent()) {
             String newPassword = CustomSecurity.generateRandom(DEFAULT_PASSWORD_LENGTH);
-            mailService.sendEmail(email, MAIL_SUBJECT_NEW_PASSWORD, String.format(MAIL_BODY_NEW_PASSWORD, newPassword));
+            mailSender.sendEmail(email, MAIL_SUBJECT_NEW_PASSWORD, String.format(MAIL_BODY_NEW_PASSWORD, newPassword));
             updatePassword(email, newPassword);
             return true;
         }
@@ -141,7 +138,7 @@ public class UserServiceImpl implements UserService {
             return true;
         }
         if (user.isEmpty()) {
-            changePasswordData.put(RequestParam.OLD_PASSWORD, ErrorInfo.OLD_PASSWORD.toString());
+            changePasswordData.put(RequestParam.OLD_PASSWORD, ErrorMessage.OLD_PASSWORD.toString());
         }
         return false;
     }

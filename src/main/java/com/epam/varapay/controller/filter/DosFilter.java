@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class DosFilter implements Filter {
-    private static DosProtection dosProtection = new DosProtection();
+    private static DosProtection dosProtection = DosProtection.getInstance();
     private static final int TOO_MANY_REQUESTS_CODE = 429;
 
     @Override

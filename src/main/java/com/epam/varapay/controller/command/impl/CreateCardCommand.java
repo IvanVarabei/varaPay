@@ -8,9 +8,9 @@ import com.epam.varapay.controller.command.ActionCommand;
 import com.epam.varapay.controller.router.Router;
 import com.epam.varapay.model.entity.User;
 import com.epam.varapay.model.exception.ServiceException;
-import com.epam.varapay.model.service.MailService;
 import com.epam.varapay.model.service.ServiceFactory;
 import com.epam.varapay.util.CustomSecurity;
+import com.epam.varapay.util.MailSender;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -22,7 +22,7 @@ import java.io.IOException;
 public class CreateCardCommand implements ActionCommand {
     private static final Logger log = LogManager.getLogger(CreateCardCommand.class);
     private static UserService userService = ServiceFactory.getInstance().getUserService();
-    private static MailService mailService = ServiceFactory.getInstance().getMailService();
+    private static MailSender mailSender = MailSender.getInstance();
     private static final String MAIL_SUBJECT = "Create new card";
     private static final String MAIL_BODY = "Confirm create card action. Your code is %s.";
     private static final int TEMP_CODE_LENGTH = 4;
@@ -35,7 +35,7 @@ public class CreateCardCommand implements ActionCommand {
             String login = req.getSession().getAttribute(RequestParam.LOGIN).toString();
             String tempCode = CustomSecurity.generateRandom(TEMP_CODE_LENGTH);
             User user = userService.findByLogin(login).get();
-            mailService.sendEmail(user.getEmail(), MAIL_SUBJECT, String.format(MAIL_BODY, tempCode));
+            mailSender.sendEmail(user.getEmail(), MAIL_SUBJECT, String.format(MAIL_BODY, tempCode));
             req.getSession().setAttribute(RequestParam.TEMP_CODE, tempCode);
             req.getSession().setAttribute(RequestParam.ACCOUNT_ID, accountId);
             router.setRedirect(String.format(CommandPath.VERIFY_CREATE_CARD, req.getContextPath()));

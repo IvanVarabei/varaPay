@@ -27,7 +27,7 @@
 		</c:if>
 	</fmt:bundle>
 </c:if>
-<jsp:useBean id="account" type="com.varabei.ivan.model.entity.Account" scope="request"/>
+<jsp:useBean id="account" type="com.epam.varapay.model.entity.Account" scope="request"/>
 <tags:general pageTitle="${title}">
 	<div class="bid-amount">
 		<div class="account__info account__title">

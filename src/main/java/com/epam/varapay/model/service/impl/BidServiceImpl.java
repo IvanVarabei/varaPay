@@ -1,17 +1,17 @@
 package com.epam.varapay.model.service.impl;
 
-import com.epam.varapay.model.exception.DaoException;
-import com.epam.varapay.model.exception.ServiceException;
 import com.epam.varapay.model.dao.AccountDao;
 import com.epam.varapay.model.dao.BidDao;
 import com.epam.varapay.model.dao.DaoFactory;
 import com.epam.varapay.model.entity.Account;
 import com.epam.varapay.model.entity.Bid;
 import com.epam.varapay.model.entity.CustomCurrency;
+import com.epam.varapay.model.exception.DaoException;
+import com.epam.varapay.model.exception.ServiceException;
 import com.epam.varapay.model.service.BidService;
-import com.epam.varapay.model.service.CurrencyService;
 import com.epam.varapay.model.service.DataTransferMapKey;
-import com.epam.varapay.model.service.ErrorInfo;
+import com.epam.varapay.model.service.ErrorMessage;
+import com.epam.varapay.util.CurrencyConverter;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -19,13 +19,9 @@ import java.util.Map;
 import java.util.Optional;
 
 public class BidServiceImpl implements BidService {
-    private static BidDao bidDao = DaoFactory.getInstance().getTopUpBidDao();
+    private BidDao bidDao = DaoFactory.getInstance().getTopUpBidDao();
     private static AccountDao accountDao = DaoFactory.getInstance().getAccountDao();
-    private CurrencyService currencyService;
-
-    public BidServiceImpl(CurrencyService currencyService) {
-        this.currencyService = currencyService;
-    }
+    private static CurrencyConverter currencyConverter = CurrencyConverter.getInstance();
 
     @Override
     public boolean placeTopUpBid(Long accountId, BigDecimal amount, BigDecimal amountInChosenCurrency,
@@ -45,7 +41,7 @@ public class BidServiceImpl implements BidService {
     @Override
     public Optional<BigDecimal> findAmountInChosenCurrencyIfEnoughBalance(Map<String, String> dataToConvert)
             throws ServiceException {
-        Optional<BigDecimal> amountInChosenCurrency = currencyService.convertUsdToAnotherCurrency(dataToConvert);
+        Optional<BigDecimal> amountInChosenCurrency = currencyConverter.convertUsdToAnotherCurrency(dataToConvert);
         if (amountInChosenCurrency.isPresent()) {
             try {
                 BigDecimal amountToWithdraw = new BigDecimal(dataToConvert.get(DataTransferMapKey.AMOUNT));
@@ -54,7 +50,7 @@ public class BidServiceImpl implements BidService {
                 if (account.getBalance().compareTo(amountToWithdraw) >= 0) {
                     return amountInChosenCurrency;
                 }
-                dataToConvert.put(DataTransferMapKey.AMOUNT, ErrorInfo.NOT_ENOUGH_BALANCE.toString());
+                dataToConvert.put(DataTransferMapKey.AMOUNT, ErrorMessage.NOT_ENOUGH_BALANCE.toString());
             } catch (DaoException e) {
                 throw new ServiceException(e);
             }

@@ -1,7 +1,7 @@
 package com.epam.varapay.model.validator;
 
 import com.epam.varapay.model.service.DataTransferMapKey;
-import com.epam.varapay.model.service.ErrorInfo;
+import com.epam.varapay.model.service.ErrorMessage;
 
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -27,11 +27,11 @@ public class UserValidator {
         String password = signupData.get(DataTransferMapKey.PASSWORD);
         String repeatPassword = signupData.get(DataTransferMapKey.REPEAT_PASSWORD);
         if (password.length() < MIN_PASSWORD_LENGTH || password.length() > MAX_PASSWORD_LENGTH) {
-            signupData.put(DataTransferMapKey.PASSWORD, ErrorInfo.LENGTH.toString());
+            signupData.put(DataTransferMapKey.PASSWORD, ErrorMessage.LENGTH.toString());
             return false;
         } else {
             if (!password.equals(repeatPassword)) {
-                signupData.put(DataTransferMapKey.REPEAT_PASSWORD, ErrorInfo.DIFFERENT_PASSWORDS.toString());
+                signupData.put(DataTransferMapKey.REPEAT_PASSWORD, ErrorMessage.DIFFERENT_PASSWORDS.toString());
                 return false;
             }
         }
@@ -40,7 +40,7 @@ public class UserValidator {
 
     private boolean checkName(String potentialName, Map<String, String> signupData, String errorKey) {
         if (!NAME_PATTERN.matcher(potentialName).find()) {
-            signupData.put(errorKey, ErrorInfo.NAME.toString());
+            signupData.put(errorKey, ErrorMessage.NAME.toString());
             return false;
         }
         return true;
@@ -48,7 +48,7 @@ public class UserValidator {
 
     private boolean checkEmail(Map<String, String> signupData) {
         if (!EMAIL_PATTERN.matcher(signupData.get(DataTransferMapKey.EMAIL)).find()) {
-            signupData.put(DataTransferMapKey.EMAIL, ErrorInfo.EMAIL.toString());
+            signupData.put(DataTransferMapKey.EMAIL, ErrorMessage.EMAIL.toString());
             return false;
         }
         return true;
@@ -56,7 +56,7 @@ public class UserValidator {
 
     private boolean checkLogin(Map<String, String> signupData) {
         if (!LOGIN_PATTERN.matcher(signupData.get(DataTransferMapKey.LOGIN)).find()) {
-            signupData.put(DataTransferMapKey.LOGIN, ErrorInfo.LOGIN.toString());
+            signupData.put(DataTransferMapKey.LOGIN, ErrorMessage.LOGIN.toString());
             return false;
         }
         return true;

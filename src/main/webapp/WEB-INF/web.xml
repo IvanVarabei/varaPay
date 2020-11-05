@@ -12,12 +12,12 @@
     </session-config>
 
     <listener>
-        <listener-class>com.varabei.ivan.controller.ConnectionPoolDestroyerListener</listener-class>
+        <listener-class>com.epam.varapay.controller.listener.ConnectionPoolDestroyerListener</listener-class>
     </listener>
 
     <filter>
         <filter-name>DosFilter</filter-name>
-        <filter-class>com.varabei.ivan.controller.filter.DosFilter</filter-class>
+        <filter-class>com.epam.varapay.controller.filter.DosFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>DosFilter</filter-name>
@@ -26,7 +26,7 @@
 
     <filter>
         <filter-name>CharsetFilter</filter-name>
-        <filter-class>com.varabei.ivan.controller.filter.CharsetFilter</filter-class>
+        <filter-class>com.epam.varapay.controller.filter.CharsetFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>CharsetFilter</filter-name>
@@ -35,7 +35,7 @@
 
     <!--    <filter>-->
     <!--        <filter-name>PermissionFilter</filter-name>-->
-    <!--        <filter-class>com.varabei.ivan.controller.filter.SecurityFilter</filter-class>-->
+    <!--        <filter-class>SecurityFilter</filter-class>-->
     <!--    </filter>-->
     <!--    <filter-mapping>-->
     <!--        <filter-name>PermissionFilter</filter-name>-->
@@ -44,7 +44,7 @@
 
     <filter>
         <filter-name>LocaleFilter</filter-name>
-        <filter-class>com.varabei.ivan.controller.filter.LocaleFilter</filter-class>
+        <filter-class>com.epam.varapay.controller.filter.LocaleFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>LocaleFilter</filter-name>
@@ -53,7 +53,7 @@
 
     <servlet>
         <servlet-name>Servlet</servlet-name>
-        <servlet-class>com.varabei.ivan.controller.RequestProcessor</servlet-class>
+        <servlet-class>com.epam.varapay.controller.RequestController</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Servlet</servlet-name>

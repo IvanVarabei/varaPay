@@ -17,7 +17,7 @@
 		<fmt:message key="${requestScope.error}" var="fail_message"/>
 	</c:if>
 </fmt:bundle>
-<jsp:useBean id="user" type="com.varabei.ivan.model.entity.User" scope="request"/>
+<jsp:useBean id="user" type="com.epam.varapay.model.entity.User" scope="request"/>
 <tags:general pageTitle="${title}">
 	<div class="profile">
 		<div class="title">${title}</div>

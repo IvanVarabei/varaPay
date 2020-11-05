@@ -6,8 +6,7 @@ import com.epam.varapay.controller.RequestParam;
 import com.epam.varapay.controller.command.ActionCommand;
 import com.epam.varapay.controller.router.Router;
 import com.epam.varapay.model.entity.CustomCurrency;
-import com.epam.varapay.model.service.CurrencyService;
-import com.epam.varapay.model.service.ServiceFactory;
+import com.epam.varapay.util.CurrencyConverter;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -19,7 +18,7 @@ import java.util.Map;
 import java.util.Optional;
 
 public class TopUpMessagePageCommand implements ActionCommand {
-    private static CurrencyService currencyService = ServiceFactory.getInstance().getCurrencyService();
+    private static CurrencyConverter currencyConverter = CurrencyConverter.getInstance();
 
     @Override
     public Router execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
@@ -29,7 +28,7 @@ public class TopUpMessagePageCommand implements ActionCommand {
         dataToConvert.put(RequestParam.AMOUNT, req.getParameter(RequestParam.AMOUNT));
         dataToConvert.put(RequestParam.CURRENCY, req.getParameter(RequestParam.CURRENCY));
         req.setAttribute(RequestParam.ACCOUNT_ID, Long.parseLong(req.getParameter(RequestParam.ACCOUNT_ID)));
-        Optional<BigDecimal> amountInCurrency = currencyService.convertUsdToAnotherCurrency(dataToConvert);
+        Optional<BigDecimal> amountInCurrency = currencyConverter.convertUsdToAnotherCurrency(dataToConvert);
         if (amountInCurrency.isPresent()) {
             req.setAttribute(AttributeKey.AMOUNT_IN_CHOSEN_CURRENCY, amountInCurrency.get());
             req.setAttribute(AttributeKey.AMOUNT, new BigDecimal(req.getParameter(RequestParam.AMOUNT)));

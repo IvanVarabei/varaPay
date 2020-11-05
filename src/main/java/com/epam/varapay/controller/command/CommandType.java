@@ -1,8 +1,7 @@
 package com.epam.varapay.controller.command;
 
-import com.epam.varapay.controller.command.impl.*;
 import com.epam.varapay.controller.JspPath;
-import com.varabei.ivan.controller.command.impl.*;
+import com.epam.varapay.controller.command.impl.*;
 import com.epam.varapay.controller.router.Router;
 
 public enum CommandType {

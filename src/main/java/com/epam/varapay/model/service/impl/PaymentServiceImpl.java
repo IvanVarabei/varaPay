@@ -8,7 +8,7 @@ import com.epam.varapay.model.entity.Payment;
 import com.epam.varapay.model.exception.DaoException;
 import com.epam.varapay.model.exception.ServiceException;
 import com.epam.varapay.model.service.DataTransferMapKey;
-import com.epam.varapay.model.service.ErrorInfo;
+import com.epam.varapay.model.service.ErrorMessage;
 import com.epam.varapay.model.service.PaymentService;
 import com.epam.varapay.model.validator.PaymentValidator;
 
@@ -68,13 +68,13 @@ public class PaymentServiceImpl implements PaymentService {
         Long sourceCardId = Long.parseLong(paymentData.get(DataTransferMapKey.CARD_ID));
         Card sourceCard = cardDao.findById(sourceCardId).get();
         if (!sourceCard.getCvc().equals(paymentData.get(DataTransferMapKey.CVC))) {
-            paymentData.put(DataTransferMapKey.CVC, ErrorInfo.CVC.toString());
+            paymentData.put(DataTransferMapKey.CVC, ErrorMessage.CVC.toString());
         }
         if (sourceCard.getAccount().getBalance().compareTo(amount) < 0) {
-            paymentData.put(DataTransferMapKey.AMOUNT, ErrorInfo.NOT_ENOUGH_BALANCE.toString());
+            paymentData.put(DataTransferMapKey.AMOUNT, ErrorMessage.NOT_ENOUGH_BALANCE.toString());
         }
         if (!sourceCard.getAccount().isActive()) {
-            paymentData.put(DataTransferMapKey.CARD_ID, ErrorInfo.SOURCE_ACCOUNT_BLOCKED.toString());
+            paymentData.put(DataTransferMapKey.CARD_ID, ErrorMessage.SOURCE_ACCOUNT_BLOCKED.toString());
         }
     }
 
@@ -84,10 +84,10 @@ public class PaymentServiceImpl implements PaymentService {
         Optional<Card> destinationCard = cardDao.findByCardNumberAndValidThru(destinationCardNumber, validThru);
         if (destinationCard.isPresent()) {
             if (!destinationCard.get().getAccount().isActive()) {
-                paymentData.put(DataTransferMapKey.CARD_NUMBER, ErrorInfo.DESTINATION_ACCOUNT_BLOCKED.toString());
+                paymentData.put(DataTransferMapKey.CARD_NUMBER, ErrorMessage.DESTINATION_ACCOUNT_BLOCKED.toString());
             }
         } else {
-            paymentData.put(DataTransferMapKey.CARD_NUMBER, ErrorInfo.CARD_DOES_NOT_EXISTS.toString());
+            paymentData.put(DataTransferMapKey.CARD_NUMBER, ErrorMessage.CARD_DOES_NOT_EXISTS.toString());
         }
     }
 }

@@ -20,7 +20,7 @@
 <jsp:useBean id="accountId" type="java.lang.Long" scope="request"/>
 <jsp:useBean id="amount" type="java.math.BigDecimal" scope="request"/>
 <jsp:useBean id="amountInChosenCurrency" type="java.math.BigDecimal" scope="request"/>
-<jsp:useBean id="currency" type="com.varabei.ivan.model.entity.CustomCurrency" scope="request"/>
+<jsp:useBean id="currency" type="com.epam.varapay.model.entity.CustomCurrency" scope="request"/>
 <tags:general pageTitle="${title}">
 	<div class="bid-message">
 		<div class="title bid-message__title">${title} ${amount}$</div>

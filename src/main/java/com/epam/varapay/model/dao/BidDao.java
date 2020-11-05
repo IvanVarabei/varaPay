@@ -14,7 +14,7 @@ public interface BidDao {
     void placeWithdrawBid(Long accountId, Long amount, BigDecimal amountInChosenCurrency,
                           CustomCurrency currency, String message) throws DaoException;
 
-    List<Bid> findInProgressBids(int recordsPerPage, int page) throws DaoException;
+    List<Bid> findInProgressBids(int limit, int offset) throws DaoException;
 
     List<Bid> findByAccountId(Long accountId, int limit, int offset) throws DaoException;
 

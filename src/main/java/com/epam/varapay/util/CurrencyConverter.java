@@ -1,7 +1,6 @@
-package com.epam.varapay.model.service.impl;
+package com.epam.varapay.util;
 
 import com.epam.varapay.model.entity.CustomCurrency;
-import com.epam.varapay.model.service.CurrencyService;
 import com.epam.varapay.model.service.DataTransferMapKey;
 import com.epam.varapay.model.validator.CurrencyValidator;
 
@@ -10,11 +9,18 @@ import java.math.RoundingMode;
 import java.util.Map;
 import java.util.Optional;
 
-public class CurrencyServiceImpl implements CurrencyService {
+public class CurrencyConverter {
+    private static CurrencyConverter instance = new CurrencyConverter();
     private static CurrencyValidator currencyValidator = new CurrencyValidator();
     private static final int AMOUNT_OF_DIGITS_AFTER_COLUMN = 8;
 
-    @Override
+    private CurrencyConverter() {
+    }
+
+    public static CurrencyConverter getInstance() {
+        return instance;
+    }
+
     public Optional<BigDecimal> convertUsdToAnotherCurrency(Map<String, String> dataToConvert) {
         if (currencyValidator.isValidDataToConvert(dataToConvert)) {
             BigDecimal amountUsd = new BigDecimal(dataToConvert.get(DataTransferMapKey.AMOUNT));

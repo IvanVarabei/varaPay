@@ -1,6 +1,6 @@
 package com.epam.varapay.model.service;
 
-public enum ErrorInfo {
+public enum ErrorMessage {
     NAME,
     LENGTH,
     ALREADY_EXISTS,
@@ -15,7 +15,6 @@ public enum ErrorInfo {
     NOT_ENOUGH_BALANCE,
     SOURCE_ACCOUNT_BLOCKED,
     DESTINATION_ACCOUNT_BLOCKED,
-    NOT_NUMBER,
     CAN_NOT_BE_EMPTY,
     CARD_DOES_NOT_EXISTS,
     AMOUNT,

@@ -45,7 +45,7 @@
 		</c:if>
 	</fmt:bundle>
 </c:if>
-<jsp:useBean id="card" type="com.varabei.ivan.model.entity.Card" scope="request"/>
+<jsp:useBean id="card" type="com.epam.varapay.model.entity.Card" scope="request"/>
 <tags:general pageTitle="${title}">
 	<div class="card">
 		<div class="account__info account__title">

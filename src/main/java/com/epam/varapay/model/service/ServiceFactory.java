@@ -2,17 +2,14 @@ package com.epam.varapay.model.service;
 
 
 import com.epam.varapay.model.service.impl.*;
-import com.varabei.ivan.model.service.impl.*;
 
 public final class ServiceFactory {
     private static final ServiceFactory instance = new ServiceFactory();
-    private final MailService mailService = new MailServiceImpl();
-    private final CurrencyService currencyService = new CurrencyServiceImpl();
     private final CardService cardService = new CardServiceImpl();
     private final PaymentService paymentService = new PaymentServiceImpl();
     private final AccountService accountService = new AccountServiceImpl();
-    private final UserService userService = new UserServiceImpl(mailService);
-    private final BidService bidService = new BidServiceImpl(currencyService);
+    private final UserService userService = new UserServiceImpl();
+    private final BidService bidService = new BidServiceImpl();
 
     private ServiceFactory() {
     }
@@ -39,13 +36,5 @@ public final class ServiceFactory {
 
     public AccountService getAccountService() {
         return accountService;
-    }
-
-    public MailService getMailService() {
-        return mailService;
-    }
-
-    public CurrencyService getCurrencyService() {
-        return currencyService;
     }
 }

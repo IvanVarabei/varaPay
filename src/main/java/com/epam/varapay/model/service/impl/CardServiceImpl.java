@@ -1,4 +1,4 @@
-package com.epam.varapay.util;
+package com.epam.varapay.model.service.impl;
 
 import com.epam.varapay.model.dao.CardDao;
 import com.epam.varapay.model.entity.Card;

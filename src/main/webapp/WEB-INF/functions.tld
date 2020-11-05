@@ -11,12 +11,12 @@
 
     <function>
         <name>formatLocalDate</name>
-        <function-class>com.varabei.ivan.util.FormatExpressionLanguage</function-class>
+        <function-class>com.epam.varapay.util.FormatExpressionLanguage</function-class>
         <function-signature>java.lang.String formatLocalDate(java.time.LocalDate, java.lang.String)</function-signature>
     </function>
     <function>
         <name>formatCardNumber</name>
-        <function-class>com.varabei.ivan.util.FormatExpressionLanguage</function-class>
+        <function-class>com.epam.varapay.util.FormatExpressionLanguage</function-class>
         <function-signature>java.lang.String formatCardNumber(java.lang.String)</function-signature>
     </function>
 </taglib>
