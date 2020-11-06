@@ -46,6 +46,10 @@ public enum CustomCurrency {
         return wallet;
     }
 
+    /**
+     * Starts daemon thread which will access {@link com.epam.varapay.model.dao.impl.CurrencyDaoImpl} each time interval
+     * to get actual currency cost.
+     */
     private void startCostUpdating() {
         Thread thread = new Thread(() -> {
             while (true) {

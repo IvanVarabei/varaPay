@@ -91,22 +91,23 @@ public class PaymentValidatorTest {
     @DataProvider(name = "cvcValues")
     public Object[][] cvcValues() {
         Map<String, String> spoiledDataLength2 = new HashMap<>(properPaymentData);
-        spoiledDataLength2.put(DataTransferMapKey.CARD_NUMBER, "11");
+        spoiledDataLength2.put(DataTransferMapKey.CVC, "11");
 
         Map<String, String> spoiledDataLength4 = new HashMap<>(properPaymentData);
-        spoiledDataLength4.put(DataTransferMapKey.CARD_NUMBER, "1111");
+        spoiledDataLength4.put(DataTransferMapKey.CVC, "1111");
 
         Map<String, String> spoiledDataNotNumber = new HashMap<>(properPaymentData);
-        spoiledDataNotNumber.put(DataTransferMapKey.CARD_NUMBER, "aaa");
+        spoiledDataNotNumber.put(DataTransferMapKey.CVC, "aaa");
 
-        Map<String, String> properDataSpaces = new HashMap<>(properPaymentData);
-        properDataSpaces.put(DataTransferMapKey.CARD_NUMBER, "1 2 3");
+        Map<String, String> spoiledDataSpaces = new HashMap<>(properPaymentData);
+        spoiledDataSpaces.put(DataTransferMapKey.CVC, "1 2 3");
 
         return new Object[][]{
                 {spoiledDataLength2, false},
                 {spoiledDataLength4, false},
                 {spoiledDataNotNumber, false},
-                {properDataSpaces, false},
+                {spoiledDataSpaces, false},
+                {properPaymentData, true},
         };
     }
 

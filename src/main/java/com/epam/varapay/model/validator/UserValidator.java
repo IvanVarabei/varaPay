@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 
 public class UserValidator {
     private static final Pattern LOGIN_PATTERN = Pattern.compile("^\\w{3,20}$");
-    private static final Pattern NAME_PATTERN = Pattern.compile("^[A-Za-z]{3,20}$");
+    private static final Pattern NAME_PATTERN = Pattern.compile("^[A-Za-zА-Яа-яёЁ]{3,20}$");
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
     private static final int MIN_PASSWORD_LENGTH = 3;
     private static final int MAX_PASSWORD_LENGTH = 20;
