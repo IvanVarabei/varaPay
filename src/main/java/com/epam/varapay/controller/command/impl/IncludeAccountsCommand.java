@@ -1,8 +1,8 @@
 package com.epam.varapay.controller.command.impl;
 
-import com.epam.varapay.controller.RequestParam;
 import com.epam.varapay.controller.AttributeKey;
 import com.epam.varapay.controller.JspPath;
+import com.epam.varapay.controller.RequestParam;
 import com.epam.varapay.controller.command.ActionCommand;
 import com.epam.varapay.controller.router.Router;
 import com.epam.varapay.controller.router.RouterType;
@@ -13,10 +13,8 @@ import com.epam.varapay.model.service.ServiceFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.List;
 
 public class IncludeAccountsCommand implements ActionCommand {
@@ -24,7 +22,7 @@ public class IncludeAccountsCommand implements ActionCommand {
     private static AccountService accountService = ServiceFactory.getInstance().getAccountService();
 
     @Override
-    public Router execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    public Router execute(HttpServletRequest req, HttpServletResponse resp) {
         Router router = new Router(JspPath.INCLUDE_ACCOUNTS, RouterType.INCLUDE);
         try {
             List<Account> accountList = accountService.findByUserLogin(req.getParameter(RequestParam.LOGIN));

@@ -14,10 +14,8 @@ import com.epam.varapay.model.service.ServiceFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,7 +27,7 @@ public class WithdrawMessagePageCommand implements ActionCommand {
     private static final AccountService accountService = ServiceFactory.getInstance().getAccountService();
 
     @Override
-    public Router execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    public Router execute(HttpServletRequest req, HttpServletResponse resp) {
         Router router = new Router(JspPath.WITHDRAW_MESSAGE);
         Map<String, String> dataToConvert = new HashMap<>();
         dataToConvert.put(RequestParam.ACCOUNT_ID, req.getParameter(RequestParam.ACCOUNT_ID));

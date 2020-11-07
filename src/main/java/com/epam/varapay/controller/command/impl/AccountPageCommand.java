@@ -1,8 +1,8 @@
 package com.epam.varapay.controller.command.impl;
 
-import com.epam.varapay.controller.RequestParam;
 import com.epam.varapay.controller.AttributeKey;
 import com.epam.varapay.controller.JspPath;
+import com.epam.varapay.controller.RequestParam;
 import com.epam.varapay.controller.command.ActionCommand;
 import com.epam.varapay.controller.router.Router;
 import com.epam.varapay.model.entity.Account;
@@ -14,10 +14,8 @@ import com.epam.varapay.model.service.ServiceFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.List;
 
 public class AccountPageCommand implements ActionCommand {
@@ -26,7 +24,7 @@ public class AccountPageCommand implements ActionCommand {
     private static BidService bidService = ServiceFactory.getInstance().getBidService();
 
     @Override
-    public Router execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    public Router execute(HttpServletRequest req, HttpServletResponse resp) {
         Router router = new Router(JspPath.ACCOUNT);
         Long accountId = Long.parseLong(req.getParameter(RequestParam.ACCOUNT_ID));
         try {

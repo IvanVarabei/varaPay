@@ -25,7 +25,7 @@ public class MakePaymentCommand implements ActionCommand {
     private static PaymentService paymentService = ServiceFactory.getInstance().getPaymentService();
 
     @Override
-    public Router execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    public Router execute(HttpServletRequest req, HttpServletResponse resp) {
         Router router = new Router(String.format(CommandPath.SUCCESS_PAGE, req.getContextPath()), RouterType.REDIRECT);
         Map<String, String> paymentData = new HashMap<>();
         paymentData.put(RequestParam.CARD_ID, req.getParameter(RequestParam.CARD_ID));

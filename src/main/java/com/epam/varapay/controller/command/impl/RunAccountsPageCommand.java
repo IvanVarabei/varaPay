@@ -22,7 +22,7 @@ public class RunAccountsPageCommand implements ActionCommand {
     private static AccountService accountService = ServiceFactory.getInstance().getAccountService();
 
     @Override
-    public Router execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    public Router execute(HttpServletRequest req, HttpServletResponse resp) {
         Router router = new Router(JspPath.RUN_ACCOUNTS);
         String query = req.getParameter(RequestParam.QUERY);
         try {

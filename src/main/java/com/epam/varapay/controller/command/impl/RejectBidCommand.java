@@ -22,7 +22,7 @@ public class RejectBidCommand implements ActionCommand {
     private static BidService bidService = ServiceFactory.getInstance().getBidService();
 
     @Override
-    public Router execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    public Router execute(HttpServletRequest req, HttpServletResponse resp) {
         Router router = new Router(String.format(CommandPath.RUN_BIDS, req.getContextPath(),
                 req.getParameter(RequestParam.PAGE)), RouterType.REDIRECT);
         try {

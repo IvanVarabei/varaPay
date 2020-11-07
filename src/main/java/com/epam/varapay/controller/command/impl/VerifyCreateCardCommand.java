@@ -24,7 +24,7 @@ public class VerifyCreateCardCommand implements ActionCommand {
     private static final String JSP_VERIFY_CREATE_CARD = "/WEB-INF/pages/verifyCreateCard.jsp";
 
     @Override
-    public Router execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    public Router execute(HttpServletRequest req, HttpServletResponse resp) {
         Router router = new Router();
         HttpSession session = req.getSession();
         String tempCode = req.getParameter(RequestParam.TEMP_CODE);

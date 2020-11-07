@@ -6,6 +6,10 @@ import com.epam.varapay.model.entity.Account;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * @author Ivan Varabei
+ * @version 1.0
+ */
 public interface AccountService {
     void create(Long userId) throws ServiceException;
 

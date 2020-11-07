@@ -8,10 +8,8 @@ import com.epam.varapay.controller.router.Router;
 import com.epam.varapay.model.entity.CustomCurrency;
 import com.epam.varapay.util.CurrencyConverter;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,7 +19,7 @@ public class TopUpMessagePageCommand implements ActionCommand {
     private static CurrencyConverter currencyConverter = CurrencyConverter.getInstance();
 
     @Override
-    public Router execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    public Router execute(HttpServletRequest req, HttpServletResponse resp) {
         Router router = new Router(JspPath.TOP_UP_MESSAGE);
         Map<String, String> dataToConvert = new HashMap<>();
         dataToConvert.put(RequestParam.ACCOUNT_ID, req.getParameter(RequestParam.ACCOUNT_ID));

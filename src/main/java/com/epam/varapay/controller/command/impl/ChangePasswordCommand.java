@@ -12,10 +12,8 @@ import com.epam.varapay.model.service.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,7 +22,7 @@ public class ChangePasswordCommand implements ActionCommand {
     private static UserService userService = ServiceFactory.getInstance().getUserService();
 
     @Override
-    public Router execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    public Router execute(HttpServletRequest req, HttpServletResponse resp) {
         Router router = new Router(JspPath.CHANGE_PASSWORD);
         Map<String, String> changePasswordData = new HashMap<>();
         changePasswordData.put(RequestParam.OLD_PASSWORD, req.getParameter(RequestParam.OLD_PASSWORD));

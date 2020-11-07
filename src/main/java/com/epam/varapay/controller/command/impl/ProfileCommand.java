@@ -22,7 +22,7 @@ public class ProfileCommand implements ActionCommand {
     private static UserService userService = ServiceFactory.getInstance().getUserService();
 
     @Override
-    public Router execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    public Router execute(HttpServletRequest req, HttpServletResponse resp) {
         Router router = new Router(JspPath.PROFILE);
         HttpSession session = req.getSession();
         String login = session.getAttribute(RequestParam.LOGIN).toString();

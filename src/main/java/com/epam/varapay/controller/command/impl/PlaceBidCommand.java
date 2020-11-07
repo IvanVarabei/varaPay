@@ -14,10 +14,8 @@ import com.epam.varapay.model.service.ServiceFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.math.BigDecimal;
 
 public class PlaceBidCommand implements ActionCommand {
@@ -25,7 +23,7 @@ public class PlaceBidCommand implements ActionCommand {
     private static BidService bidService = ServiceFactory.getInstance().getBidService();
 
     @Override
-    public Router execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    public Router execute(HttpServletRequest req, HttpServletResponse resp) {
         Router router = new Router(String.format(CommandPath.SUCCESS_PAGE, req.getContextPath()), RouterType.REDIRECT);
         Long accountId = Long.parseLong(req.getParameter(RequestParam.ACCOUNT_ID));
         BigDecimal amountUsd = new BigDecimal(req.getParameter(RequestParam.AMOUNT));

@@ -7,6 +7,12 @@ import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
 
+/**
+ * @author Ivan Varabei
+ * @version 1.0
+ * @see com.epam.varapay.model.dao.impl.CurrencyDaoImpl
+ * @see Bid
+ */
 public enum CustomCurrency {
     BITCOIN("BTC", "img/btc.png", "1F3BAUckj5dbwYSm9cPRmF73zCXjvjHyR6"),
     ETHEREUM("ETH", "img/eth.png", "0xc7fa6d4f3b985df30895f175a30d86b91ff17c96"),

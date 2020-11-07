@@ -6,6 +6,10 @@ import com.epam.varapay.model.exception.ServiceException;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * @author Ivan Varabei
+ * @version 1.0
+ */
 public interface UserService {
     Optional<String> checkSignupDataAndSendEmail(Map<String, String> signupData) throws ServiceException;
 

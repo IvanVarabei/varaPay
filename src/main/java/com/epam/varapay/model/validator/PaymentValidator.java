@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 public class PaymentValidator {
     private static final Pattern VALID_THRU_PATTERN = Pattern.compile("^(202\\d)-(1[0-2]|0[1-9])$");
     private static final Pattern AMOUNT_PATTERN =
-            Pattern.compile("^([1-9]\\d*\\.?\\d{0,2})|(0\\.((\\d[1-9])|([1-9]\\d)))$");
+            Pattern.compile("^([1-9]\\d{1,8}(\\.\\d{0,2})?)|(0\\.((\\d[1-9])|([1-9]\\d)))$");
     private static final Pattern CARD_NUMBER_PATTERN = Pattern.compile("^(\\s*\\d\\s*){16}$");
     private static final Pattern CVC_PATTERN = Pattern.compile("^\\d{3}$");
 

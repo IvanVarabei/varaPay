@@ -26,7 +26,7 @@ public class LoginCommand implements ActionCommand {
     private static UserService userService = ServiceFactory.getInstance().getUserService();
 
     @Override
-    public Router execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    public Router execute(HttpServletRequest req, HttpServletResponse resp) {
         Router router = new Router(String.format(CommandPath.PROFILE, req.getContextPath()), RouterType.REDIRECT);
         String login = req.getParameter(RequestParam.LOGIN);
         String password = req.getParameter(RequestParam.PASSWORD);

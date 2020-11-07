@@ -1,23 +1,21 @@
 package com.epam.varapay.controller.command.impl;
 
-import com.epam.varapay.controller.CommandPath;
-import com.epam.varapay.controller.RequestParam;
-import com.epam.varapay.model.service.UserService;
 import com.epam.varapay.controller.AttributeKey;
+import com.epam.varapay.controller.CommandPath;
 import com.epam.varapay.controller.JspPath;
+import com.epam.varapay.controller.RequestParam;
 import com.epam.varapay.controller.command.ActionCommand;
 import com.epam.varapay.controller.router.Router;
 import com.epam.varapay.controller.router.RouterType;
 import com.epam.varapay.model.entity.User;
 import com.epam.varapay.model.exception.ServiceException;
 import com.epam.varapay.model.service.ServiceFactory;
+import com.epam.varapay.model.service.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,7 +26,7 @@ public class SignupCommand implements ActionCommand {
     private static UserService userService = ServiceFactory.getInstance().getUserService();
 
     @Override
-    public Router execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    public Router execute(HttpServletRequest req, HttpServletResponse resp) {
         Router router = new Router(String.format(CommandPath.VERIFY_EMAIL, req.getContextPath()), RouterType.REDIRECT);
         Map<String, String> signupData = new HashMap<>();
         signupData.put(RequestParam.LOGIN, req.getParameter(RequestParam.LOGIN));

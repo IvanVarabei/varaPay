@@ -6,6 +6,10 @@ import com.epam.varapay.model.entity.Card;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * @author Ivan Varabei
+ * @version 1.0
+ */
 public interface CardService {
     String createCardAndReturnCvc(Long accountId) throws ServiceException;
 

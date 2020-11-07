@@ -9,6 +9,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * @author Ivan Varabei
+ * @version 1.0
+ */
 public interface BidService {
     boolean placeTopUpBid(Long accountId, BigDecimal amount, BigDecimal amountInChosenCurrency,
                           CustomCurrency currency, String message) throws ServiceException;

@@ -13,11 +13,9 @@ import com.epam.varapay.model.service.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
 import java.util.Optional;
 
 public class VerifyEmailCommand implements ActionCommand {
@@ -25,7 +23,7 @@ public class VerifyEmailCommand implements ActionCommand {
     private static UserService userService = ServiceFactory.getInstance().getUserService();
 
     @Override
-    public Router execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    public Router execute(HttpServletRequest req, HttpServletResponse resp) {
         Router router = new Router(JspPath.VERIFY_EMAIL);
         HttpSession session = req.getSession();
         String tempCode = req.getParameter(RequestParam.TEMP_CODE);

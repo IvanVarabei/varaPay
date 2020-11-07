@@ -15,7 +15,7 @@ import java.util.List;
 
 public class TopUpAmountPageCommand implements ActionCommand {
     @Override
-    public Router execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    public Router execute(HttpServletRequest req, HttpServletResponse resp) {
         Long accountId = Long.parseLong(req.getParameter(RequestParam.ACCOUNT_ID));
         req.setAttribute(AttributeKey.ACCOUNT_ID, accountId);
         req.setAttribute(AttributeKey.CURRENCIES, List.of(CustomCurrency.values()));

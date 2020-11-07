@@ -10,7 +10,7 @@ import java.io.IOException;
 
 public class LogoutCommand implements ActionCommand {
     @Override
-    public Router execute(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    public Router execute(HttpServletRequest req, HttpServletResponse resp) {
         req.getSession().invalidate();
         return new Router(req.getContextPath(), RouterType.REDIRECT);
     }

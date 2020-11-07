@@ -13,10 +13,8 @@ import com.epam.varapay.model.service.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 public class EnableAccountCommand implements ActionCommand {
     private static final Logger log = LogManager.getLogger(EnableAccountCommand.class);
@@ -24,7 +22,7 @@ public class EnableAccountCommand implements ActionCommand {
     private static UserService userService = ServiceFactory.getInstance().getUserService();
 
     @Override
-    public Router execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    public Router execute(HttpServletRequest req, HttpServletResponse resp) {
         Router router = new Router(JspPath.RUN_ACCOUNTS);
         String secretWord = req.getParameter(RequestParam.SECRET_WORD);
         Long accountId = Long.parseLong(req.getParameter(RequestParam.ACCOUNT_ID));

@@ -7,6 +7,10 @@
 	grid-column: 1;
 }
 
+.form__asterisk{
+	color: #e84c36;
+}
+
 .form__error{
 	color: #e84c36;
 	letter-spacing: 2px;

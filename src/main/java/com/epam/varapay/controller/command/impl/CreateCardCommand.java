@@ -1,23 +1,21 @@
 package com.epam.varapay.controller.command.impl;
 
 import com.epam.varapay.controller.CommandPath;
-import com.epam.varapay.controller.RequestParam;
-import com.epam.varapay.model.service.UserService;
 import com.epam.varapay.controller.JspPath;
+import com.epam.varapay.controller.RequestParam;
 import com.epam.varapay.controller.command.ActionCommand;
 import com.epam.varapay.controller.router.Router;
 import com.epam.varapay.model.entity.User;
 import com.epam.varapay.model.exception.ServiceException;
 import com.epam.varapay.model.service.ServiceFactory;
+import com.epam.varapay.model.service.UserService;
 import com.epam.varapay.util.CustomSecurity;
 import com.epam.varapay.util.MailSender;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 public class CreateCardCommand implements ActionCommand {
     private static final Logger log = LogManager.getLogger(CreateCardCommand.class);
@@ -28,7 +26,7 @@ public class CreateCardCommand implements ActionCommand {
     private static final int TEMP_CODE_LENGTH = 4;
 
     @Override
-    public Router execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    public Router execute(HttpServletRequest req, HttpServletResponse resp) {
         Router router = new Router();
         Long accountId = Long.parseLong(req.getParameter(RequestParam.ACCOUNT_ID));
         try {

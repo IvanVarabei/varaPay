@@ -16,7 +16,7 @@ public class PaymentValidatorTest {
 
     @BeforeClass
     private void setUp() {
-        properPaymentData.put(DataTransferMapKey.AMOUNT, "0.01");
+        properPaymentData.put(DataTransferMapKey.AMOUNT, "56");
         properPaymentData.put(DataTransferMapKey.CARD_NUMBER, "1111 2222 3333 4444");
         properPaymentData.put(DataTransferMapKey.CVC, "123");
         properPaymentData.put(DataTransferMapKey.VALID_THRU, "2023-11");
@@ -36,15 +36,23 @@ public class PaymentValidatorTest {
         Map<String, String> spoiledDataComma = new HashMap<>(properPaymentData);
         spoiledDataComma.put(DataTransferMapKey.AMOUNT, "0,01");
 
-        Map<String, String> properDataEdge = new HashMap<>(properPaymentData);
-        properDataEdge.put(DataTransferMapKey.AMOUNT, "0.01");
+        Map<String, String> properDataBottomEdge = new HashMap<>(properPaymentData);
+        properDataBottomEdge.put(DataTransferMapKey.AMOUNT, "0.01");
+
+        Map<String, String> properDataCeilingEdge = new HashMap<>(properPaymentData);
+        properDataCeilingEdge.put(DataTransferMapKey.AMOUNT, "999999999.99");
+
+        Map<String, String> spoiledDataOverCeilingEdge = new HashMap<>(properPaymentData);
+        spoiledDataOverCeilingEdge.put(DataTransferMapKey.AMOUNT, "1000000000.00");
 
         return new Object[][]{
                 {spoiledDataNegative, false},
                 {spoiledDataZero, false},
                 {spoiledDataZeroDot, false},
                 {spoiledDataComma, false},
-                {properDataEdge, true},
+                {properDataBottomEdge, true},
+                {properDataCeilingEdge, true},
+                {spoiledDataOverCeilingEdge, false},
         };
     }
 
@@ -123,14 +131,14 @@ public class PaymentValidatorTest {
         Map<String, String> spoiledDataWithDay = new HashMap<>(properPaymentData);
         spoiledDataWithDay.put(DataTransferMapKey.VALID_THRU, "2023-11-11");
 
-        Map<String, String> spoiledDataEarlierThan2020 = new HashMap<>(properPaymentData);
-        spoiledDataEarlierThan2020.put(DataTransferMapKey.VALID_THRU, "2019-11");
+        Map<String, String> spoiledDataUnderBottomEdge = new HashMap<>(properPaymentData);
+        spoiledDataUnderBottomEdge.put(DataTransferMapKey.VALID_THRU, "2019-12");
 
         Map<String, String> spoiledDataMonthThenYear = new HashMap<>(properPaymentData);
         spoiledDataMonthThenYear.put(DataTransferMapKey.VALID_THRU, "11-2021");
 
         Map<String, String> spoiledDataMonthHigherThan12 = new HashMap<>(properPaymentData);
-        spoiledDataMonthHigherThan12.put(DataTransferMapKey.VALID_THRU, "2019-13");
+        spoiledDataMonthHigherThan12.put(DataTransferMapKey.VALID_THRU, "2021-13");
 
         Map<String, String> spoiledDataMonth1 = new HashMap<>(properPaymentData);
         spoiledDataMonth1.put(DataTransferMapKey.VALID_THRU, "2019-1");
@@ -138,17 +146,25 @@ public class PaymentValidatorTest {
         Map<String, String> spoiledDataMonthZero = new HashMap<>(properPaymentData);
         spoiledDataMonthZero.put(DataTransferMapKey.VALID_THRU, "2019-0");
 
-        Map<String, String> properDataMonth01 = new HashMap<>(properPaymentData);
-        properDataMonth01.put(DataTransferMapKey.VALID_THRU, "2021-01");
+        Map<String, String> properDataBottomEdge = new HashMap<>(properPaymentData);
+        properDataBottomEdge.put(DataTransferMapKey.VALID_THRU, "2020-01");
+
+        Map<String, String> properDataCeilingEdge = new HashMap<>(properPaymentData);
+        properDataCeilingEdge.put(DataTransferMapKey.VALID_THRU, "2029-12");
+
+        Map<String, String> properDataOverCeilingEdge = new HashMap<>(properPaymentData);
+        properDataOverCeilingEdge.put(DataTransferMapKey.VALID_THRU, "2030-01");
 
         return new Object[][]{
                 {spoiledDataWithDay, false},
-                {spoiledDataEarlierThan2020, false},
                 {spoiledDataMonthThenYear, false},
                 {spoiledDataMonthHigherThan12, false},
                 {spoiledDataMonth1, false},
                 {spoiledDataMonthZero, false},
-                {properDataMonth01, true},
+                {spoiledDataUnderBottomEdge, false},
+                {properDataBottomEdge, true},
+                {properDataCeilingEdge, true},
+                {properDataOverCeilingEdge, false},
         };
     }
 

@@ -23,7 +23,7 @@ public class RunBidsCommand implements ActionCommand {
     private static BidService bidService = ServiceFactory.getInstance().getBidService();
 
     @Override
-    public Router execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    public Router execute(HttpServletRequest req, HttpServletResponse resp) {
         Router router = new Router(JspPath.RUN_BIDS);
         try {
             int page = DEFAULT_PAGE_INDEX;

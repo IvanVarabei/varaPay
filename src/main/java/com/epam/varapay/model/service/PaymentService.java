@@ -6,6 +6,10 @@ import com.epam.varapay.model.entity.Payment;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author Ivan Varabei
+ * @version 1.0
+ */
 public interface PaymentService {
     List<Payment> findPaymentsByCardId(Long cardId, int limit, int offset) throws ServiceException;
 
