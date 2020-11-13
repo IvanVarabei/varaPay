@@ -7,7 +7,7 @@ import com.epam.varapay.controller.command.ActionCommand;
 import com.epam.varapay.controller.router.Router;
 import com.epam.varapay.model.entity.Account;
 import com.epam.varapay.model.entity.CustomCurrency;
-import com.epam.varapay.model.exception.ServiceException;
+import com.epam.varapay.exception.ServiceException;
 import com.epam.varapay.model.service.AccountService;
 import com.epam.varapay.model.service.BidService;
 import com.epam.varapay.model.service.ServiceFactory;

@@ -2,10 +2,10 @@ package com.epam.varapay.model.service.impl;
 
 import com.epam.varapay.model.dao.CardDao;
 import com.epam.varapay.model.entity.Card;
-import com.epam.varapay.model.exception.DaoException;
+import com.epam.varapay.exception.DaoException;
 import com.epam.varapay.model.dao.DaoFactory;
 import com.epam.varapay.model.service.CardService;
-import com.epam.varapay.model.exception.ServiceException;
+import com.epam.varapay.exception.ServiceException;
 
 import java.util.List;
 import java.util.Optional;

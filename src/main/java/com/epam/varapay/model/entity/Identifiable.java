@@ -32,7 +32,7 @@ public class Identifiable implements Serializable {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("StorableItem{");
+        final StringBuilder sb = new StringBuilder("Identifiable{");
         sb.append("id=").append(id);
         sb.append('}');
         return sb.toString();

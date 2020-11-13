@@ -5,6 +5,7 @@ import java.time.format.DateTimeFormatter;
 
 public class FormatExpressionLanguage {
     private static final String REGEX_TO_SPLIT_CARD_NUMBER = "(?<=\\G.{4})";
+    private static final String BLANC = " ";
 
     private FormatExpressionLanguage() {
     }
@@ -14,6 +15,6 @@ public class FormatExpressionLanguage {
     }
 
     public static String formatCardNumber(String cardNumber) {
-        return String.join(" ", cardNumber.split(REGEX_TO_SPLIT_CARD_NUMBER));
+        return String.join(BLANC, cardNumber.split(REGEX_TO_SPLIT_CARD_NUMBER));
     }
 }

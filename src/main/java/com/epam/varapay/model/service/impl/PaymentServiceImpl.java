@@ -5,12 +5,13 @@ import com.epam.varapay.model.dao.DaoFactory;
 import com.epam.varapay.model.dao.PaymentDao;
 import com.epam.varapay.model.entity.Card;
 import com.epam.varapay.model.entity.Payment;
-import com.epam.varapay.model.exception.DaoException;
-import com.epam.varapay.model.exception.ServiceException;
+import com.epam.varapay.exception.DaoException;
+import com.epam.varapay.exception.ServiceException;
 import com.epam.varapay.model.service.DataTransferMapKey;
 import com.epam.varapay.model.service.ErrorMessage;
 import com.epam.varapay.model.service.PaymentService;
 import com.epam.varapay.model.validator.PaymentValidator;
+import org.apache.logging.log4j.util.Strings;
 
 import java.math.BigDecimal;
 import java.time.YearMonth;
@@ -20,9 +21,10 @@ import java.util.Map;
 import java.util.Optional;
 
 public class PaymentServiceImpl implements PaymentService {
-    private static PaymentValidator paymentValidator = new PaymentValidator();
-    private static PaymentDao paymentDao = DaoFactory.getInstance().getPaymentDao();
-    private static CardDao cardDao = DaoFactory.getInstance().getCardDao();
+    private static PaymentValidator paymentValidator = PaymentValidator.getInstance();
+    private PaymentDao paymentDao = DaoFactory.getInstance().getPaymentDao();
+    private CardDao cardDao = DaoFactory.getInstance().getCardDao();
+    private static final String SPACE_BETWEEN_CARD_NUMBER_FIGURES = " ";
 
     @Override
     public List<Payment> findPaymentsByCardId(Long cardId, int limit, int pageIndex) throws ServiceException {
@@ -49,7 +51,8 @@ public class PaymentServiceImpl implements PaymentService {
         if (paymentValidator.isValidPayment(paymentData)) {
             try {
                 Long sourceCardId = Long.parseLong(paymentData.get(DataTransferMapKey.CARD_ID));
-                String destinationCardNumber = paymentData.get(DataTransferMapKey.CARD_NUMBER).replace(" ", "");
+                String destinationCardNumber = paymentData.get(DataTransferMapKey.CARD_NUMBER)
+                        .replace(SPACE_BETWEEN_CARD_NUMBER_FIGURES, Strings.EMPTY);
                 BigDecimal amount = new BigDecimal(paymentData.get(DataTransferMapKey.AMOUNT));
                 checkSourceCard(paymentData, amount);
                 checkDestinationCard(paymentData);
@@ -79,7 +82,8 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     private void checkDestinationCard(Map<String, String> paymentData) throws DaoException {
-        String destinationCardNumber = paymentData.get(DataTransferMapKey.CARD_NUMBER).replace(" ", "");
+        String destinationCardNumber = paymentData.get(DataTransferMapKey.CARD_NUMBER)
+                .replace(SPACE_BETWEEN_CARD_NUMBER_FIGURES, Strings.EMPTY);
         YearMonth validThru = YearMonth.parse(paymentData.get(DataTransferMapKey.VALID_THRU));
         Optional<Card> destinationCard = cardDao.findByCardNumberAndValidThru(destinationCardNumber, validThru);
         if (destinationCard.isPresent()) {

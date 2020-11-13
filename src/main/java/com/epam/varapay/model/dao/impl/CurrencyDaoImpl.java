@@ -2,7 +2,7 @@ package com.epam.varapay.model.dao.impl;
 
 import com.epam.varapay.model.dao.CurrencyDao;
 import com.epam.varapay.model.entity.CustomCurrency;
-import com.epam.varapay.model.exception.DaoException;
+import com.epam.varapay.exception.DaoException;
 
 import java.io.BufferedReader;
 import java.io.IOException;

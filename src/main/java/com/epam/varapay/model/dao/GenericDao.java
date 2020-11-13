@@ -1,8 +1,8 @@
 package com.epam.varapay.model.dao;
 
-import com.epam.varapay.model.entity.Identifiable;
-import com.epam.varapay.model.exception.DaoException;
 import com.epam.varapay.model.dao.builder.IdentifiableBuilder;
+import com.epam.varapay.model.entity.Identifiable;
+import com.epam.varapay.exception.DaoException;
 import com.epam.varapay.model.pool.ConnectionPool;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

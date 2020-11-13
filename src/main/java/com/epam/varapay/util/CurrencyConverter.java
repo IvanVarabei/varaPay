@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public class CurrencyConverter {
     private static CurrencyConverter instance = new CurrencyConverter();
-    private static CurrencyValidator currencyValidator = new CurrencyValidator();
+    private static CurrencyValidator currencyValidator = CurrencyValidator.getInstance();
     private static final int AMOUNT_OF_DIGITS_AFTER_COLUMN = 8;
 
     private CurrencyConverter() {

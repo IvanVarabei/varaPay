@@ -11,7 +11,7 @@ import java.util.Map;
 import static org.testng.Assert.assertEquals;
 
 public class PaymentValidatorTest {
-    private PaymentValidator paymentValidator = new PaymentValidator();
+    private PaymentValidator paymentValidator = PaymentValidator.getInstance();
     private Map<String, String> properPaymentData = new HashMap<>();
 
     @BeforeClass

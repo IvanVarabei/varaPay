@@ -7,10 +7,8 @@ import com.epam.varapay.controller.command.ActionCommand;
 import com.epam.varapay.controller.router.Router;
 import com.epam.varapay.model.entity.CustomCurrency;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.List;
 
 public class TopUpAmountPageCommand implements ActionCommand {

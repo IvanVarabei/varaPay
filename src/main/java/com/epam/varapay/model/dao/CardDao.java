@@ -1,7 +1,7 @@
 package com.epam.varapay.model.dao;
 
 import com.epam.varapay.model.entity.Card;
-import com.epam.varapay.model.exception.DaoException;
+import com.epam.varapay.exception.DaoException;
 
 import java.time.YearMonth;
 import java.util.List;

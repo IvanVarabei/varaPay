@@ -1,7 +1,7 @@
 package com.epam.varapay.model.service;
 
 import com.epam.varapay.model.entity.User;
-import com.epam.varapay.model.exception.ServiceException;
+import com.epam.varapay.exception.ServiceException;
 
 import java.util.Map;
 import java.util.Optional;

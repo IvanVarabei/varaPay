@@ -1,0 +1,203 @@
+create function generate_random(length integer) returns text
+    language sql
+as $$
+WITH chars AS (
+    SELECT unnest(string_to_array('0 1 2 3 4 5 6 7 8 9', ' ')) AS _char
+),
+     charlist AS
+         (
+             SELECT _char FROM chars ORDER BY random() LIMIT $1
+         )
+SELECT string_agg(_char, '')
+FROM charlist
+    ;
+$$;
+
+alter function generate_random(integer) owner to postgres;
+
+CREATE OR REPLACE function generate_random_unique_card_number(length integer) returns text
+    language plpgsql
+as $$
+declare
+    i integer := 0;
+begin
+    raise exception 'not implemented';
+end;
+$$;
+
+CREATE OR REPLACE function generate_random_unique_card_number(length integer) returns text
+    language plpgsql
+as $$
+declare
+    chars text[] := '{0,1,2,3,4,5,6,7,8,9}';
+    result text := '';
+    i integer := 0;
+begin
+    if length < 0 then
+        raise exception 'Given length cannot be less than 0';
+    end if;
+    for i in 1..length loop
+            result := result || chars[1+random()*(array_length(chars, 1)-1)];
+        end loop;
+    if not exists(select 1 from cards where card_number = result) then
+        return result;
+    end if;
+    if exists(select 1 from cards where card_number = result) then
+        return generate_random_unique_card_number(length);
+    end if;
+end;
+$$;
+
+alter function generate_random_unique_card_number(integer) owner to postgres;
+
+create table roles
+(
+    role_id serial not null
+        constraint roles_pkey
+            primary key,
+    role_name varchar(20) not null
+);
+
+alter table roles owner to postgres;
+
+create table users
+(
+    user_id serial not null
+        constraint users_pkey
+            primary key,
+    role_id integer default 2 not null
+        constraint fk_user_role1
+            references roles,
+    login varchar(30) not null
+        constraint users_login_key
+            unique,
+    password varchar(64) not null,
+    firstname varchar(30) not null,
+    lastname varchar(30) not null,
+    email varchar(254) not null
+        constraint users_email_key
+            unique,
+    birth date,
+    salt varchar(64) not null,
+    secret_word varchar(64) not null
+);
+
+alter table users owner to postgres;
+
+create table accounts
+(
+    account_id serial not null
+        constraint accounts_pkey
+            primary key,
+    user_id integer not null
+        constraint fk_accounts_users1
+            references users
+            on update cascade on delete cascade,
+    balance integer default 0 not null,
+    is_active boolean default true not null,
+    is_abandoned boolean default false not null
+);
+
+alter table accounts owner to postgres;
+
+create table cards
+(
+    card_id serial not null
+        constraint cards_pkey
+            primary key,
+    account_id integer not null
+        constraint fk_card_account1
+            references accounts,
+    card_number varchar(16) default generate_random_unique_card_number(16) not null
+        constraint cards_cardnumber_key
+            unique,
+    valid_thru date default (now() + '3 years'::interval) not null,
+    cvc varchar(3) default generate_random(3) not null,
+    is_abandoned boolean default false not null
+);
+
+alter table cards owner to postgres;
+
+create table payments
+(
+    payment_id serial not null
+        constraint payments_pkey
+            primary key,
+    source_card_id integer not null
+        constraint fk_payments_cards1
+            references cards,
+    destination_card_id integer not null
+        constraint fk_payments_cards2
+            references cards,
+    amount integer not null,
+    payment_instant timestamp default now() not null
+);
+
+alter table payments owner to postgres;
+
+create table bid_states
+(
+    bid_state_id serial not null
+        constraint bid_states_pkey
+            primary key,
+    state varchar(128)
+);
+
+alter table bid_states owner to postgres;
+
+create table currencies
+(
+    currency_id serial not null
+        constraint currencies_pkey
+            primary key,
+    currency_name varchar(20) not null
+);
+
+alter table currencies owner to postgres;
+
+create table bids
+(
+    bid_id serial not null
+        constraint topupbids_pkey
+            primary key,
+    account_id integer not null
+        constraint fk_topupbids_accounts1
+            references accounts,
+    amount integer not null,
+    placing_date_time timestamp default now() not null,
+    is_top_up boolean not null,
+    client_message text not null,
+    bid_state_id integer default 1 not null
+        constraint bid_state_id_1
+            references bid_states,
+    admin_comment varchar(1024) default NULL::character varying,
+    currency_id integer not null
+        constraint fk_currencies1
+            references currencies,
+    amount_in_chosen_currency numeric not null
+);
+
+alter table bids owner to postgres;
+
+insert into currencies (currency_id, currency_name) values
+(0, 'BITCOIN'),
+(1, 'ETHEREUM'),
+(2, 'DASH');
+
+insert into roles (role_name) values
+('admin'),
+('client');
+
+insert into bid_states (state) values
+('in_progress'),
+('approved'),
+('rejected');
+
+
+
+
+
+
+
+
+

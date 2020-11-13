@@ -1,13 +1,21 @@
 package com.epam.varapay.model.entity;
 
 import com.epam.varapay.model.dao.DaoFactory;
-import com.epam.varapay.model.exception.DaoException;
+import com.epam.varapay.exception.DaoException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
 
 /**
+ * This enum contains cryptocurrencies and their characteristics such as
+ * <ul>
+ *     <li>Concise name</li>
+ *     <li>Cost USD</li>
+ *     <li>Image, sort of logo</li>
+ *     <li>Wallet to accept payments</li>
+ * </ul>
+ *
  * @author Ivan Varabei
  * @version 1.0
  * @see com.epam.varapay.model.dao.impl.CurrencyDaoImpl
@@ -25,6 +33,14 @@ public enum CustomCurrency {
     private final String wallet;
     private final String img;
 
+    /**
+     * Initializes the CustomCurrency instance and calls method which starts daemon thread accessing the
+     * {@link com.epam.varapay.model.dao.CurrencyDao}.
+     *
+     * @param conciseName the small number of letters representing full name.
+     * @param img         the logo of the currency.
+     * @param wallet      the wallet of particular currency, which is used to receive incoming payments from clients.
+     */
     CustomCurrency(String conciseName, String img, String wallet) {
         this.conciseName = conciseName;
         this.img = img;
@@ -53,8 +69,9 @@ public enum CustomCurrency {
     }
 
     /**
-     * Starts daemon thread which will access {@link com.epam.varapay.model.dao.impl.CurrencyDaoImpl} each time interval
-     * to get actual currency cost.
+     * Starts daemon thread which will access {@link com.epam.varapay.model.dao.impl.CurrencyDaoImpl} each
+     * {@link #PAUSE_BETWEEN_COST_UPDATING} to get actual currency cost. Received cost is being set to CustomCurrency
+     * instance.
      */
     private void startCostUpdating() {
         Thread thread = new Thread(() -> {

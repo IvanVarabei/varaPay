@@ -4,6 +4,7 @@ public class CommandPath {
     public static final String RUN_BIDS = "%s/mainServlet?command=run_bids_get&page=%s";
     public static final String RUN_ACCOUNTS = "%s/mainServlet?command=run_accounts_get&query=%s";
     public static final String PROFILE = "%s/mainServlet?command=profile_get";
+    public static final String PROFILE_WITH_CVC = "%s/mainServlet?command=profile_get&cvc=%s";
     public static final String CHANGING_PASSWORD = "%s/mainServlet?command=profile_get";
     public static final String SUCCESS_PAGE = "%s/mainServlet?command=success_get";
     public static final String LOGIN = "%s/mainServlet?command=login_get";

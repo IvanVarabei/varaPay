@@ -12,6 +12,17 @@ public class CurrencyValidator {
     private static final Pattern AMOUNT_PATTERN =
             Pattern.compile("^([1-9]\\d{1,8}(\\.\\d{0,2})?)|(0\\.((\\d[1-9])|([1-9]\\d)))$");
 
+    private CurrencyValidator() {
+    }
+
+    private static class CurrencyValidatorHolder {
+        private static final CurrencyValidator CURRENCY_VALIDATOR_INSTANCE = new CurrencyValidator();
+    }
+
+    public static CurrencyValidator getInstance() {
+        return CurrencyValidatorHolder.CURRENCY_VALIDATOR_INSTANCE;
+    }
+
     public boolean isValidDataToConvert(Map<String, String> dataToConvert) {
         boolean isValid = checkAmount(dataToConvert);
         isValid &= checkCurrency(dataToConvert);
@@ -19,7 +30,8 @@ public class CurrencyValidator {
     }
 
     private boolean checkAmount(Map<String, String> paymentData) {
-        if (!AMOUNT_PATTERN.matcher(paymentData.get(DataTransferMapKey.AMOUNT)).matches()) {
+        String amount = paymentData.get(DataTransferMapKey.AMOUNT);
+        if (amount == null || !AMOUNT_PATTERN.matcher(amount).matches()) {
             paymentData.put(DataTransferMapKey.AMOUNT, ErrorMessage.AMOUNT.toString());
             return false;
         }
@@ -28,7 +40,8 @@ public class CurrencyValidator {
 
     private boolean checkCurrency(Map<String, String> dataToConvert) {
         String currency = dataToConvert.get(DataTransferMapKey.CURRENCY);
-        if (Arrays.stream(CustomCurrency.values()).noneMatch(c -> currency.equalsIgnoreCase(c.name()))) {
+        if (currency == null || Arrays.stream(CustomCurrency.values())
+                .noneMatch(c -> currency.equalsIgnoreCase(c.name()))) {
             dataToConvert.put(DataTransferMapKey.CURRENCY, ErrorMessage.CAN_NOT_BE_EMPTY.toString());
             return false;
         }

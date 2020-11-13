@@ -13,6 +13,17 @@ public class UserValidator {
     private static final int MIN_PASSWORD_LENGTH = 3;
     private static final int MAX_PASSWORD_LENGTH = 20;
 
+    private UserValidator() {
+    }
+
+    private static class UserValidatorHolder {
+        private static final UserValidator USER_VALIDATOR_INSTANCE = new UserValidator();
+    }
+
+    public static UserValidator getInstance() {
+        return UserValidatorHolder.USER_VALIDATOR_INSTANCE;
+    }
+
     public boolean isValidSignupData(Map<String, String> signupData) {
         boolean isValid = checkLogin(signupData);
         isValid &= checkEmail(signupData);
@@ -26,7 +37,7 @@ public class UserValidator {
     public boolean checkPasswords(Map<String, String> signupData) {
         String password = signupData.get(DataTransferMapKey.PASSWORD);
         String repeatPassword = signupData.get(DataTransferMapKey.REPEAT_PASSWORD);
-        if (password.length() < MIN_PASSWORD_LENGTH || password.length() > MAX_PASSWORD_LENGTH) {
+        if (password == null || password.length() < MIN_PASSWORD_LENGTH || password.length() > MAX_PASSWORD_LENGTH) {
             signupData.put(DataTransferMapKey.PASSWORD, ErrorMessage.LENGTH.toString());
             return false;
         } else {
@@ -39,7 +50,7 @@ public class UserValidator {
     }
 
     private boolean checkName(String potentialName, Map<String, String> signupData, String errorKey) {
-        if (!NAME_PATTERN.matcher(potentialName).find()) {
+        if (potentialName == null || !NAME_PATTERN.matcher(potentialName).matches()) {
             signupData.put(errorKey, ErrorMessage.NAME.toString());
             return false;
         }
@@ -47,7 +58,8 @@ public class UserValidator {
     }
 
     private boolean checkEmail(Map<String, String> signupData) {
-        if (!EMAIL_PATTERN.matcher(signupData.get(DataTransferMapKey.EMAIL)).find()) {
+        String email = signupData.get(DataTransferMapKey.EMAIL);
+        if (email == null || !EMAIL_PATTERN.matcher(email).matches()) {
             signupData.put(DataTransferMapKey.EMAIL, ErrorMessage.EMAIL.toString());
             return false;
         }
@@ -55,7 +67,8 @@ public class UserValidator {
     }
 
     private boolean checkLogin(Map<String, String> signupData) {
-        if (!LOGIN_PATTERN.matcher(signupData.get(DataTransferMapKey.LOGIN)).find()) {
+        String login = signupData.get(DataTransferMapKey.LOGIN);
+        if (login == null || !LOGIN_PATTERN.matcher(login).matches()) {
             signupData.put(DataTransferMapKey.LOGIN, ErrorMessage.LOGIN.toString());
             return false;
         }

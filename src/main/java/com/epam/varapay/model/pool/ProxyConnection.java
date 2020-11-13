@@ -25,7 +25,7 @@ public class ProxyConnection implements Connection {
         try {
             this.connection.close();
         } catch (SQLException throwables) {
-            log.fatal(throwables);
+            log.error(throwables);
         }
     }
 

@@ -1,4 +1,4 @@
-﻿package com.epam.varapay.controller.command;
+package com.epam.varapay.controller.command;
 
 import com.epam.varapay.model.entity.Role;
 
@@ -25,11 +25,12 @@ public class CommandRight {
         commandRoles.put(CommandType.MAKE_PAYMENT_POST, client);
         commandRoles.put(CommandType.BLOCK_ACCOUNT_POST, client);
         commandRoles.put(CommandType.PLACE_BID_POST, client);
-        commandRoles.put(CommandType.DELETE_ACCOUNT_POST, client);
         commandRoles.put(CommandType.CREATE_ACCOUNT_POST, client);
-        commandRoles.put(CommandType.DELETE_CARD_POST, client);
-        commandRoles.put(CommandType.VERIFY_CREATE_CARD_POST, client);
+        commandRoles.put(CommandType.DELETE_ACCOUNT_POST, client);
         commandRoles.put(CommandType.CREATE_CARD_POST, client);
+        commandRoles.put(CommandType.DELETE_CARD_POST, client);
+        commandRoles.put(CommandType.VERIFY_CREATE_CARD_GET, client);
+        commandRoles.put(CommandType.VERIFY_CREATE_CARD_POST, client);
         commandRoles.put(CommandType.ACCOUNT_PAGE_GET, client);
         commandRoles.put(CommandType.TOP_UP_AMOUNT_PAGE_GET, client);
         commandRoles.put(CommandType.TOP_UP_MESSAGE_PAGE_GET, client);

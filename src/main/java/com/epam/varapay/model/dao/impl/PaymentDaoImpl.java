@@ -6,7 +6,7 @@ import com.epam.varapay.model.dao.PaymentDao;
 import com.epam.varapay.model.dao.builder.impl.CardBuilder;
 import com.epam.varapay.model.entity.Card;
 import com.epam.varapay.model.entity.Payment;
-import com.epam.varapay.model.exception.DaoException;
+import com.epam.varapay.exception.DaoException;
 
 import java.math.BigDecimal;
 import java.sql.Connection;

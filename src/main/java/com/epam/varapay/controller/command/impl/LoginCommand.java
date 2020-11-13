@@ -8,22 +8,20 @@ import com.epam.varapay.controller.command.ActionCommand;
 import com.epam.varapay.controller.router.Router;
 import com.epam.varapay.controller.router.RouterType;
 import com.epam.varapay.model.entity.User;
-import com.epam.varapay.model.exception.ServiceException;
+import com.epam.varapay.exception.ServiceException;
 import com.epam.varapay.model.service.ServiceFactory;
 import com.epam.varapay.model.service.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
 import java.util.Optional;
 
 public class LoginCommand implements ActionCommand {
     private static final Logger log = LogManager.getLogger(LoginCommand.class);
-    private static UserService userService = ServiceFactory.getInstance().getUserService();
+    private UserService userService = ServiceFactory.getInstance().getUserService();
 
     @Override
     public Router execute(HttpServletRequest req, HttpServletResponse resp) {
@@ -35,7 +33,7 @@ public class LoginCommand implements ActionCommand {
             Optional<User> user = userService.signIn(login, password);
             if (user.isPresent()) {
                 session.setAttribute(AttributeKey.ROLE_NAME, user.get().getRole().name().toLowerCase());
-                session.setAttribute(AttributeKey.LOGIN, user.get().getLogin());
+                session.setAttribute(AttributeKey.LOGIN, login);
             } else {
                 req.setAttribute(AttributeKey.ERROR, true);
                 router.setForward(JspPath.LOGIN);

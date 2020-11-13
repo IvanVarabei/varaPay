@@ -7,16 +7,14 @@ import com.epam.varapay.controller.RequestParam;
 import com.epam.varapay.controller.command.ActionCommand;
 import com.epam.varapay.controller.router.Router;
 import com.epam.varapay.controller.router.RouterType;
-import com.epam.varapay.model.exception.ServiceException;
+import com.epam.varapay.exception.ServiceException;
 import com.epam.varapay.model.service.PaymentService;
 import com.epam.varapay.model.service.ServiceFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 

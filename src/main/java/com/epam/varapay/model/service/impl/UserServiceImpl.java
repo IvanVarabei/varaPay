@@ -4,8 +4,8 @@ import com.epam.varapay.controller.RequestParam;
 import com.epam.varapay.model.dao.DaoFactory;
 import com.epam.varapay.model.dao.UserDao;
 import com.epam.varapay.model.entity.User;
-import com.epam.varapay.model.exception.DaoException;
-import com.epam.varapay.model.exception.ServiceException;
+import com.epam.varapay.exception.DaoException;
+import com.epam.varapay.exception.ServiceException;
 import com.epam.varapay.model.service.DataTransferMapKey;
 import com.epam.varapay.model.service.ErrorMessage;
 import com.epam.varapay.model.service.UserService;
@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Optional;
 
 public class UserServiceImpl implements UserService {
-    private static UserValidator userValidator = new UserValidator();
+    private static UserValidator userValidator = UserValidator.getInstance();
     private static UserDao userDao = DaoFactory.getInstance().getUserDao();
     private static MailSender mailSender = MailSender.getInstance();
     private static final String MAIL_SUBJECT_VERIFICATION = "Email verification";
@@ -30,7 +30,6 @@ public class UserServiceImpl implements UserService {
     private static final int DEFAULT_PASSWORD_LENGTH = 20;
     private static final int VERIFICATION_CODE_LENGTH = 4;
     private static final int SALT_LENGTH = 64;
-
 
     @Override
     public Optional<String> checkSignupDataAndSendEmail(Map<String, String> signupData) throws ServiceException {

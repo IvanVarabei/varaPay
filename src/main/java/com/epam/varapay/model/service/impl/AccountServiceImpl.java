@@ -1,7 +1,7 @@
 package com.epam.varapay.model.service.impl;
 
-import com.epam.varapay.model.exception.DaoException;
-import com.epam.varapay.model.exception.ServiceException;
+import com.epam.varapay.exception.DaoException;
+import com.epam.varapay.exception.ServiceException;
 import com.epam.varapay.model.dao.AccountDao;
 import com.epam.varapay.model.dao.BidDao;
 import com.epam.varapay.model.dao.DaoFactory;

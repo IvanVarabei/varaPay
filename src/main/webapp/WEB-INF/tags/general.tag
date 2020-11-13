@@ -90,7 +90,7 @@
 							<option value="ru-RU" ${sessionScope.locale.language eq 'ru' ? 'selected' : ''}>RU</option>
 						</li>
 						</select>
-						<input type="hidden" name="command" value="change_language">
+						<input type="hidden" name="command" value="change_language_post">
 						<c:forEach var="currentParam" items="${param}">
 							<c:choose>
 								<c:when test="${currentParam.value eq 'card_page_get' and param.cvc != null}">

@@ -5,16 +5,14 @@ import com.epam.varapay.controller.JspPath;
 import com.epam.varapay.controller.RequestParam;
 import com.epam.varapay.controller.command.ActionCommand;
 import com.epam.varapay.controller.router.Router;
-import com.epam.varapay.model.exception.ServiceException;
+import com.epam.varapay.exception.ServiceException;
 import com.epam.varapay.model.service.AccountService;
 import com.epam.varapay.model.service.ServiceFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.Collections;
 
 public class RunAccountsPageCommand implements ActionCommand {
@@ -26,9 +24,9 @@ public class RunAccountsPageCommand implements ActionCommand {
         Router router = new Router(JspPath.RUN_ACCOUNTS);
         String query = req.getParameter(RequestParam.QUERY);
         try {
-            if(query == null || query.isEmpty()){
+            if (query == null || query.isEmpty()) {
                 req.setAttribute(AttributeKey.ACCOUNTS, Collections.emptyList());
-            }else {
+            } else {
                 req.setAttribute(AttributeKey.ACCOUNTS, accountService.findDisabledByLoginOrAccountId(query));
             }
         } catch (ServiceException e) {

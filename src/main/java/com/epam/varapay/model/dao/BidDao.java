@@ -2,7 +2,7 @@ package com.epam.varapay.model.dao;
 
 import com.epam.varapay.model.entity.Bid;
 import com.epam.varapay.model.entity.CustomCurrency;
-import com.epam.varapay.model.exception.DaoException;
+import com.epam.varapay.exception.DaoException;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -26,9 +26,9 @@ public interface BidDao {
 
     boolean isTopUpBid(Long bidId) throws DaoException;
 
-    void approveTopUpBid(Long topUpBidId) throws DaoException;
+    void approveTopUpBid(Long topUpBidId, String adminComment) throws DaoException;
 
-    void approveWithdrawBid(Long withdrawBidId) throws DaoException;
+    void approveWithdrawBid(Long withdrawBidId, String adminComment) throws DaoException;
 
     void rejectTopUpBid(Long topUpBidId, String adminComment) throws DaoException;
 

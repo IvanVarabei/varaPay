@@ -6,8 +6,8 @@ import com.epam.varapay.model.dao.DaoFactory;
 import com.epam.varapay.model.entity.Account;
 import com.epam.varapay.model.entity.Bid;
 import com.epam.varapay.model.entity.CustomCurrency;
-import com.epam.varapay.model.exception.DaoException;
-import com.epam.varapay.model.exception.ServiceException;
+import com.epam.varapay.exception.DaoException;
+import com.epam.varapay.exception.ServiceException;
 import com.epam.varapay.model.service.BidService;
 import com.epam.varapay.model.service.DataTransferMapKey;
 import com.epam.varapay.model.service.ErrorMessage;
@@ -112,12 +112,12 @@ public class BidServiceImpl implements BidService {
     }
 
     @Override
-    public void approveBid(Long bidId) throws ServiceException {
+    public void approveBid(Long bidId, String adminComment) throws ServiceException {
         try {
             if (bidDao.isTopUpBid(bidId)) {
-                bidDao.approveTopUpBid(bidId);
+                bidDao.approveTopUpBid(bidId, adminComment);
             } else {
-                bidDao.approveWithdrawBid(bidId);
+                bidDao.approveWithdrawBid(bidId, adminComment);
             }
         } catch (DaoException daoException) {
             throw new ServiceException(daoException);

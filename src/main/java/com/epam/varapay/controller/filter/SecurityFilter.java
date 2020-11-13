@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 public class SecurityFilter implements Filter {
@@ -29,7 +30,7 @@ public class SecurityFilter implements Filter {
         Object userRole = session.getAttribute(AttributeKey.ROLE_NAME);
         String command = req.getParameter(RequestParam.COMMAND);
         List<Role> allowedRoles = null;
-        if (command != null && !command.isEmpty()) {
+        if (command != null && Arrays.stream(CommandType.values()).anyMatch(c -> command.equalsIgnoreCase(c.name()))) {
             allowedRoles = CommandRight.commandRoles.get(CommandType.valueOf(command.toUpperCase()));
         }
         if (userRole == null && allowedRoles != null) {

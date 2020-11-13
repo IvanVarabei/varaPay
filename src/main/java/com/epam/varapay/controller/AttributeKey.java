@@ -1,7 +1,6 @@
 package com.epam.varapay.controller;
 
 public class AttributeKey {
-    public static final String USER_AMOUNT = "userAmount";
     public static final String ACCOUNT = "account";
     public static final String ACCOUNTS = "accounts";
     public static final String CURRENCIES = "currencies";

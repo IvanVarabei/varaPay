@@ -7,7 +7,7 @@ import com.epam.varapay.controller.command.ActionCommand;
 import com.epam.varapay.controller.router.Router;
 import com.epam.varapay.model.entity.Account;
 import com.epam.varapay.model.entity.Bid;
-import com.epam.varapay.model.exception.ServiceException;
+import com.epam.varapay.exception.ServiceException;
 import com.epam.varapay.model.service.AccountService;
 import com.epam.varapay.model.service.BidService;
 import com.epam.varapay.model.service.ServiceFactory;
@@ -36,7 +36,7 @@ public class AccountPageCommand implements ActionCommand {
             int amountOfPages = bidService.findAmountOfPagesByAccountId(accountId, RECORDS_PER_PAGE);
             req.setAttribute(AttributeKey.AMOUNT_OF_PAGES, amountOfPages);
             req.setAttribute(AttributeKey.CURRENT_PAGE, page);
-            Account account = accountService.findById(accountId).orElse(null);
+            Account account = accountService.findById(accountId).get();
             req.setAttribute(AttributeKey.ACCOUNT, account);
             req.setAttribute(AttributeKey.BIDS, bids);
         } catch (ServiceException e) {

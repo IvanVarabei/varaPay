@@ -5,8 +5,10 @@ import com.epam.varapay.model.dao.ColumnLabel;
 import com.epam.varapay.model.dao.GenericDao;
 import com.epam.varapay.model.dao.builder.impl.AccountBuilder;
 import com.epam.varapay.model.entity.Account;
-import com.epam.varapay.model.exception.DaoException;
+import com.epam.varapay.exception.DaoException;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,6 +17,8 @@ public class AccountDaoImpl extends GenericDao<Account> implements AccountDao {
             "where account_id= ?";
     private static final String CREATE_ACCOUNT = "insert into accounts (user_id) values (?)";
     private static final String ABANDON_ACCOUNT = "update accounts set is_abandoned = true where account_id= ?";
+    private static final String ABANDON_CARDS_BY_ACCOUNT_ID = "update cards set is_abandoned = true " +
+            "where account_id= ?";
     private static final String FIND_ACCOUNTS_BY_LOGIN =
             "select account_id, balance, is_active, users.user_id, users.login, password, salt,users.email,\n" +
                     "       users.firstname, users.lastname, users.birth, roles.role_name from accounts\n" +
@@ -104,6 +108,17 @@ public class AccountDaoImpl extends GenericDao<Account> implements AccountDao {
 
     @Override
     public void delete(Long accountId) throws DaoException {
-        executeUpdate(ABANDON_ACCOUNT, accountId);
+        Connection connection = pool.getConnection();
+        try {
+            startTransaction(connection);
+            executeUpdate(ABANDON_ACCOUNT, connection, accountId);
+            executeUpdate(ABANDON_CARDS_BY_ACCOUNT_ID, connection, accountId);
+            endTransaction(connection);
+        } catch (SQLException e) {
+            cancelTransaction(connection);
+            throw new DaoException("can not get access to db", e);
+        } finally {
+            pool.releaseConnection(connection);
+        }
     }
 }

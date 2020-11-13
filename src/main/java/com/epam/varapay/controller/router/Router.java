@@ -34,8 +34,25 @@ public class Router {
         this.page = page;
     }
 
-    public void setInclude(String page) {
-        type = RouterType.INCLUDE;
-        this.page = page;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o){
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Router router = (Router) o;
+        if (page != null ? !page.equals(router.page) : router.page != null) {
+            return false;
+        }
+        return type == router.type;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = page != null ? page.hashCode() : 0;
+        result = 31 * result + (type != null ? type.hashCode() : 0);
+        return result;
     }
 }

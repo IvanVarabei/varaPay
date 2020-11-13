@@ -1,7 +1,7 @@
 package com.epam.varapay.model.dao;
 
 import com.epam.varapay.model.entity.User;
-import com.epam.varapay.model.exception.DaoException;
+import com.epam.varapay.exception.DaoException;
 
 import java.util.Optional;
 

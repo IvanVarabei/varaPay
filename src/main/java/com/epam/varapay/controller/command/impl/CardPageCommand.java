@@ -7,7 +7,7 @@ import com.epam.varapay.controller.command.ActionCommand;
 import com.epam.varapay.controller.router.Router;
 import com.epam.varapay.model.entity.Card;
 import com.epam.varapay.model.entity.Payment;
-import com.epam.varapay.model.exception.ServiceException;
+import com.epam.varapay.exception.ServiceException;
 import com.epam.varapay.model.service.CardService;
 import com.epam.varapay.model.service.PaymentService;
 import com.epam.varapay.model.service.ServiceFactory;
@@ -32,7 +32,7 @@ public class CardPageCommand implements ActionCommand {
             if (req.getParameter(RequestParam.PAGE) != null) {
                 page = Integer.parseInt(req.getParameter(RequestParam.PAGE));
             }
-            Card card = cardService.findById(cardId).orElse(null);
+            Card card = cardService.findById(cardId).get();
             List<Payment> payments =
                     paymentService.findPaymentsByCardId(cardId, RECORDS_PER_PAGE, page);
             int amountOfPages = paymentService.findAmountOfPagesByCardId(cardId, RECORDS_PER_PAGE);

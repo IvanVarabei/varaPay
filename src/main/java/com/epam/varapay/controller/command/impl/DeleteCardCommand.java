@@ -6,7 +6,7 @@ import com.epam.varapay.controller.RequestParam;
 import com.epam.varapay.controller.command.ActionCommand;
 import com.epam.varapay.controller.router.Router;
 import com.epam.varapay.controller.router.RouterType;
-import com.epam.varapay.model.exception.ServiceException;
+import com.epam.varapay.exception.ServiceException;
 import com.epam.varapay.model.service.CardService;
 import com.epam.varapay.model.service.ServiceFactory;
 import org.apache.logging.log4j.LogManager;

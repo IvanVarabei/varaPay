@@ -7,11 +7,12 @@ import com.epam.varapay.controller.RequestParam;
 import com.epam.varapay.controller.command.ActionCommand;
 import com.epam.varapay.controller.router.Router;
 import com.epam.varapay.controller.router.RouterType;
-import com.epam.varapay.model.exception.ServiceException;
+import com.epam.varapay.exception.ServiceException;
 import com.epam.varapay.model.service.AccountService;
 import com.epam.varapay.model.service.ServiceFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.util.Strings;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,7 +30,7 @@ public class DeleteAccountCommand implements ActionCommand {
             Optional<String> error = accountService.delete(accountId);
             if(error.isPresent()){
                 req.setAttribute(AttributeKey.ERROR, error.get());
-                router.setForward(String.format(CommandPath.PROFILE, ""));
+                router.setForward(String.format(CommandPath.PROFILE, Strings.EMPTY));
             }
         } catch (ServiceException e) {
             log.error(e);

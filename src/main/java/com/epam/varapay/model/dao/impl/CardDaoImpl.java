@@ -5,7 +5,7 @@ import com.epam.varapay.model.dao.ColumnLabel;
 import com.epam.varapay.model.dao.GenericDao;
 import com.epam.varapay.model.dao.builder.impl.CardBuilder;
 import com.epam.varapay.model.entity.Card;
-import com.epam.varapay.model.exception.DaoException;
+import com.epam.varapay.exception.DaoException;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -19,13 +19,14 @@ public class CardDaoImpl extends GenericDao<Card> implements CardDao {
                     "       balance, is_active, users.user_id, users.login, password, salt,users.email,\n" +
                     "       users.firstname, users.lastname, users.birth, roles.role_name from cards\n" +
                     "    join accounts on cards.account_id = ? and cards.account_id = accounts.account_id\n" +
-                    "    and cards.is_abandoned = false\n" +
+                    "    and cards.is_abandoned = false and valid_thru > now()\n" +
                     "    join users on accounts.user_id = users.user_id\n" +
                     "    join roles on users.role_id = roles.role_id";
     private static final String FIND_CARD_BY_ID = "select card_id, card_number, valid_thru, cvc, cards.account_id,\n" +
             "       balance, is_active, users.user_id, users.login, password, salt,users.email,\n" +
             "       users.firstname, users.lastname, users.birth, roles.role_name from cards\n" +
             "    join accounts on card_id = ? and cards.account_id = accounts.account_id\n" +
+            "    and cards.is_abandoned = false and valid_thru > now()\n" +
             "    join users on accounts.user_id = users.user_id\n" +
             "    join roles on users.role_id = roles.role_id";
     private static final String FIND_CARD_BY_CARD_NUMBER = "select card_id, card_number, valid_thru, cvc, " +
@@ -33,6 +34,7 @@ public class CardDaoImpl extends GenericDao<Card> implements CardDao {
             "                   users.firstname, users.lastname, users.birth, roles.role_name from cards\n" +
             "                join accounts on card_number = ? and to_char(valid_thru, 'YYYY-MM') = ?\n" +
             "                and cards.is_abandoned = false and cards.account_id = accounts.account_id\n" +
+            "                and valid_thru > now()\n" +
             "                join users on accounts.user_id = users.user_id\n" +
             "                join roles on users.role_id = roles.role_id";
     private static final String ABANDON_CARD = "update cards set is_abandoned = true where card_Id = ?";
@@ -63,8 +65,8 @@ public class CardDaoImpl extends GenericDao<Card> implements CardDao {
     }
 
     @Override
-    public Optional<Card> findById(Long id) throws DaoException {
-        return executeForSingleResult(FIND_CARD_BY_ID, id);
+    public Optional<Card> findById(Long cardId) throws DaoException {
+        return executeForSingleResult(FIND_CARD_BY_ID, cardId);
     }
 
     @Override

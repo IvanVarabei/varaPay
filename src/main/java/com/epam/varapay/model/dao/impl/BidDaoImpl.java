@@ -6,7 +6,7 @@ import com.epam.varapay.model.dao.GenericDao;
 import com.epam.varapay.model.dao.builder.impl.BidBoulder;
 import com.epam.varapay.model.entity.Bid;
 import com.epam.varapay.model.entity.CustomCurrency;
-import com.epam.varapay.model.exception.DaoException;
+import com.epam.varapay.exception.DaoException;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -36,7 +36,7 @@ public class BidDaoImpl extends GenericDao<Bid> implements BidDao {
                     "    join accounts on bids.account_id = ? and  bids.account_id = accounts.account_id\n" +
                     "    join users on accounts.user_id = users.user_id\n" +
                     " join currencies on bids.currency_id = currencies.currency_id " +
-                    "    join roles on users.role_id = roles.role_id limit ? offset ?";
+                    "    join roles on users.role_id = roles.role_id order by placing_date_time desc limit ? offset ?";
     private static final String PLACE_TOP_UP_BID = "insert into bids (account_id, amount, amount_in_chosen_currency," +
             " currency_id, client_message, is_top_up) VALUES (?, ?, ?, ?, ?, true)";
     private static final String PLACE_WITHDRAW_BID = "insert into bids (account_id, amount, " +
@@ -44,7 +44,8 @@ public class BidDaoImpl extends GenericDao<Bid> implements BidDao {
     private static final String ADD_ACCOUNT_BALANCE = "update accounts set balance = balance + ? where account_id = ?";
     private static final String UPDATE_ADMIN_COMMENT = "update bids set admin_comment = ? where bid_id = ?";
     private static final String SET_STATE_REJECTED = "update bids set bid_state_id = 3 where bid_id = ?";
-    private static final String SET_STATE_APPROVED = "update bids set bid_state_id = 2 where bid_id = ?";
+    private static final String SET_ADMIN_COMMENT_AND_STATE_APPROVED = "update bids set bid_state_id = 2, " +
+            "admin_comment = ? where bid_id = ?";
     private static final String RECOVER_ACCOUNT_BALANCE_CONSIDERING_WITHDRAW_BID_ID =
             "update accounts set balance = balance + (select amount from bids where bid_id = ?) \n" +
                     "where account_id = (select account_id from bids where bid_id = ?)";
@@ -114,7 +115,7 @@ public class BidDaoImpl extends GenericDao<Bid> implements BidDao {
     }
 
     @Override
-    public void approveTopUpBid(Long topUpBidId) throws DaoException {
+    public void approveTopUpBid(Long topUpBidId, String adminComment) throws DaoException {
         Connection connection = pool.getConnection();
         try {
             startTransaction(connection);
@@ -123,7 +124,7 @@ public class BidDaoImpl extends GenericDao<Bid> implements BidDao {
             Long bidAccountId = findLong(FIND_BID_ACCOUNT_BY_BID_ID, connection,
                     ColumnLabel.ACCOUNT_ID, topUpBidId).orElseThrow(DaoException::new);
             executeUpdate(ADD_ACCOUNT_BALANCE, connection, bidAmount, bidAccountId);
-            executeUpdate(SET_STATE_APPROVED, connection, topUpBidId);
+            executeUpdate(SET_ADMIN_COMMENT_AND_STATE_APPROVED, connection, adminComment, topUpBidId);
             endTransaction(connection);
         } catch (SQLException | DaoException e) {
             cancelTransaction(connection);
@@ -134,8 +135,8 @@ public class BidDaoImpl extends GenericDao<Bid> implements BidDao {
     }
 
     @Override
-    public void approveWithdrawBid(Long withdrawBidId) throws DaoException {
-        executeUpdate(SET_STATE_APPROVED, withdrawBidId);
+    public void approveWithdrawBid(Long withdrawBidId, String adminComment) throws DaoException {
+        executeUpdate(SET_ADMIN_COMMENT_AND_STATE_APPROVED,adminComment, withdrawBidId);
     }
 
     @Override
