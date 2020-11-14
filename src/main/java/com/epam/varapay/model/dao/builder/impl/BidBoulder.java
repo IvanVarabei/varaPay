@@ -12,7 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class BidBoulder implements IdentifiableBuilder<Bid> {
-    private final IdentifiableBuilder<Account> accountBuilder = new AccountBuilder();
+    private IdentifiableBuilder<Account> accountBuilder = new AccountBuilder();
 
     @Override
     public Bid build(ResultSet resultSet) throws SQLException {

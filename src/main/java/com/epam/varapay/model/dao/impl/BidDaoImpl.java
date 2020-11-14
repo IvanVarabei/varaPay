@@ -1,12 +1,75 @@
 package com.epam.varapay.model.dao.impl;
 
+
+//public class BidDaoImpl extends GenericDao<Bid> implements BidDao {
+//    public BidDaoImpl() {
+//        super(new BidBoulder());
+//    }
+//
+//    @Override
+//    public void placeTopUpBid(Long accountId, Long amount, BigDecimal amountInChosenCurrency,
+//                              CustomCurrency currency, String message) throws DaoException {
+//    }
+//
+//    @Override
+//    public void placeWithdrawBid(Long accountId, Long amount, BigDecimal amountInChosenCurrency,
+//                                 CustomCurrency currency, String message) throws DaoException {
+//    }
+//
+//    @Override
+//    public List<Bid> findInProgressBids(int limit, int offset) throws DaoException {
+//        return null;
+//    }
+//
+//    @Override
+//    public List<Bid> findByAccountId(Long accountId, int limit, int offset) throws DaoException {
+//        return null;
+//    }
+//
+//    @Override
+//    public Long findAmountOfInProgressBids() throws DaoException {
+//        return null;
+//    }
+//
+//    @Override
+//    public Long findAmountOfBidsByAccountId(Long accountId) throws DaoException {
+//        return null;
+//    }
+//
+//    @Override
+//    public boolean isPresentInProgressBids(Long accountId) throws DaoException {
+//        return false;
+//    }
+//
+//    @Override
+//    public boolean isTopUpBid(Long bidId) throws DaoException {
+//        return false;
+//    }
+//
+//    @Override
+//    public void approveTopUpBid(Long topUpBidId, String adminComment) throws DaoException {
+//    }
+//
+//    @Override
+//    public void approveWithdrawBid(Long withdrawBidId, String adminComment) throws DaoException {
+//    }
+//
+//    @Override
+//    public void rejectTopUpBid(Long topUpBidId, String adminComment) throws DaoException {
+//    }
+//
+//    @Override
+//    public void rejectWithdrawBid(Long withdrawBidId, String adminComment) throws DaoException {
+//    }
+//}
+
+import com.epam.varapay.exception.DaoException;
 import com.epam.varapay.model.dao.BidDao;
 import com.epam.varapay.model.dao.ColumnLabel;
 import com.epam.varapay.model.dao.GenericDao;
 import com.epam.varapay.model.dao.builder.impl.BidBoulder;
 import com.epam.varapay.model.entity.Bid;
 import com.epam.varapay.model.entity.CustomCurrency;
-import com.epam.varapay.exception.DaoException;
 
 import java.math.BigDecimal;
 import java.sql.Connection;

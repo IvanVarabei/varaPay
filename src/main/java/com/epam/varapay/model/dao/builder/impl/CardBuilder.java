@@ -10,7 +10,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 
 public class CardBuilder implements IdentifiableBuilder<Card> {
-    private final IdentifiableBuilder<Account> accountBuilder = new AccountBuilder();
+    private IdentifiableBuilder<Account> accountBuilder = new AccountBuilder();
 
     @Override
     public Card build(ResultSet resultSet) throws SQLException {

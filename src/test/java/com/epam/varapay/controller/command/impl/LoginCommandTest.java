@@ -1,9 +1,9 @@
 package com.epam.varapay.controller.command.impl;
 
 import com.epam.varapay.controller.router.Router;
+import com.epam.varapay.exception.ServiceException;
 import com.epam.varapay.model.entity.Role;
 import com.epam.varapay.model.entity.User;
-import com.epam.varapay.exception.ServiceException;
 import com.epam.varapay.model.service.UserService;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -20,7 +20,7 @@ import static org.testng.Assert.assertEquals;
 
 public class LoginCommandTest {
     @Mock
-    private UserService userService;
+    private static UserService userService;
     @Mock
     private HttpServletRequest req;
     @Mock
@@ -28,7 +28,14 @@ public class LoginCommandTest {
     @Mock
     private User user;
     @InjectMocks
-    private LoginCommand loginCommand = new LoginCommand();
+    private LoginCommandPoolInitializationPrevented loginCommand;
+
+    static class LoginCommandPoolInitializationPrevented extends LoginCommand {
+        @Override
+        public UserService getUserService() {
+            return userService;
+        }
+    }
 
     @BeforeMethod
     private void setUp() throws ServiceException {

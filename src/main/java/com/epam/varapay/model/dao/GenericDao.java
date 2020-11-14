@@ -14,11 +14,20 @@ import java.util.Optional;
 
 public class GenericDao<T extends Identifiable> {
     private static final Logger log = LogManager.getLogger(GenericDao.class);
-    protected static final ConnectionPool pool = ConnectionPool.getInstance();
+    protected ConnectionPool pool;
     private final IdentifiableBuilder<T> builder;
 
     protected GenericDao(IdentifiableBuilder<T> builder) {
         this.builder = builder;
+        init();
+    }
+
+    /**
+     * The method is necessary to prevent connection pool initialization during testing.
+     * Testing class can have inner class which overrides this method.
+     */
+    protected void init(){
+        pool = ConnectionPool.getInstance();
     }
 
     protected void closeResource(AutoCloseable resource) {

@@ -10,7 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class AccountBuilder implements IdentifiableBuilder<Account> {
-    private final IdentifiableBuilder<User> userBuilder = new UserBuilder();
+    private IdentifiableBuilder<User> userBuilder = new UserBuilder();
     private static final int CENT_TO_DOLLAR = 2;
 
     @Override

@@ -22,9 +22,22 @@ import java.util.Optional;
 
 public class PaymentServiceImpl implements PaymentService {
     private static PaymentValidator paymentValidator = PaymentValidator.getInstance();
-    private PaymentDao paymentDao = DaoFactory.getInstance().getPaymentDao();
-    private CardDao cardDao = DaoFactory.getInstance().getCardDao();
+    private PaymentDao paymentDao;
+    private CardDao cardDao;
     private static final String SPACE_BETWEEN_CARD_NUMBER_FIGURES = " ";
+
+    public PaymentServiceImpl(){
+        init();
+    }
+
+    /**
+     * The method is necessary to prevent connection pool initialization during testing.
+     * Testing class can have inner class which overrides this method.
+     */
+    protected void init(){
+        paymentDao = DaoFactory.getInstance().getPaymentDao();
+        cardDao = DaoFactory.getInstance().getCardDao();
+    }
 
     @Override
     public List<Payment> findPaymentsByCardId(Long cardId, int limit, int pageIndex) throws ServiceException {
