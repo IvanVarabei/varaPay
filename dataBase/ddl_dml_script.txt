@@ -82,6 +82,9 @@ create table users
     secret_word varchar(64) not null
 );
 
+create index users_login_email_idx
+    on users (login, email);
+
 alter table users owner to postgres;
 
 create table accounts
@@ -97,6 +100,9 @@ create table accounts
     is_active boolean default true not null,
     is_abandoned boolean default false not null
 );
+
+create index accounts_user_id_idx
+    on accounts (user_id);
 
 alter table accounts owner to postgres;
 
@@ -116,6 +122,12 @@ create table cards
     is_abandoned boolean default false not null
 );
 
+create index cards_card_number_idx
+    on cards (card_number);
+
+create index cards_account_id_idx
+    on cards (account_id);
+
 alter table cards owner to postgres;
 
 create table payments
@@ -132,6 +144,12 @@ create table payments
     amount integer not null,
     payment_instant timestamp default now() not null
 );
+
+create index payments_source_card_id_idx
+    on payments (source_card_id);
+
+create index payments_destination_card_id_idx
+    on payments (destination_card_id);
 
 alter table payments owner to postgres;
 
@@ -176,6 +194,9 @@ create table bids
             references currencies,
     amount_in_chosen_currency numeric not null
 );
+
+create index bids_account_id_idx
+    on bids (account_id);
 
 alter table bids owner to postgres;
 

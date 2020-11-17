@@ -1,8 +1,8 @@
 package com.epam.varapay.model.dao;
 
+import com.epam.varapay.exception.DaoException;
 import com.epam.varapay.model.dao.builder.IdentifiableBuilder;
 import com.epam.varapay.model.entity.Identifiable;
-import com.epam.varapay.exception.DaoException;
 import com.epam.varapay.model.pool.ConnectionPool;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,7 +26,7 @@ public class GenericDao<T extends Identifiable> {
      * The method is necessary to prevent connection pool initialization during testing.
      * Testing class can have inner class which overrides this method.
      */
-    protected void init(){
+    protected void init() {
         pool = ConnectionPool.getInstance();
     }
 
@@ -38,7 +38,12 @@ public class GenericDao<T extends Identifiable> {
         }
     }
 
-    protected void startTransaction(Connection connection) throws SQLException {
+    protected void startRepeatableReadTransaction(Connection connection) throws SQLException {
+        connection.setAutoCommit(false);
+        connection.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
+    }
+
+    protected void startSerializableTransaction(Connection connection) throws SQLException {
         connection.setAutoCommit(false);
         connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
     }
@@ -183,13 +188,13 @@ public class GenericDao<T extends Identifiable> {
             throws DaoException {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
-        Optional<Object> accountId = Optional.empty();
+        Optional<Object> soughtObject = Optional.empty();
         try {
             preparedStatement = connection.prepareStatement(query);
             setParameters(preparedStatement, params);
             resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                accountId = Optional.of(resultSet.getObject(columnLabel));
+                soughtObject = Optional.of(resultSet.getObject(columnLabel));
             }
         } catch (SQLException e) {
             throw new DaoException("can not get access to db", e);
@@ -200,6 +205,6 @@ public class GenericDao<T extends Identifiable> {
                 closeResource(preparedStatement);
             }
         }
-        return accountId;
+        return soughtObject;
     }
 }

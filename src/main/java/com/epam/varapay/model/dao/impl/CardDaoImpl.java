@@ -50,7 +50,7 @@ public class CardDaoImpl extends GenericDao<Card> implements CardDao {
     public String createCardAndReturnCvc(Long accountId) throws DaoException {
         Connection connection = pool.getConnection();
         try {
-            startTransaction(connection);
+            startSerializableTransaction(connection);
             executeUpdate(CREATE_CARD, connection, accountId);
             String cvcOfTheLastCreatedCard = findString(FIND_CVC_OF_THE_LAST_CREATED_CARD, connection,
                     ColumnLabel.CVC, accountId).orElseThrow(DaoException::new);

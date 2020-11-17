@@ -1,68 +1,5 @@
 package com.epam.varapay.model.dao.impl;
 
-
-//public class BidDaoImpl extends GenericDao<Bid> implements BidDao {
-//    public BidDaoImpl() {
-//        super(new BidBoulder());
-//    }
-//
-//    @Override
-//    public void placeTopUpBid(Long accountId, Long amount, BigDecimal amountInChosenCurrency,
-//                              CustomCurrency currency, String message) throws DaoException {
-//    }
-//
-//    @Override
-//    public void placeWithdrawBid(Long accountId, Long amount, BigDecimal amountInChosenCurrency,
-//                                 CustomCurrency currency, String message) throws DaoException {
-//    }
-//
-//    @Override
-//    public List<Bid> findInProgressBids(int limit, int offset) throws DaoException {
-//        return null;
-//    }
-//
-//    @Override
-//    public List<Bid> findByAccountId(Long accountId, int limit, int offset) throws DaoException {
-//        return null;
-//    }
-//
-//    @Override
-//    public Long findAmountOfInProgressBids() throws DaoException {
-//        return null;
-//    }
-//
-//    @Override
-//    public Long findAmountOfBidsByAccountId(Long accountId) throws DaoException {
-//        return null;
-//    }
-//
-//    @Override
-//    public boolean isPresentInProgressBids(Long accountId) throws DaoException {
-//        return false;
-//    }
-//
-//    @Override
-//    public boolean isTopUpBid(Long bidId) throws DaoException {
-//        return false;
-//    }
-//
-//    @Override
-//    public void approveTopUpBid(Long topUpBidId, String adminComment) throws DaoException {
-//    }
-//
-//    @Override
-//    public void approveWithdrawBid(Long withdrawBidId, String adminComment) throws DaoException {
-//    }
-//
-//    @Override
-//    public void rejectTopUpBid(Long topUpBidId, String adminComment) throws DaoException {
-//    }
-//
-//    @Override
-//    public void rejectWithdrawBid(Long withdrawBidId, String adminComment) throws DaoException {
-//    }
-//}
-
 import com.epam.varapay.exception.DaoException;
 import com.epam.varapay.model.dao.BidDao;
 import com.epam.varapay.model.dao.ColumnLabel;
@@ -78,7 +15,8 @@ import java.util.List;
 
 public class BidDaoImpl extends GenericDao<Bid> implements BidDao {
     private static final String FIND_BID_ACCOUNT_BY_BID_ID = "select account_id from bids where bid_id = ?";
-    private static final String FIND_BID_AMOUNT_BY_ID = "select amount from bids where bid_id = ?";
+    private static final String FIND_BID_AMOUNT_BY_IN_PROGRESS_BID_ID = "select amount from bids where bid_id = ? " +
+            "and bid_state_id = 1";
     private static final String FIND_IN_PROGRESS_BIDS =
             "select bid_id, state, bids.amount, amount_in_chosen_currency, currency_name, is_top_up, client_message, " +
                     "admin_comment, placing_date_time, accounts.account_id, accounts.account_id\n" +
@@ -134,7 +72,7 @@ public class BidDaoImpl extends GenericDao<Bid> implements BidDao {
                                  CustomCurrency currency, String message) throws DaoException {
         Connection connection = pool.getConnection();
         try {
-            startTransaction(connection);
+            startRepeatableReadTransaction(connection);
             executeUpdate(PLACE_WITHDRAW_BID, accountId, amount, amountInChosenCurrency, currency.ordinal(), message);
             executeUpdate(ADD_ACCOUNT_BALANCE, connection, -amount, accountId);
             endTransaction(connection);
@@ -181,8 +119,8 @@ public class BidDaoImpl extends GenericDao<Bid> implements BidDao {
     public void approveTopUpBid(Long topUpBidId, String adminComment) throws DaoException {
         Connection connection = pool.getConnection();
         try {
-            startTransaction(connection);
-            Long bidAmount = findLong(FIND_BID_AMOUNT_BY_ID, connection,
+            startRepeatableReadTransaction(connection);
+            Long bidAmount = findLong(FIND_BID_AMOUNT_BY_IN_PROGRESS_BID_ID, connection,
                     ColumnLabel.BID_AMOUNT, topUpBidId).orElseThrow(DaoException::new);
             Long bidAccountId = findLong(FIND_BID_ACCOUNT_BY_BID_ID, connection,
                     ColumnLabel.ACCOUNT_ID, topUpBidId).orElseThrow(DaoException::new);
@@ -199,14 +137,14 @@ public class BidDaoImpl extends GenericDao<Bid> implements BidDao {
 
     @Override
     public void approveWithdrawBid(Long withdrawBidId, String adminComment) throws DaoException {
-        executeUpdate(SET_ADMIN_COMMENT_AND_STATE_APPROVED,adminComment, withdrawBidId);
+        executeUpdate(SET_ADMIN_COMMENT_AND_STATE_APPROVED, adminComment, withdrawBidId);
     }
 
     @Override
     public void rejectTopUpBid(Long topUpBidId, String adminComment) throws DaoException {
         Connection connection = pool.getConnection();
         try {
-            startTransaction(connection);
+            startRepeatableReadTransaction(connection);
             executeUpdate(UPDATE_ADMIN_COMMENT, connection, adminComment, topUpBidId);
             executeUpdate(SET_STATE_REJECTED, connection, topUpBidId);
             endTransaction(connection);
@@ -222,7 +160,7 @@ public class BidDaoImpl extends GenericDao<Bid> implements BidDao {
     public void rejectWithdrawBid(Long withdrawBidId, String adminComment) throws DaoException {
         Connection connection = pool.getConnection();
         try {
-            startTransaction(connection);
+            startRepeatableReadTransaction(connection);
             executeUpdate(UPDATE_ADMIN_COMMENT, connection, adminComment, withdrawBidId);
             executeUpdate(RECOVER_ACCOUNT_BALANCE_CONSIDERING_WITHDRAW_BID_ID, connection, withdrawBidId, withdrawBidId);
             executeUpdate(SET_STATE_REJECTED, connection, withdrawBidId);

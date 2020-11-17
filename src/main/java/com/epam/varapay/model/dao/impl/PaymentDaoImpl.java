@@ -76,7 +76,7 @@ public class PaymentDaoImpl extends GenericDao<Card> implements PaymentDao {
     public void makePayment(Long sourceCardId, String destinationCardNumber, Long amount) throws DaoException {
         Connection connection = pool.getConnection();
         try {
-            startTransaction(connection);
+            startSerializableTransaction(connection);
             Long destinationCardId = findLong(FIND_CARD_ID_BY_NUMBER, connection,
                     ColumnLabel.CARD_ID, destinationCardNumber).orElseThrow(DaoException::new);
             Long sourceAccountId = findLong(FIND_ACCOUNT_ID_BY_CARD_ID, connection,

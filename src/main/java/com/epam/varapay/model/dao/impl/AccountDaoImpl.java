@@ -24,7 +24,8 @@ public class AccountDaoImpl extends GenericDao<Account> implements AccountDao {
                     "       users.firstname, users.lastname, users.birth, roles.role_name from accounts\n" +
                     "    join users on accounts.user_id = users.user_id\n" +
                     "    and login = ? and is_abandoned = false\n" +
-                    "    join roles on users.role_id = roles.role_id";
+                    "    join roles on users.role_id = roles.role_id" +
+                    "    order by balance desc";
     private static final String FIND_ACCOUNT_BY_ID =
             "select account_id, balance, is_active, users.user_id, users.login, password, salt,users.email,\n" +
                     "       users.firstname, users.lastname, users.birth, roles.role_name from accounts\n" +
@@ -110,7 +111,7 @@ public class AccountDaoImpl extends GenericDao<Account> implements AccountDao {
     public void delete(Long accountId) throws DaoException {
         Connection connection = pool.getConnection();
         try {
-            startTransaction(connection);
+            startSerializableTransaction(connection);
             executeUpdate(ABANDON_ACCOUNT, connection, accountId);
             executeUpdate(ABANDON_CARDS_BY_ACCOUNT_ID, connection, accountId);
             endTransaction(connection);
