@@ -94,22 +94,9 @@
 						 required oninvalid="this.setCustomValidity('${client_name_error}')" onchange="this.setCustomValidity('')">
 			<p class="form__error">${secret_word_error}</p>
 
-				<%--			<button class="button form_button">${button}</button>--%>
 			<input id="submit" name="submit" type="submit" class="button form_button" value="${button}">
 		</form>
 	</div>
-	<script>
-      document.addEventListener('DOMContentLoaded', function () {
-          var pass1 = document.querySelector('#password'),
-              pass2 = document.querySelector('#password-check')
-          pass1.addEventListener('input', function () {
-              this.value != pass2.value ? pass2.setCustomValidity('${client_repeat_password_error}') :
-                  pass2.setCustomValidity('')
-          })
-          pass2.addEventListener('input', function (e) {
-              this.value != pass1.value ? this.setCustomValidity('${client_repeat_password_error}') :
-                  this.setCustomValidity('')
-          })
-      })
-	</script>
+	<script src="js/passwordConformity.js"></script>
+	<script>checkPasswordsConformity('#password', '#password-check', '${client_repeat_password_error}')</script>
 </tags:general>
