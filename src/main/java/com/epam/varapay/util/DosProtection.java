@@ -5,7 +5,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class DosProtection {
     private static final DosProtection instance = new DosProtection();
-    private static final long ALLOWED_AMOUNT_OF_REQUESTS_PER_INTERVAL = 3000;
+    private static final long ALLOWED_AMOUNT_OF_REQUESTS_PER_INTERVAL = 100;
     private static final long INTERVAL_BETWEEN_CLEARING_HISTORY = 30_000;
     private Map<String, Integer> remoteAddressAndRequestAmount = new ConcurrentHashMap<>();
     private long historyClearingTime;
