@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 public class AccountServiceImpl implements AccountService {
     private static AccountDao accountDao = DaoFactory.getInstance().getAccountDao();
     private static BidDao bidDao = DaoFactory.getInstance().getTopUpBidDao();
-    static final Pattern DIGIT = Pattern.compile("\\d+");
+    static final Pattern DIGIT = Pattern.compile("^\\d+$");
 
     @Override
     public void create(Long userId) throws ServiceException {
