@@ -36,17 +36,20 @@
 					action="${pageContext.servletContext.contextPath}/mainServlet?command=change_password_post">
 
 			<p class="form__input-label">${old_password}</p>
-			<input class="input form__input" name="oldPassword" type="password" pattern=".{3,20}" required
+			<input class="input form__input" name="oldPassword" type="password" pattern=".{3,20}" required minlength="3"
+						 maxlength="20"
 						 oninvalid="this.setCustomValidity('${client_password_error}')" onchange="this.setCustomValidity('')">
 			<p class="form__error">${old_password_error}</p>
 
 			<p class="form__input-label">${password}</p>
 			<input class="input form__input" id="password" name="password" type="password" pattern=".{3,20}" required
+						 minlength="3" maxlength="20"
 						 oninvalid="this.setCustomValidity('${client_password_error}')" onchange="this.setCustomValidity('')">
 			<p class="form__error">${password_error}</p>
 
 			<p class="form__input-label">${repeat_password}</p>
-			<input class="input form__input" id="password-check" name="repeatPassword" type="password" title="">
+			<input class="input form__input" id="password-check" name="repeatPassword" type="password" minlength="3"
+						 maxlength="20" title="">
 			<p class="form__error">${repeat_password_error}</p>
 
 			<button class="button form_button">${button}</button>

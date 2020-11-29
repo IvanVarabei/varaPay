@@ -40,8 +40,8 @@
 
 			<p class="form__input-label">${amount} $</p>
 			<input type="number" name="amount" class="input form__input" value="${not empty param.amount ? param.amount : ''}"
-						 step="0.01" max="${account.balance}" required onchange="this.setCustomValidity('')"
-						 oninvalid="this.setCustomValidity('${client_amount_error}, ${client_less_than_error} ${account.balance}')">
+						 step="0.01" min="0.01" maxlength="7" max="${account.balance}" required onchange="this.setCustomValidity('')"
+						 oninvalid="this.setCustomValidity('${client_amount_error}, <= ${account.balance}')">
 			<p class="form__error">${amount_error}</p>
 
 			<p class="form__input-label">${currency_input}</p>

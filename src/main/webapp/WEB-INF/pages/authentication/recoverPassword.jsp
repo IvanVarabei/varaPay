@@ -21,8 +21,8 @@
 
 			<p class="form__input-label">${email}</p>
 			<input class="input form__input" name="email" value="${param.email}"
-						 pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
-						 required oninvalid="this.setCustomValidity('${client_email_error}')" onchange="this.setCustomValidity('')">
+						 pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required
+						 oninvalid="this.setCustomValidity('${client_email_error}')" onchange="this.setCustomValidity('')">
 			<c:if test="${not empty requestScope.error}"><p class="form__error">${fail_message}</p></c:if>
 
 			<button class="button form_button">${button}</button>

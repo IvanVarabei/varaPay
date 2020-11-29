@@ -35,7 +35,7 @@
 
 			<p class="form__input-label">${amount} $</p>
 			<input type="number" name="amount" class="input form__input" value="${not empty param.amount ? param.amount : ''}"
-						 step="0.01" required
+						 step="0.01" min="0.01" maxlength="7" required
 						 oninvalid="this.setCustomValidity('${client_amount_error}')" onchange="this.setCustomValidity('')">
 			<p class="form__error">${amount_error}</p>
 

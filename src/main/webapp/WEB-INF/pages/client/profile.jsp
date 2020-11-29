@@ -35,7 +35,7 @@
 		</div>
 		<div class="sub-title">${accounts}</div>
 		<div class="profile__accounts">
-			<jsp:include page="/mainServlet?command=include_accounts&login=${user.login}"/>
+			<c:import url="/mainServlet?command=include_accounts&login=${user.login}"/>
 			<form method="post" action="${pageContext.servletContext.contextPath}/mainServlet?command=create_account_post">
 				<input type="hidden" name="userId" value="${user.id}"/>
 				<button class="button">${add_account}</button>

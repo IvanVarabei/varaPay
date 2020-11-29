@@ -94,8 +94,9 @@
 			<p class="form__input-label">${amount}</p>
 			<input class="input form__input" name="amount" form="makePayment" type="number" value="${param.amount}"
 				${card.account.active ? '' : 'disabled'}
-						 step="0.01" max="${card.account.balance}" required onchange="this.setCustomValidity('')"
-						 oninvalid="this.setCustomValidity('${client_amount_error}, ${client_less_than_error} ${card.account.balance}')">
+						 step="0.01" min="0.01" max="${card.account.balance}"
+						 required onchange="this.setCustomValidity('')"
+						 oninvalid="this.setCustomValidity('${client_amount_error}, <= ${card.account.balance}')">
 			<p class="form__error">${amount_error}</p>
 
 			<p class="form__input-label">${cvc}</p>

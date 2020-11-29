@@ -40,10 +40,10 @@ public class PaymentValidatorTest {
         properDataBottomEdge.put(DataTransferMapKey.AMOUNT, "0.01");
 
         Map<String, String> properDataCeilingEdge = new HashMap<>(properPaymentData);
-        properDataCeilingEdge.put(DataTransferMapKey.AMOUNT, "999999999.99");
+        properDataCeilingEdge.put(DataTransferMapKey.AMOUNT, "9999999.99");
 
         Map<String, String> spoiledDataOverCeilingEdge = new HashMap<>(properPaymentData);
-        spoiledDataOverCeilingEdge.put(DataTransferMapKey.AMOUNT, "1000000000.00");
+        spoiledDataOverCeilingEdge.put(DataTransferMapKey.AMOUNT, "10000000.00");
 
         return new Object[][]{
                 {spoiledDataNegative, false},

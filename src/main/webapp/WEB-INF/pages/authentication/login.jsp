@@ -23,10 +23,12 @@
 
 			<p class="form__input-label">${log_in}</p>
 			<input class="input form__input" name="login" value="${param.login}" pattern="^[a-zA-Z0-9_]{3,25}$" required
+						 minlength="3" maxlength="20"
 						 oninvalid="this.setCustomValidity('${client_login_error}')" onchange="this.setCustomValidity('')">
 
 			<p class="form__input-label">${password}</p>
-			<input class="input form__input" name="password" pattern=".{3,20}" required
+			<input class="input form__input" name="password" pattern=".{3,20}" required type="password" minlength="3"
+						 maxlength="20"
 						 oninvalid="this.setCustomValidity('${client_password_error}')" onchange="this.setCustomValidity('')">
 
 			<button class="button form_button">${title}</button>

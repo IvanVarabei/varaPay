@@ -56,26 +56,31 @@
 			<input type="hidden" name="command" value="signup_post">
 
 			<p class="form__input-label">${log_in}<span class="form__asterisk">*</span></p>
-			<input class="input form__input" name="login" value="${param.login}" pattern="^[a-zA-Z0-9_]{3,25}$" required
+			<input class="input form__input" name="login" value="${param.login}" pattern="^[a-zA-Z0-9_]{3,20}$" required
+						 minlength="3" maxlength="20"
 						 oninvalid="this.setCustomValidity('${client_login_error}')" onchange="this.setCustomValidity('')"/>
 			<p class="form__error">${login_error}</p>
 
 			<p class="form__input-label">${password}<span class="form__asterisk">*</span></p>
-			<input class="input form__input" id="password" name="password" type="password" pattern=".{3,20}" required
-						 oninvalid="this.setCustomValidity('${client_password_error}')" onchange="this.setCustomValidity('')">
+			<input class="input form__input" id="password" name="password" type="password" pattern=".{3,20}" minlength="3"
+						 maxlength="20" required oninvalid="this.setCustomValidity('${client_password_error}')"
+						 onchange="this.setCustomValidity('')">
 			<p class="form__error">${password_error}</p>
 
 			<p class="form__input-label">${repeat_password}<span class="form__asterisk">*</span></p>
-			<input class="input form__input" id="password-check" name="repeatPassword" type="password" title="">
+			<input class="input form__input" id="password-check" name="repeatPassword" type="password" minlength="3"
+						 maxlength="20" title="">
 			<p class="form__error">${repeat_password_error}</p>
 
 			<p class="form__input-label">${firstname}<span class="form__asterisk">*</span></p>
 			<input class="input form__input" name="firstName" value="${param.firstName}" pattern="^[A-Za-zА-Яа-яЁё]{3,20}$"
+						 minlength="3" maxlength="20"
 						 required oninvalid="this.setCustomValidity('${client_name_error}')" onchange="this.setCustomValidity('')">
 			<p class="form__error">${firstname_error}</p>
 
 			<p class="form__input-label">${lastname}<span class="form__asterisk">*</span></p>
 			<input class="input form__input" name="lastName" value="${param.lastName}" pattern="^[A-Za-zА-Яа-яЁё]{3,20}$"
+						 minlength="3" maxlength="20"
 						 required oninvalid="this.setCustomValidity('${client_name_error}')" onchange="this.setCustomValidity('')">
 			<p class="form__error">${lastname_error}</p>
 
@@ -90,11 +95,11 @@
 						 type="date" min="1920-01-01" max="2010-01-01">
 
 			<p class="form__input-label">${secret_word}<span class="form__asterisk">*</span></p>
-			<input class="input form__input" name="secretWord" value="${param.secretWord}" pattern="^[A-Za-zА-Яа-яЁё]{3,20}$"
+			<input class="input form__input" name="secretWord" pattern="^[A-Za-zА-Яа-яЁё]{3,20}$" type="password"
+						 minlength="3" maxlength="20"
 						 required oninvalid="this.setCustomValidity('${client_name_error}')" onchange="this.setCustomValidity('')">
 			<p class="form__error">${secret_word_error}</p>
-
-			<input id="submit" name="submit" type="submit" class="button form_button" value="${button}">
+			<button class="button form_button">${button}</button>
 		</form>
 	</div>
 	<script src="js/passwordConformity.js"></script>

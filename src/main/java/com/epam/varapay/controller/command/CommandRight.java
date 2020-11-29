@@ -15,8 +15,6 @@ public class CommandRight {
         List<Role> admin = Collections.unmodifiableList(List.of(Role.ADMIN));
         List<Role> client = List.of(Role.CLIENT);
         commandRoles.put(CommandType.PROFILE_GET, adminClient);
-        commandRoles.put(CommandType.RECOVER_PASSWORD_GET, adminClient);
-        commandRoles.put(CommandType.RECOVER_PASSWORD_POST, adminClient);
         commandRoles.put(CommandType.CHANGE_PASSWORD_GET, adminClient);
         commandRoles.put(CommandType.CHANGE_PASSWORD_POST, adminClient);
         commandRoles.put(CommandType.SUCCESS_GET, adminClient);

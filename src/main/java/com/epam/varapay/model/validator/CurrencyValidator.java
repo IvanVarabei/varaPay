@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 
 public class CurrencyValidator {
     private static final Pattern AMOUNT_PATTERN =
-            Pattern.compile("^([1-9]\\d{1,8}(\\.\\d{0,2})?)|(0\\.((\\d[1-9])|([1-9]\\d)))$");
+            Pattern.compile("^([1-9]\\d{0,6}(\\.\\d{0,2})?)|(0\\.((\\d?[1-9])|([1-9]\\d)))$");
 
     private CurrencyValidator() {
     }

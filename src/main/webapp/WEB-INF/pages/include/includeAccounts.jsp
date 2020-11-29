@@ -28,7 +28,7 @@
 	</form>
 	<div class="profile__cards">
 		<div class="sub-sub-title profile__cards-sub-sub-title">${cards}</div>
-		<jsp:include page="/mainServlet?command=include_cards&accountId=${account.id}"/>
+		<c:import url="/mainServlet?command=include_cards&accountId=${account.id}"/>
 		<form class="profile__card-button" method="post"
 					action="${pageContext.servletContext.contextPath}/mainServlet?command=create_card_post">
 			<input type="hidden" name="accountId" value="${account.id}"/>
