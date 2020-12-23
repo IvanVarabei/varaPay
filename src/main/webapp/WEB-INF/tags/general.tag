@@ -129,7 +129,7 @@
 	</main>
 	<footer class="footer">
 		<div class="footer__copy">© 2020 Ivan Varabei</div>
-		<div class="footer__text">varabei.ivan@gmail.com</div>
+		<div class="footer__text">varabeiivan@gmail.com</div>
 	</footer>
 </div>
 <script src="js/burgerMenu.js"></script>
