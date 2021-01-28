@@ -1,8 +1,8 @@
 package com.epam.varapay.model.dao.impl;
 
+import com.epam.varapay.exception.DaoException;
 import com.epam.varapay.model.dao.CurrencyDao;
 import com.epam.varapay.model.entity.CustomCurrency;
-import com.epam.varapay.exception.DaoException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,8 +15,8 @@ import java.util.regex.Pattern;
 
 public class CurrencyDaoImpl implements CurrencyDao {
     private static final String API_EXCHANGE_SOME_CURRENCY_TO_USD =
-            "https://api.livecoin.net/exchange/order_book?currencyPair=%s/USD";
-    private static final Pattern PRICE_FROM_API_RESPONSE = Pattern.compile("(?<=\"asks\":\\[\\[\").+?(?=\")");
+            "https://min-api.cryptocompare.com/data/price?fsym=%s&tsyms=USD";
+    private static final Pattern PRICE_FROM_API_RESPONSE = Pattern.compile("\\d+\\.?\\d");
 
     @Override
     public BigDecimal findCurrencyCostInUsd(CustomCurrency currency) throws DaoException {
